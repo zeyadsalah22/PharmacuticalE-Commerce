@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using PharmacuticalE_Commerce.Models;
+
 namespace PharmacuticalE_Commerce
 {
     public class Program
@@ -8,6 +11,11 @@ namespace PharmacuticalE_Commerce
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<PharmacySystemContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             var app = builder.Build();
 
