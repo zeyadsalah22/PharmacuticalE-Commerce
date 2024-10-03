@@ -12,6 +12,9 @@ namespace PharmacuticalE_Commerce
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            // 34an mn3ml4 Rebuild kol ma n3dl el view
+            builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
             builder.Services.AddDbContext<PharmacySystemContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
