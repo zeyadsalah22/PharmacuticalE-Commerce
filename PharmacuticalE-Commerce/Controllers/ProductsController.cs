@@ -11,6 +11,10 @@ namespace PharmacuticalE_Commerce.Controllers
 {
     public class ProductsController : Controller
     {
+        [TempData]
+        public string MessageAdd { get; set; }
+        [TempData]
+        public string MessageDelete { get; set; }
         private readonly PharmacySystemContext _context;
 
         public ProductsController(PharmacySystemContext context)
