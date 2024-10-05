@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using PharmacuticalE_Commerce.Models;
 
-namespace PharmacuticalE_Commerce.KeepDataAnnotations
+namespace PharmacuticalE_Commerce.Models
 {
     [ModelMetadataType(typeof(ProductMetaData))]
     public partial class Product
@@ -17,7 +16,12 @@ namespace PharmacuticalE_Commerce.KeepDataAnnotations
 
         [Required(ErrorMessage = "Product name is required")]
         [StringLength(100, ErrorMessage = "Product name cannot exceed 100 characters")]
+        [Display(Name = "Product Name")]
         public string Name { get; set; } = null!;
+
+        [Required(ErrorMessage = "Please Enter Your Price ")]
+        [Range(0,100000, ErrorMessage = "Price should be less than 100000")]
+        public decimal Price { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Stock cannot be negative")]
         public int Stock { get; set; }
@@ -37,7 +41,6 @@ namespace PharmacuticalE_Commerce.KeepDataAnnotations
 
         public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
-        [Required]
         public virtual Category Category { get; set; } = null!;
 
         public virtual ICollection<Pav> Pavs { get; set; } = new List<Pav>();

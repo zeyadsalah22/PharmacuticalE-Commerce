@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
+using PharmacuticalE_Commerce.Repositories.Implements;
+using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce
 {
@@ -14,6 +16,9 @@ namespace PharmacuticalE_Commerce
 
             // 34an mn3ml4 Rebuild kol ma n3dl el view
             builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+            builder.Services.AddScoped<IProductRepository,ProductRepository>();
+            builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 
             builder.Services.AddDbContext<PharmacySystemContext>(options =>
             {
