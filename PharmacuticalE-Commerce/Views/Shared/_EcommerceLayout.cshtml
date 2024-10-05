@@ -1,0 +1,80 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy</title>
+    <link rel="stylesheet" href="/css/ecommerce.css">
+    <link rel="icon" href="/images/pharmacy.png" type="image/png">
+
+</head>
+<body>
+
+    <div class="top-header">
+        <p>Welcome to our Pharmacy - Your health is our priority!</p>
+    </div>
+
+    <header>
+        <div class="left-section">
+            <img src="/images/pharmacy.png" alt="Pharmacy Logo" class="logo">
+        </div>
+        <div class="center-section">
+            <h1> Pharmacy</h1>
+        </div>
+        <div class="right-section">
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#" class="current-page">Home</a></li>
+                    <li>
+                        <a href="#" class="shopping-link">Shopping </a>
+                        <ul class="dropdown">
+                            <li><a href="#">Categories1</a></li>
+                            <li><a href="#">Categories2</a></li>
+                            <li><a href="#">Categories3</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Offers</a></li>
+                    <li><a href="#">Prescription</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </nav>
+
+            <div id="search-container" style="display:none;">
+            </div>
+            <a href="#"><img src="/images/user.png" alt="Profile" class="icon"></a>
+            <a href="#"><img src="/images/shopping-cart.png" alt="Shopping Cart" class="icon"></a>
+            <span id="cart-total">0</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Shopping</a></li>
+                <li><a href="#">Offers</a></li>
+                <li><a href="#">Prescription</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </nav>
+        <p>All Rights Reserved © 2024</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
