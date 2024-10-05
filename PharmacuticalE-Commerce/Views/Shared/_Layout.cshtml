@@ -35,6 +35,36 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @{
+                if (TempData.ContainsKey("MessageAdd"))
+                {
+                <div class="toast show" role="alert" aria-live="polite" aria-atomic="true" style="position: absolute; top: 10%; right: 2%;">
+                    <div class="toast-header">
+                        <strong class="me-auto" style="color:green;">Done</strong>
+                        <small>now</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        @TempData["MessageAdd"]
+                    </div>
+                </div>
+
+                }
+                if (TempData.ContainsKey("MessageDelete"))
+                {
+                <div class="toast show" role="alert" aria-live="polite" aria-atomic="true" style="position: absolute; top: 10%; right: 2%;">
+                    <div class="toast-header">
+                        <strong class="me-auto" style="color:red;">Done</strong>
+                        <small>now</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        @TempData["MessageDelete"]
+                    </div>
+                </div>
+
+                }
+            }
             @RenderBody()
         </main>
     </div>
@@ -50,3 +80,9 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<script>
+    // Close the toast after 5 seconds
+    setTimeout(function () {
+        $('.toast').toast('hide');
+    }, 5000);
+</script>

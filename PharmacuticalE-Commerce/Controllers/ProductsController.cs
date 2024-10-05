@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Day6Mydemo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
+using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
@@ -15,18 +17,20 @@ namespace PharmacuticalE_Commerce.Controllers
         public string MessageAdd { get; set; }
         [TempData]
         public string MessageDelete { get; set; }
-        private readonly PharmacySystemContext _context;
-
-        public ProductsController(PharmacySystemContext context)
+        private readonly IProductRepository _repository;
+        private readonly ICategoryRepository _categoryRepository;
+        
+        public ProductsController(IProductRepository repository, ICategoryRepository categoryRepository)
         {
-            _context = context;
+            _repository = repository;
+            _categoryRepository = categoryRepository;
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var pharmacySystemContext = _context.Products.Include(p => p.Category);
-            return View(await pharmacySystemContext.ToListAsync());
+            var products = _repository.GetAllWithCategories();
+            return View(products);
         }
 
         // GET: Products/Details/5
@@ -37,9 +41,7 @@ namespace PharmacuticalE_Commerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+            var product = _repository.GetByIdWithCategories(id);
             if (product == null)
             {
                 return NotFound();
@@ -51,7 +53,7 @@ namespace PharmacuticalE_Commerce.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId");
+            ViewData["CategoryId"] = new SelectList(_categoryRepository.GetChilds(), "CategoryId", "Name");
             return View();
         }
 
@@ -60,15 +62,16 @@ namespace PharmacuticalE_Commerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Name,Stock,SerialNumber,Photo,CategoryId,Description")] Product product)
+        public async Task<IActionResult> Create([ModelBinder(BinderType=typeof(ProductBinder))] Product product)
         {
+            ModelState.Remove("Category");
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
+                _repository.Create(product);
+                TempData["MessageAdd"] = $"Product {product.Name} Added Successfully";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_categoryRepository.GetChilds(), "CategoryId", "Name",product.CategoryId);
             return View(product);
         }
 
@@ -80,12 +83,12 @@ namespace PharmacuticalE_Commerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = _repository.GetByIdWithCategories(id);
             if (product == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_categoryRepository.GetChilds(), "CategoryId", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -94,19 +97,18 @@ namespace PharmacuticalE_Commerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Stock,SerialNumber,Photo,CategoryId,Description")] Product product)
+        public async Task<IActionResult> Edit(int id, [ModelBinder(BinderType = typeof(ProductBinder))] Product product)
         {
             if (id != product.ProductId)
             {
                 return NotFound();
             }
-
+            ModelState.Remove("Category");
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    _repository.Update(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,7 +123,7 @@ namespace PharmacuticalE_Commerce.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_categoryRepository.GetChilds(), "CategoryId", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -133,9 +135,7 @@ namespace PharmacuticalE_Commerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+            var product = _repository.GetByIdWithCategories(id);
             if (product == null)
             {
                 return NotFound();
@@ -149,19 +149,24 @@ namespace PharmacuticalE_Commerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = _repository.GetById(id);
             if (product != null)
             {
-                _context.Products.Remove(product);
+                _repository.Delete(id);
+                TempData["MessageDelete"] = $"Product {product.Name} Deleted Successfully";
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Gallery()
+        {
+            var products = _repository.GetAllWithCategories();
+            return View(products);
+        }
         private bool ProductExists(int id)
         {
-            return _context.Products.Any(e => e.ProductId == id);
+            return _repository.GetAll().Any(e => e.ProductId == id);
         }
     }
 }
