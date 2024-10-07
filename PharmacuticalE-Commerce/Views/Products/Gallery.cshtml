@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PharmacuticalE_Commerce.Models.Product>
+﻿@model PaginatedList<PharmacuticalE_Commerce.Models.Product>
 
 @{
     ViewData["Title"] = "Gallery";
@@ -6,7 +6,20 @@
 }
 
 <h1>Gallery</h1>
-@* <div class="row row-cols-1 row-cols-md-3 g-4">
+<form asp-action="Gallery" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <label>Find by name: <input type="text" name="SearchString" value="@ViewData["SearchStringParm"]" /></label>
+            <input type="hidden" name="categoryFilter" value="@ViewData["CategoryFilterParm"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Gallery" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]">Back to Full List</a>
+        </p>
+    </div>
+</form>
+<a asp-action="Gallery" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" asp-route-sortOrder="@ViewData["NameSortParm"]">Sort by @Html.DisplayName("Product Name")</a>
+<br />
+<a asp-action="Gallery" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" asp-route-sortOrder="@ViewData["PriceSortParm"]">Sort by @Html.DisplayName("Price")</a>
+<div class="row row-cols-1 row-cols-md-3 g-4">
     @foreach (var item in Model)
     {
         <div class="col">
@@ -23,8 +36,33 @@
             </div>
         </div>
     }
-</div> *@
-<div id="ProductsGalleryContainer">
+</div>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Gallery"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-searchString="@ViewData["SearchStringParm"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    &lt
+</a>
+<span> @Model.PageIndex of @Model.TotalPages</span>
+<a asp-action="Gallery"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-searchString="@ViewData["SearchStringParm"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    &gt
+</a>
+
+
+@* <div id="ProductsGalleryContainer">
 
 </div>
 @section Mysection {
@@ -48,3 +86,4 @@
         }
     </script>
 }
+ *@

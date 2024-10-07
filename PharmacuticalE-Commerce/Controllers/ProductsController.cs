@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Day6Mydemo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
@@ -28,10 +30,38 @@ namespace PharmacuticalE_Commerce.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string categoryFilter, string searchString, int pageNumber = 1, int pageSize = 5)
         {
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "price";
+            ViewData["CurrentSort"] = sortOrder;
             var products = _repository.GetAllWithCategories();
-            return View(products);
+            if (!String.IsNullOrEmpty(categoryFilter))
+            {
+                ViewData["CategoryFilterParm"] = categoryFilter;
+                products = products.Where(p=>p.Category.Name.ToLower().Contains(categoryFilter.ToLower()));
+            }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ViewData["SearchStringParm"] = searchString;
+                pageNumber = 1;
+                products = products.Where(p => p.Name.ToLower().Contains(searchString.ToLower()));
+            }
+            switch (sortOrder) {
+                case "name_desc":
+                    products = products.OrderByDescending(p => p.Name).ToList();
+                    break;
+                case "price":
+                    products = products.OrderBy(p => p.Price).ToList();
+                    break;
+                case "price_desc":
+                    products = products.OrderByDescending(p => p.Price).ToList();
+                    break;
+                default:
+                    products = products.OrderBy(p => p.Name).ToList();
+                    break;
+            }
+            return View(await PaginatedList<Product>.CreateAsync(products, pageNumber, pageSize));
         }
 
         // GET: Products/Details/5
@@ -160,47 +190,76 @@ namespace PharmacuticalE_Commerce.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Gallery()
+        public async Task<IActionResult> Gallery(string sortOrder, string categoryFilter, string searchString, int pageNumber = 1, int pageSize = 5)
         {
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "price";
+            ViewData["CurrentSort"] = sortOrder;
             var products = _repository.GetAllWithCategories();
-            return View(products);
-        }
-
-        public IActionResult GetProductsList(int pageNumber = 1, int pageSize = 5)
-        {
-            var totalRecords = _repository.GetAll().Count();
-            var products = _repository.GetAllWithCategories()
-                .OrderBy(p=>p.ProductId)
-                .Skip(pageSize*(pageNumber-1))
-                .Take(pageSize).ToList();
-            var viewModel = new ProductsPaginationViewModel
+            if (!String.IsNullOrEmpty(categoryFilter))
             {
-                Products = products,
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalRecords = totalRecords
-            };
-
-            return PartialView("_productListPartial", viewModel);
-        }
-
-        public IActionResult GetProductsGallery(int pageNumber = 1, int pageSize = 5)
-        {
-            var totalRecords = _repository.GetAll().Count();
-            var products = _repository.GetAllWithCategories()
-                .OrderBy(p => p.ProductId)
-                .Skip(pageSize * (pageNumber - 1))
-                .Take(pageSize).ToList();
-            var viewModel = new ProductsPaginationViewModel
+                ViewData["CategoryFilterParm"] = categoryFilter;
+                products = products.Where(p => p.Category.Name.ToLower().Contains(categoryFilter.ToLower()));
+            }
+            if (!String.IsNullOrEmpty(searchString))
             {
-                Products = products,
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalRecords = totalRecords
-            };
-
-            return PartialView("_productGalleryPartial", viewModel);
+                ViewData["SearchStringParm"] = searchString;
+                pageNumber = 1;
+                products = products.Where(p => p.Name.ToLower().Contains(searchString.ToLower()));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    products = products.OrderByDescending(p => p.Name).ToList();
+                    break;
+                case "price":
+                    products = products.OrderBy(p => p.Price).ToList();
+                    break;
+                case "price_desc":
+                    products = products.OrderByDescending(p => p.Price).ToList();
+                    break;
+                default:
+                    products = products.OrderBy(p => p.Name).ToList();
+                    break;
+            }
+            return View(await PaginatedList<Product>.CreateAsync(products, pageNumber, pageSize));
         }
+
+        //    public IActionResult GetProductsList(int pageNumber = 1, int pageSize = 5)
+        //    {
+        //        var totalRecords = _repository.GetAll().Count();
+        //        var products = _repository.GetAllWithCategories()
+        //            .OrderBy(p=>p.ProductId)
+        //            .Skip(pageSize*(pageNumber-1))
+        //            .Take(pageSize).ToList();
+        //        var viewModel = new ProductsPaginationViewModel
+        //        {
+        //            Products = products,
+        //            PageNumber = pageNumber,
+        //            PageSize = pageSize,
+        //            TotalRecords = totalRecords
+        //        };
+
+        //        return PartialView("_productListPartial", viewModel);
+        //    }
+
+        //    public IActionResult GetProductsGallery(int pageNumber = 1, int pageSize = 5)
+        //    {
+        //        var totalRecords = _repository.GetAll().Count();
+        //        var products = _repository.GetAllWithCategories()
+        //            .OrderBy(p => p.ProductId)
+        //            .Skip(pageSize * (pageNumber - 1))
+        //            .Take(pageSize).ToList();
+        //        var viewModel = new ProductsPaginationViewModel
+        //        {
+        //            Products = products,
+        //            PageNumber = pageNumber,
+        //            PageSize = pageSize,
+        //            TotalRecords = totalRecords
+        //        };
+
+        //        return PartialView("_productGalleryPartial", viewModel);
+        //    }
         private bool ProductExists(int id)
         {
             return _repository.GetAll().Any(e => e.ProductId == id);

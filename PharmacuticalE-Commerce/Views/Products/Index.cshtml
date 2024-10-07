@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PharmacuticalE_Commerce.Models.Product>
+﻿@model PaginatedList<PharmacuticalE_Commerce.Models.Product>
 
 @{
     Layout = "_EcommerceLayout";
@@ -13,23 +13,33 @@
 <p>
     <a asp-action="Gallery">Gallery</a>
 </p>
-@* <table class="table">
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <label>Find by name: <input type="text" name="SearchString" value="@ViewData["SearchStringParm"]" /></label>
+            <input type="hidden" name="categoryFilter" value="@ViewData["CategoryFilterParm"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]">Back to Full List</a>
+        </p>
+    </div>
+</form>
+<table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <a asp-action="Index" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayName("Product Name")</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                <a asp-action="Index" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" asp-route-sortOrder="@ViewData["PriceSortParm"]">@Html.DisplayName("Price")</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SerialNumber)
+                @Html.DisplayName("SerialNumber")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Photo)
+                @Html.DisplayName("Photo")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category.Name)
+                @Html.DisplayName("Category Name")
             </th>
             <th></th>
         </tr>
@@ -61,8 +71,31 @@
 }
     </tbody>
 </table>
- *@
-<div id="ProductsListContainer">
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-searchString="@ViewData["SearchStringParm"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    &lt
+</a>
+<span> @Model.PageIndex of @Model.TotalPages</span>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-searchString="@ViewData["SearchStringParm"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    &gt
+</a>
+
+@* <div id="ProductsListContainer">
 </div>
 
 @section Mysection {
@@ -86,3 +119,4 @@
         }
     </script>
 }
+ *@
