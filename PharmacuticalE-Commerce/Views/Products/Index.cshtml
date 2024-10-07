@@ -13,7 +13,7 @@
 <p>
     <a asp-action="Gallery">Gallery</a>
 </p>
-<table class="table">
+@* <table class="table">
     <thead>
         <tr>
             <th>
@@ -61,3 +61,28 @@
 }
     </tbody>
 </table>
+ *@
+<div id="ProductsListContainer">
+</div>
+
+@section Mysection {
+    <script>
+        $(document).ready(function () {
+            loadPage(1);
+        });
+
+        function loadPage(page) {
+            $.ajax({
+                url: '/Products/GetProductsList',
+                type: 'GET',
+                data: { pageNumber: page },
+                success: function (result) {
+                    $('#ProductsListContainer').html(result);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+}

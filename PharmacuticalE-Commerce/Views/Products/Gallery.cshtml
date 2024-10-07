@@ -6,7 +6,7 @@
 }
 
 <h1>Gallery</h1>
-<div class="row row-cols-1 row-cols-md-3 g-4">
+@* <div class="row row-cols-1 row-cols-md-3 g-4">
     @foreach (var item in Model)
     {
         <div class="col">
@@ -23,4 +23,28 @@
             </div>
         </div>
     }
+</div> *@
+<div id="ProductsGalleryContainer">
+
 </div>
+@section Mysection {
+    <script>
+        $(document).ready(function () {
+            loadPage(1);
+        });
+
+        function loadPage(page) {
+            $.ajax({
+                url: '/Products/GetProductsGallery',
+                type: 'GET',
+                data: { pageNumber: page },
+                success: function (result) {
+                    $('#ProductsGalleryContainer').html(result);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+}

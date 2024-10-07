@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
+using PharmacuticalE_Commerce.Viewmodels;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
@@ -163,6 +164,42 @@ namespace PharmacuticalE_Commerce.Controllers
         {
             var products = _repository.GetAllWithCategories();
             return View(products);
+        }
+
+        public IActionResult GetProductsList(int pageNumber = 1, int pageSize = 5)
+        {
+            var totalRecords = _repository.GetAll().Count();
+            var products = _repository.GetAllWithCategories()
+                .OrderBy(p=>p.ProductId)
+                .Skip(pageSize*(pageNumber-1))
+                .Take(pageSize).ToList();
+            var viewModel = new ProductsPaginationViewModel
+            {
+                Products = products,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalRecords = totalRecords
+            };
+
+            return PartialView("_productListPartial", viewModel);
+        }
+
+        public IActionResult GetProductsGallery(int pageNumber = 1, int pageSize = 5)
+        {
+            var totalRecords = _repository.GetAll().Count();
+            var products = _repository.GetAllWithCategories()
+                .OrderBy(p => p.ProductId)
+                .Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize).ToList();
+            var viewModel = new ProductsPaginationViewModel
+            {
+                Products = products,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalRecords = totalRecords
+            };
+
+            return PartialView("_productGalleryPartial", viewModel);
         }
         private bool ProductExists(int id)
         {
