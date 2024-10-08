@@ -1,0 +1,61 @@
+﻿@model PharmacuticalE_Commerce.ViewModels.AttendancesViewModel
+
+@{
+    ViewBag.PageTitle="Attendances";
+    ViewBag.CardTitle = "Details";
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Employee Name :
+        </dt>
+        <dd class="col-sm-10">
+            @Model.FirstName @Model.LastName
+        </dd>
+        <dt class="col-sm-2">
+            Employee Id :
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeId)
+        </dd>
+        <dt class="col-sm-2">
+            Branch :
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BranchAddress)
+        </dd>
+
+        <dt class="col-sm-2">
+            Shift :
+        </dt>
+        <dd class="col-sm-10">
+            @switch (Model.ShiftId)
+            {
+                case 1:
+                    <span>8 : 4 </span>
+                    break;
+                case 2:
+                    <span>4 : 12</span>
+                    break;
+                case 4:
+                    <span>12 :8</span>
+                    break;
+            }
+        </dd>
+        <dt class = "col-sm-2">
+            Attended At :
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AttendedAt)
+        </dd>
+        <dt class = "col-sm-2">
+            Left At : 
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LeftAt)
+        </dd>
+    </dl>
+</div>

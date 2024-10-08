@@ -1,0 +1,31 @@
+﻿@model IEnumerable<PharmacuticalE_Commerce.ViewModels.AttendancesViewModel>
+
+@{
+    ViewBag.PageTitle = "Attendances";
+    ViewBag.CardTitle = "Attendances List";
+    ViewData["Title"] = "Attendances";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Branch</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FirstName @item.LastName</td>
+                <td>@item.BranchAddress</td>
+                <td>
+                    <form asp-action="Details" asp-route-id="@item.RecordId" method="get" target="_blank">
+                        <button type="submit" class="btn btn-primary">Details</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
