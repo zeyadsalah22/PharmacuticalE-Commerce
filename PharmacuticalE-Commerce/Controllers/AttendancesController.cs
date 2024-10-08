@@ -35,35 +35,17 @@ namespace PharmacuticalE_Commerce.Controllers
         [HttpPost]
         public IActionResult ShowAttendances(string ShiftId, string Branch, DateTime Date)
         {
-            var pharmacySystemContext = _context.Attendances
-                .Join(_context.Branches,
-                      attendance => attendance.BranchId,
-                      branch => branch.BranchId,
-                      (attendance, branch) => new { attendance, branch })
-                .Join(_context.Employees,
-                      ab => new { ab.attendance.EmployeeId, ab.branch.BranchId },
-                      employee => new { employee.EmployeeId, employee.BranchId },
-                      (ab, employee) => new
-                      {
-                          ab.attendance,
-                          ab.branch,
-                          employee
-                      })
-                .Where(x => x.branch.Address == Branch
-                            && x.attendance.ShiftId == int.Parse(ShiftId)
-                            && x.attendance.AttendedAt >= Date
-                            && x.attendance.AttendedAt < Date.AddDays(1))
-                .Select(x => new AttendancesViewModel
+            var pharmacySystemContext = _context.Attendances.Include(a => a.Branch).Include(a => a.Employee)
+            .Where(a => a.Branch.Address == Branch&& a.ShiftId == int.Parse(ShiftId)&& a.AttendedAt >= Date&& a.AttendedAt < Date.AddDays(1)).Select(a => new AttendancesViewModel
                 {
-                    RecordId = x.attendance.RecordId,
-                    FirstName = x.employee.Fname,
-                    LastName = x.employee.Lname,
-                    BranchAddress = x.branch.Address,
-                    ShiftId = x.attendance.ShiftId,
-                    AttendedAt = x.attendance.AttendedAt,
-                    LeftAt = x.attendance.LeftAt
-                })
-                .ToList();
+                    RecordId = a.RecordId,
+                    FirstName = a.Employee.Fname,
+                    LastName = a.Employee.Lname,
+                    BranchAddress = a.Branch.Address,
+                    ShiftId = a.ShiftId,
+                    AttendedAt = a.AttendedAt,
+                    LeftAt = a.LeftAt
+                }).ToList();
 
             return View(pharmacySystemContext);
         }
@@ -75,33 +57,17 @@ namespace PharmacuticalE_Commerce.Controllers
                 return NotFound();
             }
 
-            var pharmacySystemContext = _context.Attendances
-                .Join(_context.Employees,
-                      attendance => attendance.EmployeeId,
-                      employee => employee.EmployeeId,
-                      (attendance, employee) => new { attendance, employee })
-                .Join(_context.Branches,
-                      ae => ae.attendance.BranchId,
-                      branch => branch.BranchId,
-                      (ae, branch) => new
-                      {
-                          ae.attendance,
-                          ae.employee,
-                          branch
-                      })
-                .Where(x => x.attendance.RecordId == id)
-                .Select(x => new AttendancesViewModel
+            var pharmacySystemContext = _context.Attendances.Include(a => a.Employee).Include(a => a.Branch).Where(a => a.RecordId == id).Select(a => new AttendancesViewModel
                 {
-                    EmployeeId =x.attendance.EmployeeId,
-                    RecordId = x.attendance.RecordId,
-                    FirstName = x.employee.Fname,
-                    LastName = x.employee.Lname,
-                    BranchAddress = x.branch.Address,
-                    ShiftId = x.attendance.ShiftId,
-                    AttendedAt = x.attendance.AttendedAt,
-                    LeftAt = x.attendance.LeftAt
-                })
-                .FirstOrDefault();
+                    EmployeeId = a.EmployeeId,
+                    RecordId = a.RecordId,
+                    FirstName = a.Employee.Fname,
+                    LastName = a.Employee.Lname,
+                    BranchAddress = a.Branch.Address,
+                    ShiftId = a.ShiftId,
+                    AttendedAt = a.AttendedAt,
+                    LeftAt = a.LeftAt
+                }).FirstOrDefault();
 
             if (pharmacySystemContext == null)
             {
