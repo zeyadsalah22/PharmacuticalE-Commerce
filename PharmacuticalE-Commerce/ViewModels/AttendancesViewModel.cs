@@ -1,9 +1,13 @@
-﻿namespace PharmacuticalE_Commerce.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PharmacuticalE_Commerce.ViewModels
 {
     public class AttendancesViewModel
     {
-        
+            
             public int EmployeeId { get; set; }
+            public int BranchId { get; set; }
+        [Key]
             public int RecordId { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
