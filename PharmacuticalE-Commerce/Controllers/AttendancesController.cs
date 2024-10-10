@@ -28,7 +28,7 @@ namespace PharmacuticalE_Commerce.Controllers
         [HttpPost]
         public IActionResult ShowAttendances(string ShiftId, string Branch, DateTime Date)
         {
-            var attendancesViewModel = _context.Attendances.Include(a => a.Branch).Include(a => a.Employee).Where(a => a.Branch.Address == Branch &&a.ShiftId == int.Parse(ShiftId) &&a.AttendedAt >= Date &&a.AttendedAt < Date.AddDays(1))
+            var attendancesViewModel = _context.Attendances.Include(a => a.Employee).Include(a => a.Branch).Where(a => a.Branch.Address == Branch && a.ShiftId == int.Parse(ShiftId) && a.AttendedAt >= Date && a.AttendedAt < Date.AddDays(1))
                 .Select(a => new AttendancesViewModel
                 {
                     RecordId = a.RecordId,
@@ -67,14 +67,14 @@ namespace PharmacuticalE_Commerce.Controllers
 
         public IActionResult TakeAttendance(string shiftId, string Branch, DateTime Date)
         {
-            var employees = _context.EmployeeShifts.Include(es => es.Employee).Include(es => es.Employee.Branch).Where(es => es.ShiftId == int.Parse(shiftId) &&es.Employee.Branch.Address == Branch &&!_context.Attendances.Any(a => a.ShiftId == int.Parse(shiftId) &&a.AttendedAt >= Date &&a.LeftAt < Date.AddDays(1) &&a.EmployeeId == es.EmployeeId))
+            var employees = _context.Employees.Include(e => e.Branch).Where(es => es.ShiftId == int.Parse(shiftId) && es.Branch.Address == Branch && !_context.Attendances.Any(a => a.ShiftId == int.Parse(shiftId) && a.AttendedAt >= Date && a.LeftAt < Date.AddDays(1) && a.EmployeeId == es.EmployeeId))
             .Select(es => new AttendancesViewModel
             {
-                EmployeeId = es.Employee.EmployeeId,
-                FirstName = es.Employee.Fname,
-                LastName = es.Employee.Lname,
-                BranchAddress = es.Employee.Branch.Address,
-                BranchId = es.Employee.Branch.BranchId,
+                EmployeeId = es.EmployeeId,
+                FirstName = es.Fname,
+                LastName = es.Lname,
+                BranchAddress = es.Branch.Address,
+                BranchId = es.BranchId,
                 ShiftId = es.ShiftId
             });
 

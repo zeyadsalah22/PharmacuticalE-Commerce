@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace PharmacuticalE_Commerce.Models;
+namespace Db2;
 
 public partial class PharmacySystemContext : DbContext
 {
