@@ -28,5 +28,14 @@ namespace PharmacuticalE_Commerce.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        public IActionResult Ecommerce()
+        {
+            return View();
+        }
+
+        public IActionResult StaffManagement()
+        {
+            return View();
+        }
     }
 }
