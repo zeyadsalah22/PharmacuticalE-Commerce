@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PharmacuticalE_Commerce.Models;
+namespace Db2;
 
 public partial class Employee
 {
