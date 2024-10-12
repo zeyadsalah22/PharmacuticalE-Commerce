@@ -6,37 +6,36 @@
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
 
-<form method="post" asp-action="Attended">
-    <table class="table">
-        <thead>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Branch</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Branch
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @item.FirstName @item.LastName
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.BranchAddress)
-                    </td>
-                    <td>
+                <td>
+                    @item.FirstName @item.LastName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BranchAddress)
+                </td>
+                <td>
+                    <!-- Each employee has their own form to submit attendance -->
+                    <form method="post" asp-action="Attended">
                         <input type="hidden" name="employeeId" value="@item.EmployeeId" />
                         <input type="hidden" name="shiftId" value="@item.ShiftId" />
                         <input type="hidden" name="branchId" value="@item.BranchId" />
-                        <button type="submit" class="btn btn-primary" asp-action="Attended">Attended</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</form>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary" value="Mark Attended" />
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

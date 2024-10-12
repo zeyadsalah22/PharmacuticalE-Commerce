@@ -14,19 +14,20 @@
 
 <div>
     <div class="col-md-4">
-        Employee ID: @ViewBag.EmployeeId
+        Employee ID: @Model.EmployeeId
         <br />
-        Shift ID: @ViewBag.ShiftId
+        Shift ID: @Model.ShiftId
         <br />
-        Branch ID: @ViewBag.BranchId
+        Branch ID: @Model.BranchId
     </div>
     <br />
     <hr />
     <div class="col-md-4">
         <form asp-action="tAttended" method="post">
-            <input type="hidden" name="employeeId" value="@ViewBag.EmployeeId" />
-            <input type="hidden" name="shiftId" value="@ViewBag.ShiftId" />
-            <input type="hidden" name="branchId" value="@ViewBag.BranchId" />
+            <input type="hidden" asp-for="EmployeeId" />
+            <input type="hidden" asp-for="ShiftId" />
+            <input type="hidden" asp-for="BranchId" />
+
             <div class="form-group">
                 <label asp-for="AttendedAt" class="control-label"></label>
                 <input asp-for="AttendedAt" class="form-control" />
@@ -45,7 +46,5 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

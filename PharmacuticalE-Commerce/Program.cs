@@ -20,6 +20,8 @@ namespace PharmacuticalE_Commerce
             builder.Services.AddScoped<IProductRepository,ProductRepository>();
             builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 
+            builder.Services.AddScoped<IAttendanceRepository,AttendanceRepository>();
+
             builder.Services.AddDbContext<PharmacySystemContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
