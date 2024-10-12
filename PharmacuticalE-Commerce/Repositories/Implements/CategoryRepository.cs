@@ -49,7 +49,7 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
 
         public IEnumerable<Category> GetParents()
         {
-            return _context.Categories.Where(p => p.ParentCategoryId == null).ToList();
+            return _context.Categories.Where(p => p.ParentCategoryId == null).Include(c => c.InverseParentCategory).ToList();
         }
 
         public IEnumerable<Category> GetChildsByparent(int? parentId)
