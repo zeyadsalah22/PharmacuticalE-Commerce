@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
 
-<form method="post" asp-action="ShowAttendances">
+<form method="get" asp-action="ShowAttendances">
     <div class="mb-3">
         <label for="ShiftId" class="form-label">Shift:</label>
         <select id="ShiftId" name="ShiftId" class="form-select">
@@ -43,12 +43,12 @@
 
     <div class="mb-3">
         <label for="Date" class="form-label">Date:</label>
-        <input type="date" id="Date" name="Date" class="form-control" asp-for="AttendedAt" value="2000-01-01" min="2000-01-01">
+        <input type="date" id="Date" name="Date" class="form-control" asp-for="AttendedAt" value="" min="2000-01-01">
         <span asp-validation-for="AttendedAt" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Show</button>
-    <button type="submit" class="btn btn-primary"  asp-action="TakeAttendance">Take Attendance</button>
+    <button type="submit" class="btn btn-primary" asp-action="TakeAttendance">Take Attendance</button>
 </form>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

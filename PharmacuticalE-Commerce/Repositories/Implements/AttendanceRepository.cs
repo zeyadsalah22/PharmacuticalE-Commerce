@@ -14,10 +14,10 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
             _context = context;
         }
 
+
         public Attendance GetById(int? id)
         {
-            return _context.Attendances.Include(a => a.Employee).Include(a => a.Branch)
-                    .FirstOrDefault(a => a.RecordId == id);
+            return _context.Attendances.Include(a => a.Employee).Include(a => a.Branch).FirstOrDefault(a => a.RecordId == id);
         }
 
         public IEnumerable<Attendance> GetAll()
@@ -85,6 +85,21 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
         {
             return _context.Attendances.Any(a => a.EmployeeId == int.Parse(employeeId) && a.ShiftId == int.Parse(shiftId)
                         && a.BranchId == int.Parse(branchId) && a.AttendedAt.Date == attendedAt.Date);
+        }
+
+        public IEnumerable<string> GetAllBranches()
+        {
+            return _context.Branches.Select(a => a.Address).ToList();
+        }
+
+        public IEnumerable<int> GetAllShifts()
+        {
+            return _context.Shifts.Select(a=>a.ShiftId).ToList();
+        }
+
+        public string GetBranchAddress(int id)
+        {
+            return _context.Branches.Where(a=>a.BranchId == id).First().Address;
         }
     }
 }

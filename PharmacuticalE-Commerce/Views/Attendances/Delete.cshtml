@@ -1,0 +1,15 @@
+﻿@model PharmacuticalE_Commerce.ViewModels.AttendancesViewModel
+
+@{
+    ViewData["Title"] = "Delete Attendance";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+<h1>Delete Attendance</h1>
+
+<h3>Are you sure you want to delete this attendance?</h3>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" value="@Model.RecordId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>

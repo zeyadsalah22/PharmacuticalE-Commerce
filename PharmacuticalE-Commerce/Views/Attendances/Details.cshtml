@@ -1,7 +1,7 @@
 ﻿@model PharmacuticalE_Commerce.ViewModels.AttendancesViewModel
 
 @{
-    ViewBag.PageTitle="Attendances";
+    ViewBag.PageTitle = "Attendances";
     ViewBag.CardTitle = "Details";
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
@@ -45,16 +45,16 @@
                     break;
             }
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Attended At :
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AttendedAt)
         </dd>
-        <dt class = "col-sm-2">
-            Left At : 
+        <dt class="col-sm-2">
+            Left At :
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LeftAt)
         </dd>
     </dl>
