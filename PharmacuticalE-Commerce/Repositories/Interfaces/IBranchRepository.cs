@@ -2,7 +2,7 @@
 
 namespace PharmacuticalE_Commerce.Repositories.Interfaces
 {
-    public interface IBranchRepository
+    public interface IBranchRepository : IRepository<Branch>
     {
         IEnumerable<Branch> GetAllBranches();
         Branch GetBranchById(int? id);
