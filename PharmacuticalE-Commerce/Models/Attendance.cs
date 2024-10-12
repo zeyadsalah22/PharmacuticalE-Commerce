@@ -9,8 +9,6 @@ public partial class Attendance
 
     public int EmployeeId { get; set; }
 
-    public int ShiftId { get; set; }
-
     public int BranchId { get; set; }
 
     public DateTime AttendedAt { get; set; }
@@ -20,6 +18,4 @@ public partial class Attendance
     public virtual Branch Branch { get; set; } = null!;
 
     public virtual Employee Employee { get; set; } = null!;
-
-    public virtual Shift Shift { get; set; } = null!;
 }

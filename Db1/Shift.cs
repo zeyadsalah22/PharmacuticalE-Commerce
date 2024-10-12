@@ -11,7 +11,5 @@ public partial class Shift
 
     public TimeOnly ToTime { get; set; }
 
-    public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
-
-    public virtual ICollection<EmployeeShift> EmployeeShifts { get; set; } = new List<EmployeeShift>();
+    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 }

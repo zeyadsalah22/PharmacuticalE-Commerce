@@ -25,15 +25,17 @@ public partial class Employee
 
     public DateTime? CreatedAt { get; set; }
 
+    public int? ShiftId { get; set; }
+
     public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
 
     public virtual Branch Branch { get; set; } = null!;
-
-    public virtual ICollection<EmployeeShift> EmployeeShifts { get; set; } = new List<EmployeeShift>();
 
     public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 
     public virtual Role Role { get; set; } = null!;
 
     public virtual ICollection<SalaryLog> SalaryLogs { get; set; } = new List<SalaryLog>();
+
+    public virtual Shift? Shift { get; set; }
 }

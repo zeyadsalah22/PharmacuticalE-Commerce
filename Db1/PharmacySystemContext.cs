@@ -31,8 +31,6 @@ public partial class PharmacySystemContext : DbContext
 
     public virtual DbSet<Employee> Employees { get; set; }
 
-    public virtual DbSet<EmployeeShift> EmployeeShifts { get; set; }
-
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<Pav> Pavs { get; set; }
@@ -63,7 +61,7 @@ public partial class PharmacySystemContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=PharmacySystem;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=PharmacySystem;Integrated Security=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -82,7 +80,6 @@ public partial class PharmacySystemContext : DbContext
             entity.Property(e => e.LeftAt)
                 .HasColumnType("datetime")
                 .HasColumnName("leftAt");
-            entity.Property(e => e.ShiftId).HasColumnName("shiftId");
 
             entity.HasOne(d => d.Branch).WithMany(p => p.Attendances)
                 .HasForeignKey(d => d.BranchId)
@@ -93,11 +90,6 @@ public partial class PharmacySystemContext : DbContext
                 .HasForeignKey(d => d.EmployeeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Attendanc__emplo__3B75D760");
-
-            entity.HasOne(d => d.Shift).WithMany(p => p.Attendances)
-                .HasForeignKey(d => d.ShiftId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Attendanc__shift__3C69FB99");
         });
 
         modelBuilder.Entity<Branch>(entity =>
@@ -281,42 +273,21 @@ public partial class PharmacySystemContext : DbContext
             entity.Property(e => e.Salary)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("salary");
+            entity.Property(e => e.ShiftId).HasColumnName("shiftId");
 
             entity.HasOne(d => d.Branch).WithMany(p => p.Employees)
                 .HasForeignKey(d => d.BranchId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Employee__branch__2F10007B");
+                .HasConstraintName("FK__Employee__branch__160F4887");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Employees)
                 .HasForeignKey(d => d.RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Employee__roleId__2E1BDC42");
-        });
+                .HasConstraintName("FK__Employee__roleId__17036CC0");
 
-        modelBuilder.Entity<EmployeeShift>(entity =>
-        {
-            entity.HasKey(e => new { e.EmployeeId, e.ShiftId, e.StartDate }).HasName("PK__Employee__19D564BAA1789460");
-
-            entity.ToTable("EmployeeShift");
-
-            entity.Property(e => e.EmployeeId).HasColumnName("employeeId");
-            entity.Property(e => e.ShiftId).HasColumnName("shiftId");
-            entity.Property(e => e.StartDate)
-                .HasColumnType("datetime")
-                .HasColumnName("startDate");
-            entity.Property(e => e.EndDate)
-                .HasColumnType("datetime")
-                .HasColumnName("endDate");
-
-            entity.HasOne(d => d.Employee).WithMany(p => p.EmployeeShifts)
-                .HasForeignKey(d => d.EmployeeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__EmployeeS__emplo__37A5467C");
-
-            entity.HasOne(d => d.Shift).WithMany(p => p.EmployeeShifts)
+            entity.HasOne(d => d.Shift).WithMany(p => p.Employees)
                 .HasForeignKey(d => d.ShiftId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__EmployeeS__shift__38996AB5");
+                .HasConstraintName("FK__Employee__shiftI__17F790F9");
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -451,6 +422,9 @@ public partial class PharmacySystemContext : DbContext
             entity.Property(e => e.Photo)
                 .HasMaxLength(255)
                 .HasColumnName("photo");
+            entity.Property(e => e.Price)
+                .HasDefaultValue(10.0m)
+                .HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SerialNumber)
                 .HasMaxLength(50)
                 .IsUnicode(false)
