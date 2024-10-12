@@ -3,7 +3,7 @@
 @{
     ViewBag.PageTitle = "Attendances";
     ViewBag.CardTitle = "Select Date";
-    ViewData["Title"] = "Index1";
+    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
 
@@ -48,6 +48,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Show</button>
+    <button type="submit" class="btn btn-primary"  asp-action="TakeAttendance">Take Attendance</button>
 </form>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

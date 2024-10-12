@@ -31,8 +31,6 @@ public partial class PharmacySystemContext : DbContext
 
     public virtual DbSet<Employee> Employees { get; set; }
 
-    public virtual DbSet<EmployeeShift> EmployeeShifts { get; set; }
-
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<Pav> Pavs { get; set; }
@@ -73,6 +71,12 @@ public partial class PharmacySystemContext : DbContext
 
             entity.ToTable("Attendance");
 
+            entity.HasIndex(e => e.BranchId, "IX_Attendance_branchId");
+
+            entity.HasIndex(e => e.EmployeeId, "IX_Attendance_employeeId");
+
+            entity.HasIndex(e => e.ShiftId, "IX_Attendance_shiftId");
+
             entity.Property(e => e.RecordId).HasColumnName("recordId");
             entity.Property(e => e.AttendedAt)
                 .HasColumnType("datetime")
@@ -93,11 +97,6 @@ public partial class PharmacySystemContext : DbContext
                 .HasForeignKey(d => d.EmployeeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Attendanc__emplo__3B75D760");
-
-            entity.HasOne(d => d.Shift).WithMany(p => p.Attendances)
-                .HasForeignKey(d => d.ShiftId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Attendanc__shift__3C69FB99");
         });
 
         modelBuilder.Entity<Branch>(entity =>
@@ -118,6 +117,8 @@ public partial class PharmacySystemContext : DbContext
 
             entity.ToTable("Cart");
 
+            entity.HasIndex(e => e.UserId, "IX_Cart_userId");
+
             entity.Property(e => e.CartId).HasColumnName("cartId");
             entity.Property(e => e.Type)
                 .HasMaxLength(50)
@@ -135,6 +136,8 @@ public partial class PharmacySystemContext : DbContext
             entity.HasKey(e => new { e.CartId, e.ProductId }).HasName("PK__CartItem__F38A0EAE461C9600");
 
             entity.ToTable("CartItem");
+
+            entity.HasIndex(e => e.ProductId, "IX_CartItem_productId");
 
             entity.Property(e => e.CartId).HasColumnName("cartId");
             entity.Property(e => e.ProductId).HasColumnName("productId");
@@ -162,6 +165,8 @@ public partial class PharmacySystemContext : DbContext
             entity.HasKey(e => e.CategoryId).HasName("PK__Category__23CAF1D854A9661D");
 
             entity.ToTable("Category");
+
+            entity.HasIndex(e => e.ParentCategoryId, "IX_Category_parentCategoryId");
 
             entity.HasIndex(e => e.Name, "UQ__Category__72E12F1B99F0194C").IsUnique();
 
@@ -212,6 +217,7 @@ public partial class PharmacySystemContext : DbContext
                     {
                         j.HasKey("DiscountId", "CategoryId").HasName("PK__Category__402FA57B117933E4");
                         j.ToTable("CategoryDiscount");
+                        j.HasIndex(new[] { "CategoryId" }, "IX_CategoryDiscount_categoryId");
                         j.IndexerProperty<int>("DiscountId").HasColumnName("discountId");
                         j.IndexerProperty<int>("CategoryId").HasColumnName("categoryId");
                     });
@@ -231,6 +237,7 @@ public partial class PharmacySystemContext : DbContext
                     {
                         j.HasKey("DiscountId", "ProductId").HasName("PK__ProductD__60C20770C507E758");
                         j.ToTable("ProductDiscount");
+                        j.HasIndex(new[] { "ProductId" }, "IX_ProductDiscount_productId");
                         j.IndexerProperty<int>("DiscountId").HasColumnName("discountId");
                         j.IndexerProperty<int>("ProductId").HasColumnName("productId");
                     });
@@ -253,6 +260,10 @@ public partial class PharmacySystemContext : DbContext
             entity.HasKey(e => e.EmployeeId).HasName("PK__Employee__C134C9C190EC8A1A");
 
             entity.ToTable("Employee");
+
+            entity.HasIndex(e => e.BranchId, "IX_Employee_branchId");
+
+            entity.HasIndex(e => e.RoleId, "IX_Employee_roleId");
 
             entity.HasIndex(e => e.Email, "UQ__Employee__AB6E6164DA1FA5B2").IsUnique();
 
@@ -281,6 +292,7 @@ public partial class PharmacySystemContext : DbContext
             entity.Property(e => e.Salary)
                 .HasColumnType("decimal(10, 2)")
                 .HasColumnName("salary");
+            entity.Property(e => e.ShiftId).HasColumnName("shiftId");
 
             entity.HasOne(d => d.Branch).WithMany(p => p.Employees)
                 .HasForeignKey(d => d.BranchId)
@@ -291,32 +303,11 @@ public partial class PharmacySystemContext : DbContext
                 .HasForeignKey(d => d.RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Employee__roleId__2E1BDC42");
-        });
 
-        modelBuilder.Entity<EmployeeShift>(entity =>
-        {
-            entity.HasKey(e => new { e.EmployeeId, e.ShiftId, e.StartDate }).HasName("PK__Employee__19D564BAA1789460");
-
-            entity.ToTable("EmployeeShift");
-
-            entity.Property(e => e.EmployeeId).HasColumnName("employeeId");
-            entity.Property(e => e.ShiftId).HasColumnName("shiftId");
-            entity.Property(e => e.StartDate)
-                .HasColumnType("datetime")
-                .HasColumnName("startDate");
-            entity.Property(e => e.EndDate)
-                .HasColumnType("datetime")
-                .HasColumnName("endDate");
-
-            entity.HasOne(d => d.Employee).WithMany(p => p.EmployeeShifts)
-                .HasForeignKey(d => d.EmployeeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__EmployeeS__emplo__37A5467C");
-
-            entity.HasOne(d => d.Shift).WithMany(p => p.EmployeeShifts)
+            entity.HasOne(d => d.Shift).WithMany(p => p.Employees)
                 .HasForeignKey(d => d.ShiftId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__EmployeeS__shift__38996AB5");
+                .HasConstraintName("FK_Employee_Shift");
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -324,6 +315,12 @@ public partial class PharmacySystemContext : DbContext
             entity.HasKey(e => e.OrderId).HasName("PK__Order__0809335DE1283F0A");
 
             entity.ToTable("Order");
+
+            entity.HasIndex(e => e.AddressId, "IX_Order_addressId");
+
+            entity.HasIndex(e => e.CartId, "IX_Order_cartId");
+
+            entity.HasIndex(e => e.UserId, "IX_Order_userId");
 
             entity.Property(e => e.OrderId).HasColumnName("orderId");
             entity.Property(e => e.AddressId).HasColumnName("addressId");
@@ -365,6 +362,8 @@ public partial class PharmacySystemContext : DbContext
 
             entity.ToTable("PAV");
 
+            entity.HasIndex(e => e.AttributeId, "IX_PAV_attributeId");
+
             entity.Property(e => e.ProductId).HasColumnName("productId");
             entity.Property(e => e.AttributeId).HasColumnName("attributeId");
             entity.Property(e => e.Value)
@@ -387,6 +386,10 @@ public partial class PharmacySystemContext : DbContext
             entity.HasKey(e => e.PrescriptionId).HasName("PK__Prescrip__7920FC2498C9F50F");
 
             entity.ToTable("Prescription");
+
+            entity.HasIndex(e => e.CartId, "IX_Prescription_cartId");
+
+            entity.HasIndex(e => e.EmployeeId, "IX_Prescription_employeeId");
 
             entity.Property(e => e.PrescriptionId).HasColumnName("prescriptionId");
             entity.Property(e => e.CartId).HasColumnName("cartId");
@@ -427,6 +430,7 @@ public partial class PharmacySystemContext : DbContext
                     {
                         j.HasKey("PrescriptionId", "DoctorId").HasName("PK__DoctorIn__0E02B463C56294AE");
                         j.ToTable("DoctorInPrescription");
+                        j.HasIndex(new[] { "DoctorId" }, "IX_DoctorInPrescription_doctorId");
                         j.IndexerProperty<int>("PrescriptionId").HasColumnName("prescriptionId");
                         j.IndexerProperty<int>("DoctorId").HasColumnName("doctorId");
                     });
@@ -437,6 +441,8 @@ public partial class PharmacySystemContext : DbContext
             entity.HasKey(e => e.ProductId).HasName("PK__Product__2D10D16AFD65A980");
 
             entity.ToTable("Product");
+
+            entity.HasIndex(e => e.CategoryId, "IX_Product_categoryId");
 
             entity.HasIndex(e => e.SerialNumber, "UQ__Product__3304A095B7795A78").IsUnique();
 
@@ -451,6 +457,7 @@ public partial class PharmacySystemContext : DbContext
             entity.Property(e => e.Photo)
                 .HasMaxLength(255)
                 .HasColumnName("photo");
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SerialNumber)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -481,6 +488,8 @@ public partial class PharmacySystemContext : DbContext
 
             entity.ToTable("ProductPrice");
 
+            entity.HasIndex(e => e.ProductId, "IX_ProductPrice_productId");
+
             entity.Property(e => e.PriceId).HasColumnName("priceId");
             entity.Property(e => e.EndDate)
                 .HasColumnType("datetime")
@@ -504,6 +513,8 @@ public partial class PharmacySystemContext : DbContext
             entity.HasKey(e => e.PromoCode1).HasName("PK__PromoCod__C7120D046F08FC51");
 
             entity.ToTable("PromoCode");
+
+            entity.HasIndex(e => e.DiscountId, "IX_PromoCode_discountId");
 
             entity.Property(e => e.PromoCode1)
                 .HasMaxLength(50)
@@ -545,6 +556,8 @@ public partial class PharmacySystemContext : DbContext
 
             entity.ToTable("SalaryLog");
 
+            entity.HasIndex(e => e.EmployeeId, "IX_SalaryLog_employeeId");
+
             entity.Property(e => e.RecordId).HasColumnName("recordId");
             entity.Property(e => e.ChangeType)
                 .HasMaxLength(10)
@@ -582,6 +595,8 @@ public partial class PharmacySystemContext : DbContext
 
             entity.ToTable("ShippingAddress");
 
+            entity.HasIndex(e => e.UserId, "IX_ShippingAddress_userId");
+
             entity.Property(e => e.AddressId).HasColumnName("addressId");
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
@@ -605,6 +620,8 @@ public partial class PharmacySystemContext : DbContext
             entity.HasKey(e => e.ShoppingCartId).HasName("PK__Shopping__21DFC906F465567E");
 
             entity.ToTable("ShoppingCart");
+
+            entity.HasIndex(e => e.CartId, "IX_ShoppingCart_cartId");
 
             entity.Property(e => e.ShoppingCartId).HasColumnName("shoppingCartId");
             entity.Property(e => e.CartId).HasColumnName("cartId");
@@ -652,6 +669,8 @@ public partial class PharmacySystemContext : DbContext
             entity.HasKey(e => new { e.CardId, e.CardNo }).HasName("PK__UserCard__E98DAD82B96B04DE");
 
             entity.ToTable("UserCard");
+
+            entity.HasIndex(e => e.UserId, "IX_UserCard_userId");
 
             entity.HasIndex(e => e.CardNo, "UQ__UserCard__4D66913A9FD915EA").IsUnique();
 

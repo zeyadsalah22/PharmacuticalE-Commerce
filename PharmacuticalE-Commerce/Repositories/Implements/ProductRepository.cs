@@ -37,12 +37,12 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
 
         public IEnumerable<Product> GetAllWithCategories()
         {
-            return _context.Products.Include(p=>p.Category).ToList();
+            return _context.Products.Include(p=>p.Category).Include(p=>p.Category.ParentCategory).ToList();
         }
 
         public Product GetByIdWithCategories(int? id)
         {
-            return _context.Products.Include(p=>p.Category).FirstOrDefault(m => m.ProductId == id);
+            return _context.Products.Include(p=>p.Category).Include(p => p.Category.ParentCategory).FirstOrDefault(m => m.ProductId == id);
         }
 
         public IEnumerable<Product> GetProductsByCategory(int categoryId)

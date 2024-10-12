@@ -5,85 +5,111 @@
     Layout = "~/Views/Shared/_EcommerceLayout.cshtml";
 }
 
-<h1>Gallery</h1>
-<form asp-action="Gallery" method="get">
-    <div class="form-actions no-color">
-        <p>
-            <label>Find by name: <input type="text" name="SearchString" value="@ViewData["SearchStringParm"]" /></label>
-            <input type="hidden" name="categoryFilter" value="@ViewData["CategoryFilterParm"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Gallery" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]">Back to Full List</a>
-        </p>
-    </div>
-</form>
-<a asp-action="Gallery" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" asp-route-sortOrder="@ViewData["NameSortParm"]">Sort by @Html.DisplayName("Product Name")</a>
-<br />
-<a asp-action="Gallery" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" asp-route-sortOrder="@ViewData["PriceSortParm"]">Sort by @Html.DisplayName("Price")</a>
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    @foreach (var item in Model)
-    {
-        <div class="col">
-            <div class="card h-100">
-                <img src="@Url.Content("~/images/products/" + item.Photo)" class="card-img-top" width="300" height="300" alt="@item.Name">
-                <div class="card-body">
-                    <h5 class="card-title">@item.Name</h5>
-                    <p class="card-subheading">@item.Category.Name</p>
-                    <p class="card-text">Price: @item.Price $</p>
-                </div>
-                <div class="card-footer">
-                    <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-primary">Details</a>
-                </div>
-            </div>
-        </div>
-    }
-</div>
+<section class="products section">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="widget">
+					<h4 class="widget-title">Search</h4>
+					<form asp-action="Gallery" method="get">
+						<div class="form-actions no-color">
+							<p>
+								<input type="text" class="form-control" name="SearchString" value="@ViewData["SearchStringParm"]" />
+								<input type="hidden" name="categoryFilter" value="@ViewData["CategoryFilterParm"]" />
+                                <input type="submit" hidden="hidden" value="Search" />
+								<br />
+                                <a asp-action="Gallery" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]">Back to Full List</a>
+							</p>
+						</div>
+					</form>
+				</div>
+				<div class="widget">
+					<h4 class="widget-title">Sort By</h4>
+					<a asp-action="Gallery" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayName("Product Name")</a>
+					<br />
+					<a asp-action="Gallery" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" asp-route-sortOrder="@ViewData["PriceSortParm"]">@Html.DisplayName("Price")</a>
+				</div>
 
-@{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
+				<div class="widget product-category" id="productscategories">
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="row">
+					@foreach (var item in Model)
+					{
+						<div class="col-md-4">
+							<div class="product-item">
+								<div class="product-thumb">
+									<img style="width:250px; height:300px; object-fit:cover" src="@Url.Content("~/images/products/" + item.Photo)" alt="@item.Name" />
+									<div class="preview-meta">
+										<ul>
 
-<a asp-action="Gallery"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-searchString="@ViewData["SearchStringParm"]"
-   asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @prevDisabled">
-    &lt
-</a>
-<span> @Model.PageIndex of @Model.TotalPages</span>
-<a asp-action="Gallery"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-searchString="@ViewData["SearchStringParm"]"
-   asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @nextDisabled">
-    &gt
-</a>
+											<li>
+												<a asp-action="CardDetails" asp-route-id="@item.ProductId"><i class="tf-ion-ios-search-strong"></i></a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="product-content">
+									<h4><a href="product-single.html">@item.Name</a></h4>
+									<p class="price">$@item.Price</p>
+								</div>
+							</div>
+						</div>
+					}
+					@{
+						var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+						var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+					}
+					
 
+				</div>
+			</div>
 
-@* <div id="ProductsGalleryContainer">
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<a asp-action="Gallery"
+					   asp-route-sortOrder="@ViewData["CurrentSort"]"
+					   asp-route-searchString="@ViewData["SearchStringParm"]"
+					   asp-route-pageNumber="@(Model.PageIndex - 1)"
+					   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+					   class="btn btn-default @prevDisabled">
+						&lt
+					</a>
+					<span> @Model.PageIndex of @Model.TotalPages</span>
+					<a asp-action="Gallery"
+					   asp-route-sortOrder="@ViewData["CurrentSort"]"
+					   asp-route-searchString="@ViewData["SearchStringParm"]"
+					   asp-route-pageNumber="@(Model.PageIndex + 1)"
+					   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+					   class="btn btn-default @nextDisabled">
+						&gt
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 
-</div>
 @section Mysection {
-    <script>
-        $(document).ready(function () {
-            loadPage(1);
-        });
+	<script>
+		$(document).ready(function () {
+			loadPage();
+		});
 
-        function loadPage(page) {
-            $.ajax({
-                url: '/Products/GetProductsGallery',
-                type: 'GET',
-                data: { pageNumber: page },
-                success: function (result) {
-                    $('#ProductsGalleryContainer').html(result);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        }
-    </script>
+		function loadPage() {
+			$.ajax({
+				url: '/Products/GetCategoriesSideBar',
+				type: 'GET',
+				success: function (result) {
+					$('#productscategories').html(result);
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+		}
+	</script>
 }
- *@

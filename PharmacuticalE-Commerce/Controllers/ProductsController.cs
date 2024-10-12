@@ -36,10 +36,13 @@ namespace PharmacuticalE_Commerce.Controllers
             ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "price";
             ViewData["CurrentSort"] = sortOrder;
             var products = _repository.GetAllWithCategories();
-            if (!String.IsNullOrEmpty(categoryFilter))
+			if (!String.IsNullOrEmpty(categoryFilter))
             {
                 ViewData["CategoryFilterParm"] = categoryFilter;
-                products = products.Where(p=>p.Category.Name.ToLower().Contains(categoryFilter.ToLower()));
+                products = products.Where(p=>p.Category.Name.ToLower().Contains(categoryFilter.ToLower()) ||
+                (p.Category.ParentCategory != null &&
+                p.Category.ParentCategory.Name.ToLower().Contains(categoryFilter.ToLower())
+                ));
             }
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -81,8 +84,25 @@ namespace PharmacuticalE_Commerce.Controllers
             return View(product);
         }
 
-        // GET: Products/Create
-        public IActionResult Create()
+		// GET: Products/Details/5
+		public async Task<IActionResult> CardDetails(int? id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
+
+			var product = _repository.GetByIdWithCategories(id);
+			if (product == null)
+			{
+				return NotFound();
+			}
+
+			return View(product);
+		}
+
+		// GET: Products/Create
+		public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_categoryRepository.GetChilds(), "CategoryId", "Name");
             return View();
@@ -198,9 +218,12 @@ namespace PharmacuticalE_Commerce.Controllers
             var products = _repository.GetAllWithCategories();
             if (!String.IsNullOrEmpty(categoryFilter))
             {
-                ViewData["CategoryFilterParm"] = categoryFilter;
-                products = products.Where(p => p.Category.Name.ToLower().Contains(categoryFilter.ToLower()));
-            }
+				ViewData["CategoryFilterParm"] = categoryFilter;
+                products = products.Where(p => p.Category.Name.ToLower().Contains(categoryFilter.ToLower()) ||
+				(p.Category.ParentCategory != null &&
+				p.Category.ParentCategory.Name.ToLower().Contains(categoryFilter.ToLower())
+				));
+			}
             if (!String.IsNullOrEmpty(searchString))
             {
                 ViewData["SearchStringParm"] = searchString;
@@ -223,6 +246,33 @@ namespace PharmacuticalE_Commerce.Controllers
                     break;
             }
             return View(await PaginatedList<Product>.CreateAsync(products, pageNumber, pageSize));
+        }
+
+		public async Task<IActionResult> GetRelatedProducts(string categoryFilter, int productId)
+		{
+			var products = _repository.GetAllWithCategories();
+			if (!String.IsNullOrEmpty(categoryFilter))
+			{
+				ViewData["CategoryFilterParm"] = categoryFilter;
+				products = products.Where(p => p.ProductId!=productId && (p.Category.Name.ToLower().Contains(categoryFilter.ToLower()) ||
+				(p.Category.ParentCategory != null &&
+				p.Category.ParentCategory.Name.ToLower().Contains(categoryFilter.ToLower())
+				))).Take(4);
+			}
+
+			return View("_RelatedProductsPartial", products);
+		}
+
+        public async Task<IActionResult> GetCategoriesSideBar()
+		{
+			var categories = _categoryRepository.GetParents();
+			return View("_CategoriesSideBarPartial", categories);
+		}
+
+        public async Task<IActionResult> GetCategoriesNav()
+        {
+            var categories = _categoryRepository.GetParents();
+            return View("_CategoriesNavPartial", categories);
         }
 
         //    public IActionResult GetProductsList(int pageNumber = 1, int pageSize = 5)

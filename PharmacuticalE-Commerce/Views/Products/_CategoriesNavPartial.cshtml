@@ -1,0 +1,18 @@
+﻿@model IEnumerable<PharmacuticalE_Commerce.Models.Category>
+@{
+    Layout = null;
+}
+
+@foreach (var item in Model)
+{
+    <div class="col-lg-6 col-md-6 mb-sm-3">
+        <ul>
+            <li class="dropdown-header">@item.Name</li>
+                    @foreach (var subItem in item.InverseParentCategory)
+                    {
+                        <li><a asp-action="Gallery" asp-route-categoryFilter="@subItem.Name" asp-controller="Products">@subItem.Name</a></li>
+                    }
+        </ul>
+    </div>
+}
+

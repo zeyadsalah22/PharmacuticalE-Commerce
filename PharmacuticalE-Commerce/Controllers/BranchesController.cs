@@ -1,23 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
+using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
     public class BranchesController : Controller
     {
-        private readonly PharmacySystemContext _context;
+        private readonly IBranchRepository _branchRepository;
 
-        public BranchesController(PharmacySystemContext context)
+        public BranchesController(IBranchRepository branchRepository)
         {
-            _context = context;
+            _branchRepository = branchRepository;
         }
 
         public IActionResult Index()
         {
-            return View(_context.Branches.ToList());
+            var branches = _branchRepository.GetAllBranches();
+            return View(branches);
         }
-        // GET: Branches/Create
+
         public IActionResult Create()
         {
             return View();
@@ -29,8 +31,8 @@ namespace PharmacuticalE_Commerce.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(branch);
-                _context.SaveChanges();
+                _branchRepository.AddBranch(branch);
+                _branchRepository.Save();
                 return RedirectToAction(nameof(Index));
             }
             return View(branch);
@@ -43,7 +45,7 @@ namespace PharmacuticalE_Commerce.Controllers
                 return NotFound();
             }
 
-            var branch = _context.Branches.Find(id);
+            var branch = _branchRepository.GetBranchById(id);
             if (branch == null)
             {
                 return NotFound();
@@ -64,12 +66,12 @@ namespace PharmacuticalE_Commerce.Controllers
             {
                 try
                 {
-                    _context.Update(branch);
-                    _context.SaveChanges();
+                    _branchRepository.UpdateBranch(branch);
+                    _branchRepository.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BranchExists(branch.BranchId))
+                    if (!_branchRepository.BranchExists(branch.BranchId))
                     {
                         return NotFound();
                     }
@@ -90,8 +92,7 @@ namespace PharmacuticalE_Commerce.Controllers
                 return NotFound();
             }
 
-            var branch = _context.Branches
-                .FirstOrDefault(m => m.BranchId == id);
+            var branch = _branchRepository.GetBranchById(id);
             if (branch == null)
             {
                 return NotFound();
@@ -104,19 +105,9 @@ namespace PharmacuticalE_Commerce.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var branch = _context.Branches.Find(id);
-            if (branch != null)
-            {
-                _context.Branches.Remove(branch);
-            }
-
-            _context.SaveChanges();
+            _branchRepository.DeleteBranch(id);
+            _branchRepository.Save();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool BranchExists(int id)
-        {
-            return _context.Branches.Any(e => e.BranchId == id);
         }
     }
 }
