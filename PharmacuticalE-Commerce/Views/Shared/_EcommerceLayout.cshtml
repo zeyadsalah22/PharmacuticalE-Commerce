@@ -167,32 +167,7 @@
 								Shop <span class="tf-ion-ios-arrow-down"></span>
 							</a>
 							<div class="dropdown-menu">
-								<div class="row">
-
-									<div class="col-lg-6 col-md-6 mb-sm-3">
-										<ul>
-											<li class="dropdown-header">Category1</li>
-											<li role="separator" class="divider"></li>
-											<li><a href="shop.html">subcategory1</a></li>
-											<li><a href="checkout.html">subcategory2</a></li>
-											<li><a href="cart.html">subcategory3</a></li>
-											<li><a href="pricing.html">subcategory4</a></li>
-
-										</ul>
-									</div>
-
-									<div class="col-lg-6 col-md-6 mb-sm-3">
-										<ul>
-											<li class="dropdown-header">Category2</li>
-											<li role="separator" class="divider"></li>
-											<li><a href="shop.html">subcategory1</a></li>
-											<li><a href="checkout.html">subcategory2</a></li>
-											<li><a href="cart.html">subcategory3</a></li>
-											<li><a href="pricing.html">subcategory4</a></li>
-
-										</ul>
-									</div>
-
+								<div class="row shop">
 								</div><!-- / .row -->
 							</div><!-- / .dropdown-menu -->
 						</li><!-- / Shop -->
@@ -383,7 +358,24 @@
 
     <!-- Main Js File -->
     <script src="~/js/script.js"></script>
+	<script>
+		$(document).ready(function () {
+			getNav();
+		});
 
+		function getNav() {
+			$.ajax({
+				url: '/Products/GetCategoriesNav',
+				type: 'GET',
+				success: function (result) {
+					$('.shop').html(result);
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+		}
+	</script>
 
 
 </body>

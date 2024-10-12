@@ -269,42 +269,48 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View("_CategoriesSideBarPartial", categories);
 		}
 
-		//    public IActionResult GetProductsList(int pageNumber = 1, int pageSize = 5)
-		//    {
-		//        var totalRecords = _repository.GetAll().Count();
-		//        var products = _repository.GetAllWithCategories()
-		//            .OrderBy(p=>p.ProductId)
-		//            .Skip(pageSize*(pageNumber-1))
-		//            .Take(pageSize).ToList();
-		//        var viewModel = new ProductsPaginationViewModel
-		//        {
-		//            Products = products,
-		//            PageNumber = pageNumber,
-		//            PageSize = pageSize,
-		//            TotalRecords = totalRecords
-		//        };
+        public async Task<IActionResult> GetCategoriesNav()
+        {
+            var categories = _categoryRepository.GetParents();
+            return View("_CategoriesNavPartial", categories);
+        }
 
-		//        return PartialView("_productListPartial", viewModel);
-		//    }
+        //    public IActionResult GetProductsList(int pageNumber = 1, int pageSize = 5)
+        //    {
+        //        var totalRecords = _repository.GetAll().Count();
+        //        var products = _repository.GetAllWithCategories()
+        //            .OrderBy(p=>p.ProductId)
+        //            .Skip(pageSize*(pageNumber-1))
+        //            .Take(pageSize).ToList();
+        //        var viewModel = new ProductsPaginationViewModel
+        //        {
+        //            Products = products,
+        //            PageNumber = pageNumber,
+        //            PageSize = pageSize,
+        //            TotalRecords = totalRecords
+        //        };
 
-		//    public IActionResult GetProductsGallery(int pageNumber = 1, int pageSize = 5)
-		//    {
-		//        var totalRecords = _repository.GetAll().Count();
-		//        var products = _repository.GetAllWithCategories()
-		//            .OrderBy(p => p.ProductId)
-		//            .Skip(pageSize * (pageNumber - 1))
-		//            .Take(pageSize).ToList();
-		//        var viewModel = new ProductsPaginationViewModel
-		//        {
-		//            Products = products,
-		//            PageNumber = pageNumber,
-		//            PageSize = pageSize,
-		//            TotalRecords = totalRecords
-		//        };
+        //        return PartialView("_productListPartial", viewModel);
+        //    }
 
-		//        return PartialView("_productGalleryPartial", viewModel);
-		//    }
-		private bool ProductExists(int id)
+        //    public IActionResult GetProductsGallery(int pageNumber = 1, int pageSize = 5)
+        //    {
+        //        var totalRecords = _repository.GetAll().Count();
+        //        var products = _repository.GetAllWithCategories()
+        //            .OrderBy(p => p.ProductId)
+        //            .Skip(pageSize * (pageNumber - 1))
+        //            .Take(pageSize).ToList();
+        //        var viewModel = new ProductsPaginationViewModel
+        //        {
+        //            Products = products,
+        //            PageNumber = pageNumber,
+        //            PageSize = pageSize,
+        //            TotalRecords = totalRecords
+        //        };
+
+        //        return PartialView("_productGalleryPartial", viewModel);
+        //    }
+        private bool ProductExists(int id)
         {
             return _repository.GetAll().Any(e => e.ProductId == id);
         }
