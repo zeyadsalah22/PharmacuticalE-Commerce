@@ -8,8 +8,9 @@ public partial class Attendance
     public int RecordId { get; set; }
 
     public int EmployeeId { get; set; }
+	public int ShiftId { get; set; }
 
-    public int BranchId { get; set; }
+	public int BranchId { get; set; }
 
     public DateTime AttendedAt { get; set; }
 

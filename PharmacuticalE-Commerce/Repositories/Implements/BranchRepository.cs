@@ -50,5 +50,30 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
         {
             _context.SaveChanges();
         }
-    }
+
+		public Branch GetById(int? id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<Branch> GetAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Create(Branch entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Update(Branch entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Delete(int? id)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

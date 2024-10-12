@@ -25,9 +25,9 @@ public partial class Employee
 
     public DateTime? CreatedAt { get; set; }
 
-    public int? ShiftId { get; set; }
+	public int ShiftId { get; set; }
 
-    public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
+	public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
 
     public virtual Branch Branch { get; set; } = null!;
 
