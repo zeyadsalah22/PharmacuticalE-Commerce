@@ -1,0 +1,116 @@
+﻿@model IEnumerable<PharmacuticalE_Commerce.Models.Category>
+@{
+    Layout = null;
+}
+
+<h4 class="widget-title">Categories</h4>
+<div class="accordion custom-accordion" id="accordionExample">
+    @foreach (var item in Model)
+    {
+        <div class="accordion-item">
+            <h4 class="accordion-header" id="heading-@item.CategoryId">
+                <button class="accordion-button collapsed custom-accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@item.CategoryId" aria-expanded="false" aria-controls="collapse-@item.CategoryId">
+                    @item.Name
+                </button>
+            </h4>
+            <div id="collapse-@item.CategoryId" class="accordion-collapse collapse" aria-labelledby="heading-@item.CategoryId" data-bs-parent="#accordionExample">
+                <div class="accordion-body custom-accordion-body">
+                    <ul>
+                        @foreach (var subItem in item.InverseParentCategory)
+                        {
+                            <li><a asp-action="Gallery" asp-route-categoryFilter="@subItem.Name" asp-controller="Products">@subItem.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="accordion-item">
+        <h4 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed custom-accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                Shoes
+            </button>
+        </h4>
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body custom-accordion-body">
+                <ul>
+                    <li><a href="#!">Brand & Twist</a></li>
+                    <li><a href="#!">Shoe Color</a></li>
+                    <li><a href="#!">Shoe Size</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+    /* Accordion styling */
+    .custom-accordion .accordion-item {
+        border: none;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    /* Button styles for accordion */
+    .custom-accordion-button {
+        background-color: white;
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+        padding-right: 40px; /* Added padding to the right to prevent overlap */
+        border: none;
+        box-shadow: none;
+        text-align: left;
+        position: relative;
+    }
+
+        .custom-accordion-button:focus {
+            box-shadow: none;
+        }
+
+        /* Changing collapsed state styles */
+        .custom-accordion-button.collapsed::after {
+            content: '+';
+            font-weight: bold;
+            font-size: 18px;
+            position: absolute;
+            right: 20px; /* Ensures the icon is positioned correctly */
+            top: 50%;
+            transform: translateY(-50%);
+            color: #333;
+        }
+
+        .custom-accordion-button::after {
+            content: '–';
+            font-weight: bold;
+            font-size: 18px;
+            position: absolute;
+            right: 20px; /* Ensures the icon is positioned correctly */
+            top: 50%;
+            transform: translateY(-50%);
+            color: #333;
+        }
+
+
+    /* Accordion body styling */
+    .custom-accordion-body {
+        padding: 15px 20px;
+        background-color: #f9f9f9;
+        font-size: 14px;
+    }
+
+        .custom-accordion-body ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+            .custom-accordion-body ul li {
+                margin-bottom: 5px;
+            }
+
+
+                    .custom-accordion-body ul li a:hover {
+                        text-decoration: underline;
+                    }
+</style>

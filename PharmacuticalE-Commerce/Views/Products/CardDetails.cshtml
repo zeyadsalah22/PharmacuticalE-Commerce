@@ -1,0 +1,81 @@
+﻿@model PharmacuticalE_Commerce.Models.Product
+
+@{
+    Layout = "_EcommerceLayout";
+    ViewData["Title"] = "ProductDetails";
+}
+
+<section class="single-product">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<ol class="breadcrumb">
+					<li><a asp-action="Ecommerce" asp-controller="Home">Home</a></li>
+					<li><a asp-action="Gallery" >Shop</a></li>
+					<li class="active">Product Details</li>
+				</ol>
+			</div>
+		</div>
+		<div class="row mt-20">
+			<div class="col-md-5">
+				<img style="width:350px; height:440px; object-fit:cover" src="@Url.Content("~/images/products/" + Model.Photo)" alt="@Model.Name" />
+			</div>
+			<div class="col-md-7">
+				<div class="single-product-details">
+					<h2>@Model.Name</h2>
+					<p class="product-price">$ @Model.Price</p>
+
+					<p class="product-description mt-20">
+						@Model.Description
+					</p>
+					<div class="product-quantity">
+						<span>Quantity:</span>
+						<div class="product-quantity-slider">
+							<input id="product-quantity" type="text" value="0" max="@Model.Stock" name="product-quantity">
+						</div>
+					</div>
+					<div class="product-category">
+						<span>Categories:</span>
+						<ul>
+							@if (@Model.Category.ParentCategory != null)
+							{
+								<li><a asp-action="Gallery" asp-route-categoryFilter="@Model.Category.ParentCategory.Name">@Model.Category.ParentCategory.Name</a></li>
+							}
+							<li><a asp-action="Gallery" asp-route-categoryFilter="@Model.Category.Name">@Model.Category.Name</a></li>
+
+						</ul>
+					</div>
+					<a href="cart.html" class="btn btn-main mt-20">Add To Cart</a>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</section>
+
+
+<section class="products related-products section" id="relatedproducts">
+	
+</section>
+
+@section Mysection {
+	<script>
+		$(document).ready(function () {
+            loadPage('@Html.Raw(Model.Category.Name)', @Model.ProductId);
+		});
+
+		function loadPage(category, productId) {
+			$.ajax({
+				url: '/Products/GetRelatedProducts',
+				type: 'GET',
+				data: {categoryFilter: category, productId : productId },
+				success: function (result) {
+					$('#relatedproducts').html(result);
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+		}
+	</script>
+}
