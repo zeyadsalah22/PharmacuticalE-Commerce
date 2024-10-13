@@ -1,0 +1,30 @@
+﻿@model PharmacuticalE_Commerce.ViewModels.AttendancesViewModel
+
+@{
+    ViewBag.Title = "Edit Attendance";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label asp-for="AttendedAt" class="control-label"></label>
+        <input asp-for="AttendedAt" class="form-control" />
+        <span asp-validation-for="AttendedAt" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LeftAt" class="control-label"></label>
+        <input asp-for="LeftAt" class="form-control" />
+        <span asp-validation-for="LeftAt" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="RecordId" />
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -25,8 +25,7 @@
                     @Html.DisplayFor(modelItem => item.BranchAddress)
                 </td>
                 <td>
-                    <!-- Each employee has their own form to submit attendance -->
-                    <form method="post" asp-action="Attended">
+                    <form method="get" asp-action="Attended">
                         <input type="hidden" name="employeeId" value="@item.EmployeeId" />
                         <input type="hidden" name="shiftId" value="@item.ShiftId" />
                         <input type="hidden" name="branchId" value="@item.BranchId" />
