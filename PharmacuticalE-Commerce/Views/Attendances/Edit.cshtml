@@ -1,6 +1,8 @@
 ﻿@model PharmacuticalE_Commerce.ViewModels.AttendancesViewModel
 
 @{
+    ViewBag.PageTitle = "Attendance";
+    ViewBag.CardTitle = $"Edit{Model.FirstName} {Model.LastName} Attendance";
     ViewBag.Title = "Edit Attendance";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }

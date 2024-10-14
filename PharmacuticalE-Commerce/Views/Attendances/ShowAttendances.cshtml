@@ -29,9 +29,10 @@
                     <a asp-action="Edit" asp-route-id="@item.RecordId" class="btn btn-warning">Edit</a>
                 </td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@item.RecordId" class="btn btn-danger">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.RecordId" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+<a class="btn btn-secondary" asp-action="Index">Cancel</a>

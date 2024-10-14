@@ -27,76 +27,39 @@ namespace PharmacuticalE_Commerce.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("BranchId,Address")] Branch branch)
+        public IActionResult Create(Branch branch)
         {
-            if (ModelState.IsValid)
-            {
-                _branchRepository.AddBranch(branch);
-                _branchRepository.Save();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(branch);
+
+            _branchRepository.AddBranch(branch);
+            _branchRepository.Save();
+            return RedirectToAction(nameof(Index));
+
         }
 
         public IActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             var branch = _branchRepository.GetBranchById(id);
-            if (branch == null)
-            {
-                return NotFound();
-            }
+
             return View(branch);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("BranchId,Address")] Branch branch)
+        public IActionResult Edit(int id, Branch branch)
         {
-            if (id != branch.BranchId)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _branchRepository.UpdateBranch(branch);
-                    _branchRepository.Save();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_branchRepository.BranchExists(branch.BranchId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(branch);
+            _branchRepository.UpdateBranch(branch);
+            _branchRepository.Save();
+
+            return RedirectToAction(nameof(Index));
+
         }
 
         public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
+ 
             var branch = _branchRepository.GetBranchById(id);
-            if (branch == null)
-            {
-                return NotFound();
-            }
 
             return View(branch);
         }
