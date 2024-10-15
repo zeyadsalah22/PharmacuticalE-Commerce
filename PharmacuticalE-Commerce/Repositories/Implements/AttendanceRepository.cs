@@ -101,5 +101,10 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
         {
             return _context.Branches.Where(a=>a.BranchId == id).First().Address;
         }
+
+        public IEnumerable<Shift> GetallShifts()
+        {
+            return _context.Shifts.ToList();
+        }
     }
 }

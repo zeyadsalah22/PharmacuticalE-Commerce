@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PharmacuticalE_Commerce.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace PharmacuticalE_Commerce.ViewModels
 {
@@ -17,7 +18,7 @@ namespace PharmacuticalE_Commerce.ViewModels
             public DateTime? LeftAt { get; set; }
             public IEnumerable<int> ShiftIds { get; set; }
             public IEnumerable<string> Branch { get; set; }
-
+            public IEnumerable<Shift> Shifts { get; set; }
 
     }
 }
