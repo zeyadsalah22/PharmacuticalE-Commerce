@@ -45,7 +45,13 @@
 
 						</ul>
 					</div>
-					<a href="cart.html" class="btn btn-main mt-20">Add To Cart</a>
+					@if (User.Identity.IsAuthenticated)
+					{
+						<a href="cart.html" class="btn btn-main mt-20">Add To Cart</a>
+                    }
+                    else{
+                        <a asp-action="Login" asp-controller="UserAuth" class="btn btn-main mt-20">Login to Add To Cart</a>
+                    }
 				</div>
 			</div>
 		</div>
