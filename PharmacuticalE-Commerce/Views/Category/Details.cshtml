@@ -1,0 +1,23 @@
+﻿@model Category
+@{
+    Layout = "_StaffManagementLayout";
+    ViewData["Title"] = "Deatils";
+}
+<h2>Category Details</h2>
+
+<div>
+    <h4>@Model.Name</h4>
+    @if (Model.ParentCategoryId != null)
+    {
+        <p>@Model.ParentCategory.Name</p>
+
+    }
+    else
+    {
+        <p>No Parent Category</p>
+
+    }
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

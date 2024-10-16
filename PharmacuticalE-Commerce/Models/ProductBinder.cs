@@ -8,7 +8,7 @@ namespace Day6Mydemo.Models
     {
         private readonly long _maxFileSize = 5 * 1024 * 1024; // Maximum file size: 5 MB
         private readonly string _imageFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products");
-        private string defaultPhoto = "default.jpg";
+        private string defaultPhoto = "default.jpeg";
         public async Task BindModelAsync(ModelBindingContext bindingContext)
         {
             string? productIdValue = bindingContext.HttpContext.Request.Form["ProductId"];
