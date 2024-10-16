@@ -19,7 +19,7 @@ namespace PharmacuticalE_Commerce.Areas.Identity.Pages.Account
     {
         private readonly UserManager<User> _userManager;
 
-        public ConfirmEmailModel(UserManager<User> userManager)
+        public ConfirmEmailModel(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
         }

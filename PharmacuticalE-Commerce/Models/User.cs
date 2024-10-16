@@ -6,15 +6,9 @@ namespace PharmacuticalE_Commerce.Models;
 
 public partial class User : IdentityUser
 {
-    public string UserId { get; set; }
+    public string? Fname { get; set; } = null!;
 
-    public string Fname { get; set; } = null!;
-
-    public string Lname { get; set; } = null!;
-
-    public string Email { get; set; } = null!;
-
-    public string Password { get; set; } = null!;
+    public string? Lname { get; set; } = null!;
 
     public DateTime? CreatedAt { get; set; }
 

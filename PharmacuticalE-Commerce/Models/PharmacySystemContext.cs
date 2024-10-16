@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PharmacuticalE_Commerce.Viewmodels;
 
 namespace PharmacuticalE_Commerce.Models;
 
@@ -643,27 +644,27 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__CB9A1CFF7DF85AD0");
+            //entity.HasKey(e => e.UserId).HasName("PK__Users__CB9A1CFF7DF85AD0");
 
             entity.HasIndex(e => e.Email, "UQ__Users__AB6E6164CA5F8C8F").IsUnique();
 
-            entity.Property(e => e.UserId).HasColumnName("userId");
+            //entity.Property(e => e.UserId).HasColumnName("userId");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("createdAt");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .HasColumnName("email");
+            //entity.Property(e => e.Email)
+            //    .HasMaxLength(100)
+            //    .HasColumnName("email");
             entity.Property(e => e.Fname)
                 .HasMaxLength(50)
                 .HasColumnName("fname");
             entity.Property(e => e.Lname)
                 .HasMaxLength(50)
                 .HasColumnName("lname");
-            entity.Property(e => e.Password)
-                .HasMaxLength(100)
-                .HasColumnName("password");
+            //entity.Property(e => e.Password)
+                //.HasMaxLength(100)
+                //.HasColumnName("password");
         });
 
         modelBuilder.Entity<UserCard>(entity =>
@@ -703,4 +704,8 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+public DbSet<PharmacuticalE_Commerce.Viewmodels.RegisterViewModel> RegisterViewModel { get; set; } = default!;
+
+public DbSet<PharmacuticalE_Commerce.Viewmodels.LoginViewModel> LoginViewModel { get; set; } = default!;
 }
