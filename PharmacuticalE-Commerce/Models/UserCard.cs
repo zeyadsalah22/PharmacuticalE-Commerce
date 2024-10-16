@@ -9,7 +9,7 @@ public partial class UserCard
 
     public string CardNo { get; set; } = null!;
 
-    public int UserId { get; set; }
+    public string UserId { get; set; }
 
     public string HolderName { get; set; } = null!;
 

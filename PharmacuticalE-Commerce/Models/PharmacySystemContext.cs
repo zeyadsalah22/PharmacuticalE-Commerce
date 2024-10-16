@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace PharmacuticalE_Commerce.Models;
 
-public partial class PharmacySystemContext : DbContext
+public partial class PharmacySystemContext : IdentityDbContext<User>
 {
     public PharmacySystemContext()
     {
@@ -65,6 +66,7 @@ public partial class PharmacySystemContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Attendance>(entity =>
         {
             entity.HasKey(e => e.RecordId).HasName("PK__Attendan__D825195E107E2F41");
