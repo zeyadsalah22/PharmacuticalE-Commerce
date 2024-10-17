@@ -65,9 +65,12 @@
 					<!-- Cart -->
 					<ul class="top-menu text-right list-inline">
 						<li class="dropdown cart-nav dropdown-slide">
-							<a asp-action="Index" asp-controller="Carts" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
-								<i class="tf-ion-android-cart"></i>Cart
-							</a>
+							@if (User.Identity.IsAuthenticated)
+							{
+								<a asp-action="Index" asp-controller="Carts" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+									<i class="tf-ion-android-cart"></i>Cart
+								</a>
+							}
 							<div class="cart_items-nav"></div>
 						</li><!-- / Cart -->
 						<!-- Search -->
