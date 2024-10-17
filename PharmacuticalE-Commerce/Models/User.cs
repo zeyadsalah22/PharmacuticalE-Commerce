@@ -1,19 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace PharmacuticalE_Commerce.Models;
 
-public partial class User
+public partial class User : IdentityUser
 {
-    public int UserId { get; set; }
+    public string? Fname { get; set; } = null!;
 
-    public string Fname { get; set; } = null!;
-
-    public string Lname { get; set; } = null!;
-
-    public string Email { get; set; } = null!;
-
-    public string Password { get; set; } = null!;
+    public string? Lname { get; set; } = null!;
 
     public DateTime? CreatedAt { get; set; }
 

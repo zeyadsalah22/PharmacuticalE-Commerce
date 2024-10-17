@@ -35,6 +35,11 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
             return _context.Categories.FirstOrDefault(p => p.CategoryId == id);
         }
 
+        public Category GetByIdWithParent(int? id)
+        {
+            return _context.Categories.Include(c=>c.ParentCategory).FirstOrDefault(p => p.CategoryId == id);
+        }
+
         public void Update(Category entity)
         {
             _context.Categories.Attach(entity);

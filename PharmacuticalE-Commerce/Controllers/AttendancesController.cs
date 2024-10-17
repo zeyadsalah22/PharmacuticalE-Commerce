@@ -18,7 +18,7 @@ namespace PharmacuticalE_Commerce.Controllers
         {
             var attendancesViewModel = new AttendancesViewModel
             {
-                ShiftIds = _attendanceRepository.GetAllShifts(),
+                Shifts = _attendanceRepository.GetallShifts(),
                 Branch = _attendanceRepository.GetAllBranches()
             };
 

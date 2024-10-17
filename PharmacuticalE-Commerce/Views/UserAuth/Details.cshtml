@@ -1,0 +1,37 @@
+﻿@model User
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_EcommerceLayout.cshtml";
+}
+
+<section class="user-dashboard page-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-inline dashboard-menu text-center">
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="order.html">Orders</a></li>
+                    <li><a href="address.html">Address</a></li>
+                    <li><a class="active" href="profile-details.html">Profile Details</a></li>
+                </ul>
+                <div class="dashboard-wrapper dashboard-user-profile">
+                    <div class="media">
+                        <div class="pull-left text-center" href="#!">
+                            <img class="media-object user-img" src="~/images/avater.jpg" alt="Image">
+                        </div>
+                        <div class="media-body">
+                            <ul class="user-profile-list">
+                                <li><span>Full Name:</span>@Model.Fname @Model.Lname</li>
+                                <li><span>UserName:</span>@Model.UserName</li>
+                                <li><span>Email:</span>@Model.Email</li>
+                                <li><span>Phone:</span>@Model.PhoneNumber</li>
+                                <li><span>Date Joined:</span>@Model.CreatedAt</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

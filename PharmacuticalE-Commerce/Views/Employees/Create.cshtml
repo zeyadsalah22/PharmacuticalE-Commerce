@@ -1,0 +1,90 @@
+﻿@model PharmacuticalE_Commerce.ViewModels.EmployeeViewModel
+
+@{
+    ViewBag.pageTitle="Employees";
+    ViewBag.CardTitle = "Create Employee";
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Employee.Fname" class="control-label"></label>
+        <input asp-for="Employee.Fname" class="form-control" />
+        <span asp-validation-for="Employee.Fname" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Employee.Lname" class="control-label"></label>
+        <input asp-for="Employee.Lname" class="form-control" />
+        <span asp-validation-for="Employee.Lname" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Employee.Email" class="control-label"></label>
+        <input asp-for="Employee.Email" class="form-control" />
+        <span asp-validation-for="Employee.Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Employee.Password" class="control-label"></label>
+        <input asp-for="Employee.Password" class="form-control" />
+        <span asp-validation-for="Employee.Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Employee.BranchId" class="form-label">Branch : </label>
+        <select asp-for="Employee.BranchId" class="form-select">
+            <option value="">-- Select Branch --</option>
+            @foreach (var item in Model.Branches)
+            {
+                <option value="@item.BranchId">@item.Address</option>
+            }
+        </select>
+        <span asp-validation-for="Employee.BranchId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Employee.RoleId" class="form-label">Role : </label>
+        <select asp-for="Employee.RoleId" class="form-select">
+            <option value="">-- Select Role --</option>
+            @foreach (var item in Model.Roles)
+            {
+                <option value="@item.RoleId">@item.Title</option>
+            }
+        </select>
+        <span asp-validation-for="Employee.RoleId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Employee.ShiftId" class="form-label">Shift : </label>
+        <select asp-for="Employee.ShiftId" class="form-select">
+            <option value="">-- Select Shift --</option>
+            @foreach (var item in Model.Shifts)
+            {
+                <option value="@item.ShiftId">@item.FromTime</option>
+            }
+        </select>
+        <span asp-validation-for="Employee.ShiftId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Employee.Salary" class="control-label"></label>
+        <input asp-for="Employee.Salary" class="form-control" />
+        <span asp-validation-for="Employee.Salary" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Employee.FirstDay" class="control-label"></label>
+        <input asp-for="Employee.FirstDay" class="form-control" type="date" />
+        <span asp-validation-for="Employee.FirstDay" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

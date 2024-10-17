@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories.Implements;
@@ -12,6 +13,12 @@ namespace PharmacuticalE_Commerce
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<PharmacySystemContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<PharmacySystemContext>();
             builder.Services.AddControllersWithViews();
 
             // 34an mn3ml4 Rebuild kol ma n3dl el view
@@ -20,13 +27,18 @@ namespace PharmacuticalE_Commerce
             builder.Services.AddScoped<IProductRepository,ProductRepository>();
             builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
             builder.Services.AddScoped<IBranchRepository, BranchRepository>();
-
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IAttendanceRepository,AttendanceRepository>();
+            //builder.Services.AddIdentity<User, IdentityRole>()
+            //    .AddEntityFrameworkStores<PharmacySystemContext>();
+            
+            //builder.Services.AddDbContext<PharmacySystemContext>(options =>
+            //{
+            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            //});
 
-            builder.Services.AddDbContext<PharmacySystemContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
+
+
 
             var app = builder.Build();
 
@@ -40,6 +52,8 @@ namespace PharmacuticalE_Commerce
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MapRazorPages();
 
             app.MapControllerRoute(
                 name: "default",

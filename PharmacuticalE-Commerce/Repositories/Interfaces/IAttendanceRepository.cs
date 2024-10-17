@@ -11,6 +11,7 @@ namespace PharmacuticalE_Commerce.Repositories.Interfaces
         IEnumerable<AttendancesViewModel> GetEmployeesWithoutAttendance(string shiftId, string branch, DateTime date);
         IEnumerable<string> GetAllBranches();
         IEnumerable<int> GetAllShifts();
+        IEnumerable<Shift> GetallShifts();
         public string GetBranchAddress(int id);
         bool AttendanceExists(string employeeId, string shiftId, string branchId, DateTime attendedAt);
     }

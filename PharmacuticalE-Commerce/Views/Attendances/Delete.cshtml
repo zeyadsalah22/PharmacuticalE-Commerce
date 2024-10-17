@@ -1,13 +1,13 @@
 ﻿@model PharmacuticalE_Commerce.ViewModels.AttendancesViewModel
 
 @{
+    ViewBag.PageTitle = "Attendances";
+    ViewBag.CardTitle = "Delete Attendance";
     ViewData["Title"] = "Delete Attendance";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
 
-<h1>Delete Attendance</h1>
-
-<h3>Are you sure you want to delete this attendance?</h3>
+<h3>@($"Are you sure you want to delete {Model.FirstName} {Model.LastName} Attendance?")</h3>
 
 <form asp-action="Delete" method="post">
     <input type="hidden" value="@Model.RecordId" />

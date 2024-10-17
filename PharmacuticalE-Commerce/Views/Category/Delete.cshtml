@@ -1,0 +1,32 @@
+﻿@model Category
+@{
+    Layout = "_StaffManagementLayout";
+    ViewData["Title"] = "Delete";
+}
+<h2>Delete Category</h2>
+
+<h3>Are you sure you want to delete this category?</h3>
+
+<div>
+    <h4>@Model.Name</h4>
+    @if (Model.ParentCategoryId != null)
+    {
+        <p>@Model.ParentCategory.Name</p>
+
+    }
+    else
+    {
+        <p>No Parent Category</p>
+
+    }
+</div>
+
+<form asp-action="Delete">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input type="hidden" asp-for="CategoryId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
