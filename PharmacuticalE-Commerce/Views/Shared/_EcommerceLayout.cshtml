@@ -1,43 +1,42 @@
-﻿
-@{
-    Layout = null;
+﻿@{
+	Layout = null;
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-    <!-- Basic Page Needs
-    ================================================== -->
-    <meta charset="utf-8">
-    <title>Pharmacy</title>
+	<!-- Basic Page Needs
+	================================================== -->
+	<meta charset="utf-8">
+	<title>Pharmacy</title>
 
-    <!-- Mobile Specific Metas
-    ================================================== -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Construction Html5 Template">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="author" content="Themefisher">
-    <meta name="generator" content="Themefisher Constra HTML Template v1.0">
+	<!-- Mobile Specific Metas
+	================================================== -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Construction Html5 Template">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+	<meta name="author" content="Themefisher">
+	<meta name="generator" content="Themefisher Constra HTML Template v1.0">
 
-    <!-- theme meta -->
-    <meta name="theme-name" content="aviato" />
+	<!-- theme meta -->
+	<meta name="theme-name" content="aviato" />
 
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="~/images/pharmacy.png" />
+	<!-- Favicon -->
+	<link rel="shortcut icon" type="image/x-icon" href="~/images/pharmacy.png" />
 
-    <!-- Themefisher Icon font -->
-    <link rel="stylesheet" href="~/plugins/themefisher-font/style.css">
-    <!-- bootstrap.min css -->
-    <link rel="stylesheet" href="~/plugins/bootstrap/css/bootstrap.min.css">
+	<!-- Themefisher Icon font -->
+	<link rel="stylesheet" href="~/plugins/themefisher-font/style.css">
+	<!-- bootstrap.min css -->
+	<link rel="stylesheet" href="~/plugins/bootstrap/css/bootstrap.min.css">
 
-    <!-- Animate css -->
-    <link rel="stylesheet" href="~/plugins/animate/animate.css">
-    <!-- Slick Carousel -->
-    <link rel="stylesheet" href="~/plugins/slick/slick.css">
-    <link rel="stylesheet" href="~/plugins/slick/slick-theme.css">
+	<!-- Animate css -->
+	<link rel="stylesheet" href="~/plugins/animate/animate.css">
+	<!-- Slick Carousel -->
+	<link rel="stylesheet" href="~/plugins/slick/slick.css">
+	<link rel="stylesheet" href="~/plugins/slick/slick-theme.css">
 
-    <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="~/css/style.css">
+	<!-- Main Stylesheet -->
+	<link rel="stylesheet" href="~/css/style.css">
 
 </head>
 
@@ -83,11 +82,12 @@
 						</li><!-- / Search -->
 						<!-- Languages -->
 						<li class="dropdown cart-nav dropdown-slide">
-							
-								@if (User.Identity.IsAuthenticated)
-								{
+
+							@if (User.Identity.IsAuthenticated)
+							{
 								<a asp-action="Details" asp-controller="UserAuth" asp-route-username="@User.Identity.Name" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
-                                    <i class="tf-ion-android-person"></i>@User.Identity.Name</a>
+									<i class="tf-ion-android-person"></i>@User.Identity.Name
+								</a>
 								<div class="dropdown-menu cart-dropdown">
 									<div class="media">
 										<a asp-action="Details" asp-controller="UserAuth" asp-route-username="@User.Identity.Name">Profile</a>
@@ -97,9 +97,9 @@
 									</div>
 								</div>
 
-								}
-								else
-								{
+							}
+							else
+							{
 								<a asp-action="Login" asp-controller="UserAuth" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
 									<i class="tf-ion-android-person"></i>@Html.DisplayName("User")
 								</a>
@@ -111,8 +111,8 @@
 										<a asp-action="Register" asp-controller="UserAuth">Register</a>
 									</div>
 								</div>
-								
-								}
+
+							}
 
 						</li>
 
@@ -313,35 +313,35 @@
 			</div>
 		</div>
 	</footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-    @RenderSection("MySection", required: false))
-    <!--
-        Essential Scripts
-        =====================================-->
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+	@RenderSection("MySection", required: false))
+	<!--
+		Essential Scripts
+		=====================================-->
 	@* <!-- Bootstrap 3.1 -->
 	<script src="~/plugins/bootstrap/js/bootstrap.min.js"></script> *@
-    <!-- Bootstrap Touchpin -->
-    <script src="~/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
-    <!-- Instagram Feed Js -->
-    <script src="~/plugins/instafeed/instafeed.min.js"></script>
-    <!-- Video Lightbox Plugin -->
-    <script src="~/plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
-    <!-- Count Down Js -->
-    <script src="~/plugins/syo-timer/build/jquery.syotimer.min.js"></script>
+	<!-- Bootstrap Touchpin -->
+	<script src="~/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+	<!-- Instagram Feed Js -->
+	<script src="~/plugins/instafeed/instafeed.min.js"></script>
+	<!-- Video Lightbox Plugin -->
+	<script src="~/plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
+	<!-- Count Down Js -->
+	<script src="~/plugins/syo-timer/build/jquery.syotimer.min.js"></script>
 
-    <!-- slick Carousel -->
-    <script src="~/plugins/slick/slick.min.js"></script>
-    <script src="~/plugins/slick/slick-animation.min.js"></script>
+	<!-- slick Carousel -->
+	<script src="~/plugins/slick/slick.min.js"></script>
+	<script src="~/plugins/slick/slick-animation.min.js"></script>
 
-    <!-- Google Mapl -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw"></script>
-    <script type="text/javascript" src="~/plugins/google-map/gmap.js"></script>
+	<!-- Google Mapl -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw"></script>
+	<script type="text/javascript" src="~/plugins/google-map/gmap.js"></script>
 
-    <!-- Main Js File -->
-    <script src="~/js/script.js"></script>
+	<!-- Main Js File -->
+	<script src="~/js/script.js"></script>
 	<script>
 		$(document).ready(function () {
 			getNav();
