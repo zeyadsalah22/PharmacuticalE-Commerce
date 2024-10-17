@@ -14,10 +14,10 @@ public partial class Cart
     public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    
+    public virtual Prescription Prescription { get; set; } = null!;
 
-    public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
-
-    public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; } = new List<ShoppingCart>();
-
+    public virtual ShoppingCart ShoppingCart { get; set; } = null!;
+    
     public virtual User User { get; set; } = null!;
 }

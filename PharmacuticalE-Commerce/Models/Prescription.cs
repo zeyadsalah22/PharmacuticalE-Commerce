@@ -9,11 +9,9 @@ public partial class Prescription
 
     public string Photo { get; set; } = null!;
 
-    public int CartId { get; set; }
-
     public string Status { get; set; } = null!;
 
-    public int EmployeeId { get; set; }
+    public int? EmployeeId { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 

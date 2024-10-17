@@ -11,9 +11,7 @@ public partial class CartItem
 
     public int Quantity { get; set; }
 
-    public string ProductName { get; set; } = null!;
-
-    public bool? IsSelected { get; set; }
+    public bool IsSelected { get; set; }
 
     public virtual Cart Cart { get; set; } = null!;
 

@@ -144,9 +144,6 @@ public partial class PharmacySystemContext : DbContext
             entity.Property(e => e.IsSelected)
                 .HasDefaultValue(false)
                 .HasColumnName("isSelected");
-            entity.Property(e => e.ProductName)
-                .HasMaxLength(255)
-                .HasColumnName("productName");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
 
             entity.HasOne(d => d.Cart).WithMany(p => p.CartItems)
@@ -387,12 +384,9 @@ public partial class PharmacySystemContext : DbContext
 
             entity.ToTable("Prescription");
 
-            entity.HasIndex(e => e.CartId, "IX_Prescription_cartId");
-
             entity.HasIndex(e => e.EmployeeId, "IX_Prescription_employeeId");
 
             entity.Property(e => e.PrescriptionId).HasColumnName("prescriptionId");
-            entity.Property(e => e.CartId).HasColumnName("cartId");
             entity.Property(e => e.EmployeeId).HasColumnName("employeeId");
             entity.Property(e => e.Photo)
                 .HasMaxLength(255)
@@ -405,8 +399,8 @@ public partial class PharmacySystemContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("updatedAt");
 
-            entity.HasOne(d => d.Cart).WithMany(p => p.Prescriptions)
-                .HasForeignKey(d => d.CartId)
+            entity.HasOne(d => d.Cart).WithOne(p => p.Prescription)
+                .HasForeignKey(d => d.PrescriptionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Prescript__cartI__5629CD9C");
 
@@ -621,10 +615,7 @@ public partial class PharmacySystemContext : DbContext
 
             entity.ToTable("ShoppingCart");
 
-            entity.HasIndex(e => e.CartId, "IX_ShoppingCart_cartId");
-
             entity.Property(e => e.ShoppingCartId).HasColumnName("shoppingCartId");
-            entity.Property(e => e.CartId).HasColumnName("cartId");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasColumnName("status");
@@ -633,8 +624,8 @@ public partial class PharmacySystemContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("updatedAt");
 
-            entity.HasOne(d => d.Cart).WithMany(p => p.ShoppingCarts)
-                .HasForeignKey(d => d.CartId)
+            entity.HasOne(d => d.Cart).WithOne(p => p.ShoppingCart)
+                .HasForeignKey(d => d.ShoppingCartId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__ShoppingC__cartI__60A75C0F");
         });
