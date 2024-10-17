@@ -6,14 +6,12 @@
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
 
-<table class="table">
+<table class="table" id="ShowAttendancesList">
     <thead>
         <tr>
             <th>Employee Name</th>
             <th>Branch</th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>Options</th>
         </tr>
     </thead>
     <tbody>
@@ -23,12 +21,10 @@
                 <td>@item.FirstName @item.LastName</td>
                 <td>@item.BranchAddress</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.RecordId" class="btn btn-info">Details</a>
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.RecordId" class="btn btn-warning">Edit</a>
-                </td>
-                <td>
+                    <a asp-action="Details" asp-route-id="@item.RecordId" class="btn btn-info">Details</a>&nbsp;&nbsp;&nbsp;
+
+                    <a asp-action="Edit" asp-route-id="@item.RecordId" class="btn btn-warning">Edit</a>&nbsp;&nbsp;&nbsp;
+
                     <a asp-action="Delete" asp-route-id="@item.RecordId" class="btn btn-danger">Delete</a>
                 </td>
             </tr>

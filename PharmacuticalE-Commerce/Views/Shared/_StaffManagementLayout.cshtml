@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="~/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!--Tabele-->
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+
 </head>
 <body class="hold-transition sidebar-mini sidebar-collapse">
     <!-- Site wrapper -->
@@ -141,7 +144,7 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="../../index3.html" class="brand-link">
-                <img src="../../dist/img/AdminLTELogo.png"
+                <img src="~/images/Adminpharmacy.png"
                      alt="AdminLTE Logo"
                      class="brand-image img-circle elevation-3"
                      style="opacity: .8">
@@ -199,9 +202,9 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Attendances" asp-action="Index">
+                                    <a class="nav-link" asp-controller="Roles" asp-action="Index">
                                         <i class="fas fa-user-cog"></i>
-                                        <p>Roles</p>
+                                        <p>Employees Roles</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -326,6 +329,19 @@
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/js/adminlte.min.js"></script>
+    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#EmployeesList').DataTable();
+            $('#ShiftsList').DataTable();
+            $('#CategoryList').DataTable();
+            $('#BranchesList').DataTable();
+            $('#ShowAttendancesList').DataTable();
+            $('#TakeAttendanceList').DataTable();
+            $('#RolesList').DataTable();
+        });
+    </script>
+
     <!-- AdminLTE for demo purposes -->
     <script src="/js/demo.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

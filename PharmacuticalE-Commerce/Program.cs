@@ -31,9 +31,11 @@ namespace PharmacuticalE_Commerce
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IAttendanceRepository,AttendanceRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
             //builder.Services.AddIdentity<User, IdentityRole>()
             //    .AddEntityFrameworkStores<PharmacySystemContext>();
-            
+
             //builder.Services.AddDbContext<PharmacySystemContext>(options =>
             //{
             //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

@@ -1,9 +1,10 @@
 ﻿@model Category
 @{
+    ViewBag.PageTitle = "Categories";
+    ViewBag.CardTitle = "Category Details";
     Layout = "_StaffManagementLayout";
     ViewData["Title"] = "Deatils";
 }
-<h2>Category Details</h2>
 
 <div>
     <h4>@Model.Name</h4>
@@ -19,5 +20,5 @@
     }
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

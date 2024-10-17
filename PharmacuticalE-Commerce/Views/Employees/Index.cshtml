@@ -10,7 +10,7 @@
 <a asp-action="Create" class="btn btn-primary">Create New</a>
 &nbsp;&nbsp;&nbsp;
 <a asp-action="Shifts" class="btn btn-primary">Mange Shifts</a>
-<table class="table">
+<table class="table" id="EmployeesList">
     <thead>
         <tr>
             <th>
@@ -29,9 +29,7 @@
                 @Html.DisplayNameFor(model => model.Role)
             </th>
             <th>Shift</th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>Options</th>
         </tr>
     </thead>
     <tbody>
@@ -56,12 +54,10 @@
                 @Html.DisplayFor(modelItem => item.Shift.FromTime)
             </td>
             <td>
-                    <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-warning">Edit</a>
-            </td>
-            <td>
-                    <a asp-action="Details" asp-route-id="@item.EmployeeId" class="btn btn-info">Details</a>
-            </td>
-            <td>
+                    <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-warning">Edit</a>&nbsp;&nbsp;&nbsp;
+
+                    <a asp-action="Details" asp-route-id="@item.EmployeeId" class="btn btn-info">Details</a>&nbsp;&nbsp;&nbsp;
+            
                     <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
