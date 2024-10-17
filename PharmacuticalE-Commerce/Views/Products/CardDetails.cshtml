@@ -28,12 +28,6 @@
 					<p class="product-description mt-20">
 						@Model.Description
 					</p>
-					<div class="product-quantity">
-						<span>Quantity:</span>
-						<div class="product-quantity-slider">
-							<input id="product-quantity" type="text" value="0" max="@Model.Stock" name="product-quantity">
-						</div>
-					</div>
 					<div class="product-category">
 						<span>Categories:</span>
 						<ul>
@@ -47,7 +41,16 @@
 					</div>
 					@if (User.Identity.IsAuthenticated)
 					{
-						<a href="cart.html" class="btn btn-main mt-20">Add To Cart</a>
+						<form method="post" asp-action="AddCartItem" asp-controller="Carts">
+							<div class="product-quantity">
+								<span>Quantity:</span>
+								<div class="product-quantity-slider">
+									<input id="product-quantity" type="text" value="1" min="1" max="@Model.Stock" name="quantity">
+								</div>
+							</div>
+							<input type="hidden" name="productId" value="@Model.ProductId"/>
+							<button type="submit" class="btn btn-main mt-20">Add To Cart</button>
+						</form>
                     }
                     else{
                         <a asp-action="Login" asp-controller="UserAuth" class="btn btn-main mt-20">Login to Add To Cart</a>

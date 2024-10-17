@@ -29,7 +29,7 @@ namespace PharmacuticalE_Commerce.Controllers
 
             if (activeCart == null)
             {
-                var cart = new Cart { UserId = userId, CartItems = new List<CartItem>() };
+                var cart = new Cart { UserId = userId, CartItems = new List<CartItem>() , Status = true};
                 await _cartRepository.AddCartAsync(cart);
                 return View(cart); // Return an empty cart if no active cart exists
             }
@@ -40,34 +40,46 @@ namespace PharmacuticalE_Commerce.Controllers
         // Adding a new item to the cart or updating quantity if it already exists
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddCartItem(int cartId, int productId, int quantity)
+        public async Task<IActionResult> AddCartItem(int productId, int quantity)
         {
-            var cart = await _cartRepository.GetCartByIdAsync(cartId);
-            if (cart == null || cart.UserId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+            if (quantity < 1)
             {
-                return Unauthorized();  // Ensure the user owns the cart
+                return Content("Quantity must be more than 1");
             }
+			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var product = _productRepository.GetById(productId);
+			var activeCart = await _cartRepository.GetActiveCartByUserAsync(userId);
+
+			if (activeCart == null)
+			{
+				var cart = new Cart { UserId = userId, CartItems = new List<CartItem>(), Status = true };
+				await _cartRepository.AddCartAsync(cart);
+                activeCart = cart;
+			}
+
+			var product = _productRepository.GetById(productId);
             if (product == null)
             {
                 return NotFound("Product not found.");
             }
-
-            // Check if the cart already contains the item
-            var existingCartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+			if (quantity > product.Stock)
+			{
+				return Content($"Proudct stock is {product.Stock}");
+			}
+			// Check if the cart already contains the item
+			var existingCartItem = activeCart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
             if (existingCartItem != null)
             {
                 // Update quantity if item already exists
                 existingCartItem.Quantity += quantity;
-                await _cartRepository.UpdateCartAsync(cart);
+                await _cartRepository.UpdateCartAsync(activeCart);
             }
             else
             {
                 // Add a new cart item
                 var cartItem = new CartItem
                 {
-                    CartId = cartId,
+                    CartId = activeCart.CartId,
                     ProductId = productId,
                     Quantity = quantity
                 };
@@ -83,6 +95,8 @@ namespace PharmacuticalE_Commerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveCartItem(int cartId, int productId)
         {
+            Console.WriteLine($"remove test {productId}");
+            Console.WriteLine("__________________________________________________________________________");
             var cart = await _cartRepository.GetCartByIdAsync(cartId);
             if (cart == null || cart.UserId != User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
@@ -100,5 +114,21 @@ namespace PharmacuticalE_Commerce.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> GetPartialCart()
+        {
+			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+			var activeCart = await _cartRepository.GetActiveCartByUserAsync(userId);
+
+			if (activeCart == null)
+			{
+				var cart = new Cart { UserId = userId, CartItems = new List<CartItem>(), Status = true };
+				await _cartRepository.AddCartAsync(cart);
+				return View(cart); // Return an empty cart if no active cart exists
+			}
+
+			return View(activeCart);
+		}
     }
 }

@@ -18,4 +18,12 @@ public partial class Cart
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
     
     public virtual User User { get; set; } = null!;
+	public decimal TotalPrice
+	{
+		get
+		{
+			return CartItems.Sum(item => item.Product.Price * item.Quantity);
+		}
+	}
+
 }
