@@ -29,21 +29,11 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
 
     public virtual DbSet<Discount> Discounts { get; set; }
 
-    public virtual DbSet<Doctor> Doctors { get; set; }
-
     public virtual DbSet<Employee> Employees { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
 
-    public virtual DbSet<Pav> Pavs { get; set; }
-
-    public virtual DbSet<Prescription> Prescriptions { get; set; }
-
     public virtual DbSet<Product> Products { get; set; }
-
-    public virtual DbSet<ProductAttribute> ProductAttributes { get; set; }
-
-    public virtual DbSet<ProductPrice> ProductPrices { get; set; }
 
     public virtual DbSet<PromoCode> PromoCodes { get; set; }
 
@@ -54,8 +44,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
     public virtual DbSet<Shift> Shifts { get; set; }
 
     public virtual DbSet<ShippingAddress> ShippingAddresses { get; set; }
-
-    public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -123,9 +111,7 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
             entity.HasIndex(e => e.UserId, "IX_Cart_userId");
 
             entity.Property(e => e.CartId).HasColumnName("cartId");
-            entity.Property(e => e.Type)
-                .HasMaxLength(50)
-                .HasColumnName("type");
+
             entity.Property(e => e.UserId).HasColumnName("userId");
 
             entity.HasOne(d => d.User).WithMany(p => p.Carts)
@@ -243,17 +229,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
                     });
         });
 
-        modelBuilder.Entity<Doctor>(entity =>
-        {
-            entity.HasKey(e => e.DoctorId).HasName("PK__Doctor__722484769DF35E54");
-
-            entity.ToTable("Doctor");
-
-            entity.Property(e => e.DoctorId).HasColumnName("doctorId");
-            entity.Property(e => e.Name)
-                .HasMaxLength(100)
-                .HasColumnName("name");
-        });
 
         modelBuilder.Entity<Employee>(entity =>
         {
@@ -356,82 +331,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
                 .HasConstraintName("FK__Order__userId__6FE99F9F");
         });
 
-        modelBuilder.Entity<Pav>(entity =>
-        {
-            entity.HasKey(e => new { e.ProductId, e.AttributeId }).HasName("PK__PAV__3D2B51558DCFC313");
-
-            entity.ToTable("PAV");
-
-            entity.HasIndex(e => e.AttributeId, "IX_PAV_attributeId");
-
-            entity.Property(e => e.ProductId).HasColumnName("productId");
-            entity.Property(e => e.AttributeId).HasColumnName("attributeId");
-            entity.Property(e => e.Value)
-                .HasMaxLength(255)
-                .HasColumnName("value");
-
-            entity.HasOne(d => d.Attribute).WithMany(p => p.Pavs)
-                .HasForeignKey(d => d.AttributeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PAV__attributeId__4D94879B");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.Pavs)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PAV__productId__4CA06362");
-        });
-
-        modelBuilder.Entity<Prescription>(entity =>
-        {
-            entity.HasKey(e => e.PrescriptionId).HasName("PK__Prescrip__7920FC2498C9F50F");
-
-            entity.ToTable("Prescription");
-
-            entity.HasIndex(e => e.EmployeeId, "IX_Prescription_employeeId");
-
-            entity.Property(e => e.PrescriptionId).HasColumnName("prescriptionId");
-            entity.Property(e => e.EmployeeId).HasColumnName("employeeId");
-            entity.Property(e => e.Photo)
-                .HasMaxLength(255)
-                .HasColumnName("photo");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
-            entity.Property(e => e.UpdatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("updatedAt");
-
-            entity.HasOne(d => d.Cart).WithOne(p => p.Prescription)
-                .HasForeignKey(d => d.PrescriptionId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Prescript__cartI__5629CD9C");
-
-            entity.HasOne(d => d.Employee).WithMany(p => p.Prescriptions)
-                .HasForeignKey(d => d.EmployeeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Prescript__emplo__571DF1D5");
-
-            entity.HasMany(d => d.Doctors).WithMany(p => p.Prescriptions)
-                .UsingEntity<Dictionary<string, object>>(
-                    "DoctorInPrescription",
-                    r => r.HasOne<Doctor>().WithMany()
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__DoctorInP__docto__5CD6CB2B"),
-                    l => l.HasOne<Prescription>().WithMany()
-                        .HasForeignKey("PrescriptionId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__DoctorInP__presc__5BE2A6F2"),
-                    j =>
-                    {
-                        j.HasKey("PrescriptionId", "DoctorId").HasName("PK__DoctorIn__0E02B463C56294AE");
-                        j.ToTable("DoctorInPrescription");
-                        j.HasIndex(new[] { "DoctorId" }, "IX_DoctorInPrescription_doctorId");
-                        j.IndexerProperty<int>("PrescriptionId").HasColumnName("prescriptionId");
-                        j.IndexerProperty<int>("DoctorId").HasColumnName("doctorId");
-                    });
-        });
 
         modelBuilder.Entity<Product>(entity =>
         {
@@ -467,43 +366,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
                 .HasConstraintName("FK__Product__categor__44FF419A");
         });
 
-        modelBuilder.Entity<ProductAttribute>(entity =>
-        {
-            entity.HasKey(e => e.AttributeId).HasName("PK__ProductA__03B803F048206992");
-
-            entity.ToTable("ProductAttribute");
-
-            entity.Property(e => e.AttributeId).HasColumnName("attributeId");
-            entity.Property(e => e.Name)
-                .HasMaxLength(100)
-                .HasColumnName("name");
-        });
-
-        modelBuilder.Entity<ProductPrice>(entity =>
-        {
-            entity.HasKey(e => e.PriceId).HasName("PK__ProductP__366E4CC285ECEDD9");
-
-            entity.ToTable("ProductPrice");
-
-            entity.HasIndex(e => e.ProductId, "IX_ProductPrice_productId");
-
-            entity.Property(e => e.PriceId).HasColumnName("priceId");
-            entity.Property(e => e.EndDate)
-                .HasColumnType("datetime")
-                .HasColumnName("endDate");
-            entity.Property(e => e.Price)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("price");
-            entity.Property(e => e.ProductId).HasColumnName("productId");
-            entity.Property(e => e.StartDate)
-                .HasColumnType("datetime")
-                .HasColumnName("startDate");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.ProductPrices)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ProductPr__produ__47DBAE45");
-        });
 
         modelBuilder.Entity<PromoCode>(entity =>
         {
@@ -612,27 +474,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
                 .HasConstraintName("FK__ShippingA__userI__6B24EA82");
         });
 
-        modelBuilder.Entity<ShoppingCart>(entity =>
-        {
-            entity.HasKey(e => e.ShoppingCartId).HasName("PK__Shopping__21DFC906F465567E");
-
-            entity.ToTable("ShoppingCart");
-
-            entity.Property(e => e.ShoppingCartId).HasColumnName("shoppingCartId");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
-            entity.Property(e => e.UpdatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("updatedAt");
-
-            entity.HasOne(d => d.Cart).WithOne(p => p.ShoppingCart)
-                .HasForeignKey(d => d.ShoppingCartId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ShoppingC__cartI__60A75C0F");
-        });
-
         modelBuilder.Entity<User>(entity =>
         {
             //entity.HasKey(e => e.UserId).HasName("PK__Users__CB9A1CFF7DF85AD0");
@@ -654,8 +495,8 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
                 .HasMaxLength(50)
                 .HasColumnName("lname");
             //entity.Property(e => e.Password)
-                //.HasMaxLength(100)
-                //.HasColumnName("password");
+            //.HasMaxLength(100)
+            //.HasColumnName("password");
         });
 
         modelBuilder.Entity<UserCard>(entity =>

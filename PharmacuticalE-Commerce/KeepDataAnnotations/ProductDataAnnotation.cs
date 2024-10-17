@@ -43,10 +43,6 @@ namespace PharmacuticalE_Commerce.Models
 
         public virtual Category Category { get; set; } = null!;
 
-        public virtual ICollection<Pav> Pavs { get; set; } = new List<Pav>();
-
-        public virtual ICollection<ProductPrice> ProductPrices { get; set; } = new List<ProductPrice>();
-
         public virtual ICollection<Discount> Discounts { get; set; } = new List<Discount>();
     }
 }

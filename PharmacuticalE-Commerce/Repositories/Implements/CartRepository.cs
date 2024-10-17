@@ -1,114 +1,73 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
-using PharmacuticalE_Commerce.Repositories.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace PharmacuticalE_Commerce.Repositories.Implements
+namespace PharmacuticalE_Commerce.Repositories
 {
     public class CartRepository : ICartRepository
     {
         private readonly PharmacySystemContext _context;
-        private readonly UserRepository _userRepo;
-        private readonly PrescriptionRepository _prescRepo;
-        private readonly ShoppingCartRepository _shoppingRepo;
 
         public CartRepository(PharmacySystemContext context)
         {
             _context = context;
-            _userRepo = new UserRepository(context);
-            _prescRepo = new PrescriptionRepository(context);
-            _shoppingRepo = new ShoppingCartRepository(context);
         }
 
-        public void Create(Cart entity)
+        public async Task<Cart> GetCartByIdAsync(int cartId)
         {
-            if (entity.Type is null ||
-                _userRepo.GetById(entity.UserId) is null) return;
-
-            _context.Carts.Add(entity);
-
-            if (entity.Type == "Presc")
-            {
-                var prescToAdd = new Prescription
-                {
-                    PrescriptionId = entity.CartId,
-                    Status = "UnderReview"
-                };
-                _prescRepo.Create(prescToAdd);
-                _context.SaveChanges();
-            }
-            else if (entity.Type == "Shopping")
-            {
-                var userShoppingCarts = GetAllByUserIdWithShopping(entity.UserId);
-                if (userShoppingCarts.Any(c => c.ShoppingCart.Status == "Active"))
-                {
-                    _context.Remove(entity);
-                    return;
-                }
-
-                var shoppingToAdd = new ShoppingCart
-                {
-                    ShoppingCartId = entity.CartId,
-                    Status = "Active"
-                };
-                _shoppingRepo.Create(shoppingToAdd);
-
-                _context.SaveChanges();
-            }
-            else _context.Remove(entity);
+            return await _context.Carts
+                                 .Include(c => c.CartItems)
+                                 .ThenInclude(ci => ci.Product)
+                                 .FirstOrDefaultAsync(c => c.CartId == cartId);
         }
 
-        public void Delete(int? id)
+        public async Task<Cart> GetActiveCartByUserAsync(string userId)
         {
-            throw new NotImplementedException();
+            return await _context.Carts
+                                 .Include(c => c.CartItems)
+                                 .ThenInclude(ci => ci.Product)
+                                 .FirstOrDefaultAsync(c => c.UserId == userId && c.Status == true);  // Only return active cart
         }
 
-        public IEnumerable<Cart> GetAll()
+        public async Task<IEnumerable<Cart>> GetCartsByUserAsync(string userId)
         {
-            return _context.Carts.ToList();
-        }
-
-        public IEnumerable<Cart> GetAllWithShopping()
-        {
-            return _context.Carts.Include(c => c.ShoppingCart)
-                                 .ToList();
-        }
-
-        public IEnumerable<Cart> GetAllWithPresc()
-        {
-            return _context.Carts.Include(c => c.Prescription)
-                                 .ToList();
-        }
-        public IEnumerable<Cart> GetAllByUserIdWithShopping(int? userId)
-        {
-            return _context.Carts.Include(c => c.ShoppingCart)
+            return await _context.Carts
+                                 .Include(c => c.CartItems)
                                  .Where(c => c.UserId == userId)
-                                 .ToList();
-        }
-        public IEnumerable<Cart> GetAllByUserIdWithPresc(int? userId)
-        {
-            return _context.Carts.Include(c => c.Prescription)
-                                 .Where(c => c.UserId == userId)
-                                 .ToList();
+                                 .ToListAsync();
         }
 
-        public Cart GetById(int? id)
+        public async Task AddCartAsync(Cart cart)
         {
-            return _context.Carts.FirstOrDefault(c => c.CartId == id);
+            _context.Carts.Add(cart);
+            await _context.SaveChangesAsync();
         }
 
-        public Cart GetByIdWithShopping(int? id)
+        public async Task UpdateCartAsync(Cart cart)
         {
-            return _context.Carts.Include(c => c.ShoppingCart).FirstOrDefault(c => c.CartId == id);
+            _context.Carts.Update(cart);
+            await _context.SaveChangesAsync();
         }
 
-        public Cart GetByIdWithPresc(int? id)
+        public async Task DeleteCartAsync(int cartId)
         {
-            return _context.Carts.Include(c => c.Prescription).FirstOrDefault(c => c.CartId == id);
+            var cart = await GetCartByIdAsync(cartId);
+            _context.Carts.Remove(cart);
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(Cart entity)
+        public async Task AddCartItemAsync(CartItem cartItem)
         {
-            throw new NotImplementedException();
+            _context.CartItems.Add(cartItem);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveCartItemAsync(CartItem cartItem)
+        {
+            _context.CartItems.Remove(cartItem);
+            await _context.SaveChangesAsync();
         }
     }
 }

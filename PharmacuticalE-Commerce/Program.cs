@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
+using PharmacuticalE_Commerce.Repositories;
 using PharmacuticalE_Commerce.Repositories.Implements;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 
@@ -29,6 +30,7 @@ namespace PharmacuticalE_Commerce
             builder.Services.AddScoped<IBranchRepository, BranchRepository>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IAttendanceRepository,AttendanceRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
             //builder.Services.AddIdentity<User, IdentityRole>()
             //    .AddEntityFrameworkStores<PharmacySystemContext>();
             

@@ -1,19 +1,18 @@
 ﻿using PharmacuticalE_Commerce.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace PharmacuticalE_Commerce.Repositories.Interfaces
+namespace PharmacuticalE_Commerce.Repositories
 {
-    public interface ICartRepository: IRepository<Cart>
+    public interface ICartRepository
     {
-        public IEnumerable<Cart> GetAllWithShopping();
-
-        public IEnumerable<Cart> GetAllWithPresc();
-
-        public IEnumerable<Cart> GetAllByUserIdWithShopping(int? userId);
-
-        public IEnumerable<Cart> GetAllByUserIdWithPresc(int? userId);
-
-        public Cart GetByIdWithShopping(int? id);
-
-        public Cart GetByIdWithPresc(int? id);
+        Task<Cart> GetCartByIdAsync(int cartId);
+        Task<Cart> GetActiveCartByUserAsync(string userId);
+        Task<IEnumerable<Cart>> GetCartsByUserAsync(string userId);
+        Task AddCartAsync(Cart cart);
+        Task UpdateCartAsync(Cart cart);
+        Task DeleteCartAsync(int cartId);
+        Task AddCartItemAsync(CartItem cartItem);   // Add cart item
+        Task RemoveCartItemAsync(CartItem cartItem);  // Remove cart item
     }
 }

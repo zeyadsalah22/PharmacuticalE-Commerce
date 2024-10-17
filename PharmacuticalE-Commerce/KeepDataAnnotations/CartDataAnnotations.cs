@@ -9,25 +9,24 @@ namespace PharmacuticalE_Commerce.Models
     {
     }
 
-
     public class CartMetaData
     {
         [Key]
         public int CartId { get; set; }
 
-        public string Type { get; set; } = null!;
+        [Required(ErrorMessage = "Status is required")]
+        public bool Status { get; set; }
 
-        [ForeignKey("User")]
-        public int UserId { get; set; }
+        [Required]
+        public string UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public virtual User User { get; set; } = null!;
 
         public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
-
-        public virtual ShoppingCart ShoppingCart { get; set; } = null!;
-
-        public virtual Prescription Prescription { get; set; } = null!;
-        
-        public virtual User User { get; set; } = null!;
     }
+
+    
 }

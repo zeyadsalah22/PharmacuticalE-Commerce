@@ -31,8 +31,6 @@ public partial class Employee
 
     public virtual Branch Branch { get; set; } = null!;
 
-    public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
-
     public virtual Role Role { get; set; } = null!;
 
     public virtual ICollection<SalaryLog> SalaryLogs { get; set; } = new List<SalaryLog>();
