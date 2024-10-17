@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Category>
 @{
+    ViewBag.PageTitle = "Categories";
+    ViewBag.CardTitle = "Create New Category";
     Layout = "_StaffManagementLayout";
     ViewData["Title"] = "Index";
 }
-<h2>Categories</h2>
-
 <a asp-action="Create" class="btn btn-primary">Create New</a>
 
-<table class="table">
+<table class="table" id="CategoryList">
     <thead>
         <tr>
             <th>
@@ -17,6 +17,7 @@
             <th>
                 @Html.DisplayName("Parent Category")
             </th>
+            <th>Options</th>
         </tr>
     </thead>
     <tbody>
@@ -35,9 +36,9 @@
 
                 }
                 <td>
-                    <a asp-action="Edit" asp-route-id="@category.CategoryId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@category.CategoryId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@category.CategoryId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@category.CategoryId" class="btn btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@category.CategoryId" class="btn btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@category.CategoryId" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }

@@ -1,0 +1,29 @@
+﻿@model PharmacuticalE_Commerce.Models.Role
+
+@{
+    ViewBag.PageTitle = "Employees Roles";
+    ViewBag.CardTitle = $"{Model.Title} Role Details";
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+<div>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.RoleId" class="btn btn-warning">Edit</a>&nbsp;&nbsp;&nbsp;
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

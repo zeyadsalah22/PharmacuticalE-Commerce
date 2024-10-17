@@ -1,25 +1,25 @@
 ﻿@model PaginatedList<PharmacuticalE_Commerce.Models.Product>
 
 @{
+    ViewBag.PageTitle = "Products";
+    ViewBag.CardTitle = "Products List";
     Layout = "_StaffManagementLayout";
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
 <p>
-    <a asp-action="Gallery">Gallery</a>
+    <a asp-action="Gallery" class="btn btn-secondary">Gallery</a>
 </p>
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
             <label>Find by name: <input type="text" name="SearchString" value="@ViewData["SearchStringParm"]" /></label>
             <input type="hidden" name="categoryFilter" value="@ViewData["CategoryFilterParm"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]">Back to Full List</a>
+            <input type="submit" value="Search" class="btn btn-default" /> &nbsp;&nbsp;&nbsp;
+            <a asp-action="Index" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" class="btn btn-secondary">Clear</a>
         </p>
     </div>
 </form>
@@ -27,10 +27,10 @@
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayName("Product Name")</a>
+                <a asp-action="Index" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" class="btn btn-link" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayName("Product Name")</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" asp-route-sortOrder="@ViewData["PriceSortParm"]">@Html.DisplayName("Price")</a>
+                <a asp-action="Index" asp-route-searchString="@ViewData["SearchStringParm"]" asp-route-categoryFilter="@ViewData["CategoryFilterParm"]" class="btn btn-link" asp-route-sortOrder="@ViewData["PriceSortParm"]">@Html.DisplayName("Price")</a>
             </th>
             <th>
                 @Html.DisplayName("SerialNumber")
@@ -63,9 +63,9 @@
                 @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-warning">Edit</a> &nbsp;&nbsp;&nbsp;
+                    <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-info">Details</a> &nbsp;&nbsp;&nbsp;
+                    <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }

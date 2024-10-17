@@ -1,0 +1,42 @@
+﻿@model IEnumerable<PharmacuticalE_Commerce.Models.Role>
+
+@{
+    ViewBag.PageTitle = "Employees Roles";
+    ViewBag.CardTitle = "Roles";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table" id="RolesList">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.RoleId" class="btn btn-warning">Edit</a> &nbsp;&nbsp;&nbsp;
+                    <a asp-action="Details" asp-route-id="@item.RoleId" class="btn btn-info">Details</a> &nbsp;&nbsp;&nbsp;
+                    <a asp-action="Delete" asp-route-id="@item.RoleId" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
