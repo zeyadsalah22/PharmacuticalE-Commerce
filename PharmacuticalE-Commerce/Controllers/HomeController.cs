@@ -13,10 +13,10 @@ namespace PharmacuticalE_Commerce.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
         public IActionResult Privacy()
         {
@@ -28,7 +28,7 @@ namespace PharmacuticalE_Commerce.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult Ecommerce()
+        public IActionResult Index()
         {
             return View();
         }

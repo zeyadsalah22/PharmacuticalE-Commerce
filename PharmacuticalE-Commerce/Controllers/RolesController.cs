@@ -19,39 +19,26 @@ namespace PharmacuticalE_Commerce.Controllers
             _roleRepository = roleRepository;
         }
 
-        // GET: Roles
         public IActionResult Index()
         {
             return View(_roleRepository.GetAll());
         }
 
-        // GET: Roles/Details/5
         public IActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var role = _roleRepository.GetById(id);
-            if (role == null)
-            {
-                return NotFound();
-            }
 
             return View(role);
         }
 
-        // GET: Roles/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Roles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("RoleId,Title,Description")] Role role)
+        public IActionResult Create(Role role)
         {
             if (ModelState.IsValid)
             {
@@ -61,72 +48,36 @@ namespace PharmacuticalE_Commerce.Controllers
             return View(role);
         }
 
-        // GET: Roles/Edit/5
         public IActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             var role = _roleRepository.GetById(id);
-            if (role == null)
-            {
-                return NotFound();
-            }
+
             return View(role);
         }
 
-        // POST: Roles/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("RoleId,Title,Description")] Role role)
+        public IActionResult Edit(int id, Role role)
         {
-            if (id != role.RoleId)
-            {
-                return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _roleRepository.Update(role);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (_roleRepository.GetById(role.RoleId) == null)
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                
+                _roleRepository.Update(role);
                 return RedirectToAction(nameof(Index));
             }
             return View(role);
         }
 
-        // GET: Roles/Delete/5
         public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             var role = _roleRepository.GetById(id);
-            if (role == null)
-            {
-                return NotFound();
-            }
 
             return View(role);
         }
 
-        // POST: Roles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
