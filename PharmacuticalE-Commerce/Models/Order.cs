@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 namespace PharmacuticalE_Commerce.Models;
 
+public enum OrderStatus
+{
+    Pending,
+    Delevering,
+    Completed,
+    Cancelled
+}
 public partial class Order
 {
     public int OrderId { get; set; }
@@ -30,7 +37,7 @@ public partial class Order
     public bool IsPaid { get; set; }
 
     public string? PromoCode { get; set; }
-    public string? Status { get; set; }
+    public OrderStatus? Status { get; set; }
 
     public virtual ShippingAddress ShippingAddress { get; set; } = null!;
 
