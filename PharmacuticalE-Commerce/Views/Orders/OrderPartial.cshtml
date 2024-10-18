@@ -15,7 +15,7 @@
             <div class="media-body">
                 <h4 class="media-heading"><a asp-action="CardDetails" asp-controller="Products" asp-route-id="@item.Product.ProductId">@item.Product.Name</a></h4>
                 <p class="price">@item.Quantity x @item.Product.Price.ToString("C")</p>
-                <form asp-action="RemoveCartItem" method="post">
+                <form asp-action="RemoveCartItem" asp-controller="Carts" method="post">
                     <input type="hidden" name="cartId" value="@Model.CartId" />
                     <input type="hidden" name="productId" value="@item.ProductId" />
                     <button type="submit" class="remove">Remove</button>
@@ -23,9 +23,9 @@
             </div>
         </div>
     }
-    <div class="discount-code">
+   @*  <div class="discount-code">
         <p>Have a discount ? <a data-toggle="modal" data-target="#coupon-modal" href="#!">enter it here</a></p>
-    </div>
+    </div> *@
     <ul class="summary-prices">
         <li>
             <span>Subtotal:</span>

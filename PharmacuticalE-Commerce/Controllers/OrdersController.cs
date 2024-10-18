@@ -6,9 +6,12 @@ using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories;
 using PharmacuticalE_Commerce.Repositories.Implements;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
+using Stripe.Checkout;
+using Stripe;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
@@ -18,12 +21,14 @@ namespace PharmacuticalE_Commerce.Controllers
         private readonly IOrderRepository _orderRepository;
         private readonly ICartRepository _cartRepository;
         private readonly IShippingAddressRepository _shippingAddressRepository;
-        private readonly decimal ShippingPrice = 50.00M; 
-        public OrdersController(IOrderRepository orderRepository, ICartRepository cartRepository, IShippingAddressRepository shippingAddressRepository)
+        private readonly IConfiguration _configuration;
+        private readonly decimal ShippingPrice = 50.00M;
+        public OrdersController(IOrderRepository orderRepository, ICartRepository cartRepository, IShippingAddressRepository shippingAddressRepository, IConfiguration configuration)
         {
             _orderRepository = orderRepository;
             _cartRepository = cartRepository;
             _shippingAddressRepository = shippingAddressRepository;
+            _configuration = configuration;
         }
 
         // GET: Orders/Index
@@ -62,7 +67,7 @@ namespace PharmacuticalE_Commerce.Controllers
         public IActionResult OrderView(int id)
         {
             var order = _orderRepository.GetByIdWithDetails(id);
-            if (order == null || order.UserId!= User.FindFirstValue(ClaimTypes.NameIdentifier))
+            if (order == null || order.UserId != User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
                 return NotFound();
             }
@@ -149,7 +154,7 @@ namespace PharmacuticalE_Commerce.Controllers
             if (ModelState.IsValid)
             {
                 _orderRepository.Update(order);
-                foreach(var item in order.Cart.CartItems)
+                foreach (var item in order.Cart.CartItems)
                 {
                     item.Product.Stock += item.Quantity;
                 }
@@ -203,11 +208,12 @@ namespace PharmacuticalE_Commerce.Controllers
             {
                 return RedirectToAction("Index", "Carts");  // Redirect to the cart if it's empty
             }
-            foreach(var item in cart.CartItems) {
+            foreach (var item in cart.CartItems)
+            {
                 if (item.Product.Stock < item.Quantity)
                 {
                     ViewBag.ErrorMessage = $"{item.Product.Name} in your cart is out of stock";
-                    return RedirectToAction("Index", "Carts");  
+                    return RedirectToAction("Index", "Carts");
                 }
             }
             if (shippingAddress.AddressId != 0)
@@ -218,14 +224,15 @@ namespace PharmacuticalE_Commerce.Controllers
                     return NotFound();
                 }
             }
-            else {
+            else
+            {
                 ModelState.Remove("AddressId");
                 ModelState.Remove("UserId");
                 ModelState.Remove("User");
                 if (!ModelState.IsValid)
-				{
-					return View(shippingAddress);
-				}
+                {
+                    return View(shippingAddress);
+                }
                 shippingAddress = new ShippingAddress
                 {
                     Address = shippingAddress.Address,
@@ -236,7 +243,8 @@ namespace PharmacuticalE_Commerce.Controllers
                 };
                 _shippingAddressRepository.Create(shippingAddress);
             }
-                
+
+
             // Calculate the total price of the cart
             decimal totalAmount = cart.CartItems.Sum(item => item.Quantity * item.Product.Price);
 
@@ -246,7 +254,7 @@ namespace PharmacuticalE_Commerce.Controllers
                 UserId = userId,
                 ShippingAddress = shippingAddress,
                 OrderDate = DateTime.Now,
-                TotalAmount = totalAmount+ ShippingPrice,
+                TotalAmount = totalAmount + ShippingPrice,
                 ShippingPrice = ShippingPrice,
                 Cart = cart,
                 Status = "Pending"
@@ -256,14 +264,15 @@ namespace PharmacuticalE_Commerce.Controllers
             _orderRepository.Create(order);
 
             // Clear the cart after placing the order
-            foreach(var item in cart.CartItems) {
+            foreach (var item in cart.CartItems)
+            {
                 item.Product.Stock -= item.Quantity;
             }
             cart.Status = false;
             await _cartRepository.UpdateCartAsync(cart);
 
-            return RedirectToAction(nameof(ListOrders));
+            return RedirectToAction("OrderView", new { id = order.OrderId });
         }
-
+        
     }
 }

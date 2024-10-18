@@ -27,6 +27,8 @@ public partial class Order
 
 	public decimal? ShippingPrice { get; set; }
 
+    public bool IsPaid { get; set; }
+
     public string? PromoCode { get; set; }
     public string? Status { get; set; }
 

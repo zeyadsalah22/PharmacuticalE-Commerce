@@ -4,6 +4,7 @@ using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories;
 using PharmacuticalE_Commerce.Repositories.Implements;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
+using Stripe;
 
 namespace PharmacuticalE_Commerce
 {
@@ -17,7 +18,8 @@ namespace PharmacuticalE_Commerce
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<PharmacySystemContext>(options =>
                 options.UseSqlServer(connectionString));
-
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
             builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>().AddDefaultUI()
                 .AddEntityFrameworkStores<PharmacySystemContext>();
@@ -66,6 +68,10 @@ namespace PharmacuticalE_Commerce
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+                name: "checkout",
+                pattern: "checkout/{action=Index}/{id?}",
+                defaults: new { controller = "Checkout", action = "Index" });
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;

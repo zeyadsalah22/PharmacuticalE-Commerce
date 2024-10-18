@@ -72,8 +72,53 @@
                                     </table>
                         </div>
                     </div>
+                    @if((Model.Status == "Pending" || Model.Status=="Delivering") && !Model.IsPaid)
+                    {
+                        <div class="row">
+                            <form asp-action="PayVisa" method="post">
+                                <input type="hidden" name="Id" value="@Model.OrderId" />
+                                <button type="button" id="checkout-button" class="btn btn-main mt-20">Pay with Visa</button>
+                            </form>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
+@section MySection {
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('pk_test_51QBKRM08kuWvYrxHMsB8UvoFJH9lDrxjQvgGSwEYa7a6Ee4Zmt8WN3N4UkB49H91i5PRueiXO5vfbZoby3lHSmrD000nC9swSl');
+        document.getElementById('checkout-button').addEventListener('click', function () {
+            console.log(@Model.OrderId)
+            fetch('/API/PayVisa', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ "Id": parseInt(@Model.OrderId) })
+                })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(function (session) {
+                    if (!session.sessionId) {
+                        throw new Error('Session ID not returned');
+                    }
+                    return stripe.redirectToCheckout({ sessionId: session.sessionId });
+                })
+                .then(function (result) {
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+}
