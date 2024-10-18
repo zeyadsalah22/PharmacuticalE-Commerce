@@ -68,12 +68,43 @@ namespace PharmacuticalE_Commerce
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             using (var scope = app.Services.CreateScope())
             {
-                var roleManger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var services = scope.ServiceProvider;
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = services.GetRequiredService<UserManager<User>>();
+
+                // Ensure roles exist
                 var roles = new[] { "Admin", "HR", "Moderator", "Customer" };
                 foreach (var role in roles)
                 {
-                    if (!await roleManger.RoleExistsAsync(role))
-                        await roleManger.CreateAsync(new IdentityRole(role));
+                    if (!await roleManager.RoleExistsAsync(role))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                    }
+                }
+
+                // Ensure admin user exists
+                var adminUsers = await userManager.GetUsersInRoleAsync("Admin");
+                if (!adminUsers.Any())
+                {
+                    var adminUser = new User
+                    {
+                        UserName = "Admin",
+                        Email = "admin@example.com",
+                        PhoneNumber = "1234567890",
+                        Fname = "Pharma",
+                        Lname = "Ease"
+                    };
+                    var password = "Admin@12345";
+
+                    var result = await userManager.CreateAsync(adminUser, password);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(adminUser, "Admin");
+                    }
+                    else
+                    {
+                        throw new Exception(string.Join("; ", result.Errors.Select(e => e.Description)));
+                    }
                 }
             }
             app.Run();
