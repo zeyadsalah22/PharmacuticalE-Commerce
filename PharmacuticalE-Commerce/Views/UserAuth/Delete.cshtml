@@ -1,17 +1,15 @@
 ﻿@model PharmacuticalE_Commerce.Models.User
 
 @{
+    ViewBag.PageTitle = "Delete User";
+    ViewBag.CardTitle = "Delete";
     ViewData["Title"] = "Delete User";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
 
-<h1>Delete User</h1>
-
-<h3>Are you sure you want to delete @Model.UserName?</h3>
+<h3>Are you sure you want to delete @Model.Fname @Model.Lname?</h3>
 
 <div>
-    <h4>User</h4>
-    <hr />
     <dl class="row">
         <dt class="col-sm-2">
             First Name
@@ -48,7 +46,7 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <button type="submit" class="btn btn-danger">Delete</button>
-        <a asp-action="UsersList" class="btn btn-secondary">Cancel</a>
+        <a asp-action="CustomersList" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 

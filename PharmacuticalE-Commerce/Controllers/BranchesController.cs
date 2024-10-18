@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class BranchesController : Controller
     {
         private readonly IBranchRepository _branchRepository;

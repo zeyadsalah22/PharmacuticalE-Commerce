@@ -64,7 +64,7 @@
             <option value="">-- Select Shift --</option>
             @foreach (var item in Model.Shifts)
             {
-                <option value="@item.ShiftId">@item.FromTime</option>
+                <option value="@item.ShiftId">@item.FromTime To @item.ToTime</option>
             }
         </select>
         <span asp-validation-for="Employee.ShiftId" class="text-danger"></span>

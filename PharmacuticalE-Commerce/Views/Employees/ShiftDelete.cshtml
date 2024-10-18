@@ -1,0 +1,33 @@
+﻿@model PharmacuticalE_Commerce.Models.Shift
+
+@{
+    ViewBag.PageTitle = "Shifts";
+    ViewBag.CardTitle = "Delete";
+    ViewData["Title"] = "ShiftDelete";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+<h3>Are you sure you want to delete @Model.FromTime To @Model.ToTime Shift?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FromTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FromTime)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ToTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ToTime)
+        </dd>
+    </dl>
+    
+    <form asp-action="ShiftDelete">
+        <input type="hidden" asp-for="ShiftId" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Shifts" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>

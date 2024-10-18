@@ -1,14 +1,11 @@
 ﻿@model PharmacuticalE_Commerce.Models.Role
 
 @{
+    ViewBag.PageTitle = "Employees Roles";
+    ViewBag.CardTitle = "Create New Role";
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
-
-<h1>Create</h1>
-
-<h4>Role</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -31,7 +28,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
 @section Scripts {

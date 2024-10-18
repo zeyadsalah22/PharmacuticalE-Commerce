@@ -12,6 +12,8 @@ namespace PharmacuticalE_Commerce.Repositories.Interfaces
         IEnumerable<Shift> GetShifts();
         Shift GetShiftsById(int? id);
         void UpdateShift(Shift shift);
+        void DeleteShift(int? id);
+        void CreateShift(Shift shift);
     }
 
 }

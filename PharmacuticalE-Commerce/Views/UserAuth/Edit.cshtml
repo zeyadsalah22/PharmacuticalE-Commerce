@@ -1,11 +1,11 @@
 ﻿@model PharmacuticalE_Commerce.ViewModels.UserViewModel
 
 @{
+    ViewBag.PageTitle = "Edit User";
+    ViewBag.CardTitle = $"Edit {Model.Fname} {Model.Lname} Data";
     ViewData["Title"] = "Edit User";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
-
-<h1>Edit User</h1>
 
 <form asp-action="Edit">
     <input type="hidden" asp-for="UserId" />

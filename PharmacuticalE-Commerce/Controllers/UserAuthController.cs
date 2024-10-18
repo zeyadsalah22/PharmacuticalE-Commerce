@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PharmacuticalE_Commerce.Models;
@@ -94,6 +95,27 @@ namespace PharmacuticalE_Commerce.Controllers
             return RedirectToAction(nameof(Login));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> StaffLogin(LoginViewModel loginViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await _userManager.FindByNameAsync(loginViewModel.Username);
+                if (user != null)
+                {
+                    bool userFound = await _userManager.CheckPasswordAsync(user, loginViewModel.Password);
+                    if (userFound)
+                    {
+                        await _signInManager.SignInAsync(user, loginViewModel.RememberMe);
+                        return RedirectToAction("StaffManagement", "Home");
+                    }
+                }
+                ModelState.AddModelError(string.Empty, "Invalid UserName and/or Password");
+
+            }
+            return RedirectToAction(nameof(Login));
+        }
+
         public async Task<IActionResult> Details(string username)
         {
             User user = await _userManager.FindByNameAsync(username);
@@ -116,11 +138,13 @@ namespace PharmacuticalE_Commerce.Controllers
             return RedirectToAction(nameof(StaffLogin));
         }
 
+        [Authorize(Roles = "Admin,Moderator")]
         public async Task<IActionResult> CustomersList()
         {
             var users = await _userRepository.GetAllCustomerUserViewModels();
             return View(users);
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminsList()
         {
             var users = await _userRepository.GetAllAdminsViewModels();
@@ -128,6 +152,7 @@ namespace PharmacuticalE_Commerce.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             var model = new UserViewModel
@@ -139,6 +164,7 @@ namespace PharmacuticalE_Commerce.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(UserViewModel model)
         {
             RegisterViewModel registerViewModel = new RegisterViewModel
@@ -166,7 +192,6 @@ namespace PharmacuticalE_Commerce.Controllers
                 {
                     await _userManager.AddToRoleAsync(user,model.RoleName);
                     //cookies
-                    await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("AdminsList");
                 }
                 else
@@ -182,6 +207,7 @@ namespace PharmacuticalE_Commerce.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -197,16 +223,17 @@ namespace PharmacuticalE_Commerce.Controllers
                 RoleName = (await _userManager.GetRolesAsync(user)).FirstOrDefault()
             };
 
-            userViewModel.RoleNames = new List<string> { userViewModel.RoleName };
+            userViewModel.RoleNames = _roleManager.Roles.Select(r => r.Name).ToList();
 
             return View(userViewModel);
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(UserViewModel model)
         {
-            
-                var user = await _userManager.FindByIdAsync(model.UserId);
+
+            var user = await _userManager.FindByIdAsync(model.UserId);
 
                 user.Fname = model.Fname;
                 user.Lname = model.Lname;
@@ -229,11 +256,12 @@ namespace PharmacuticalE_Commerce.Controllers
                 }
             
 
-            model.RoleNames = new List<string> { model.RoleName };
+            model.RoleNames = _roleManager.Roles.Select(r => r.Name).ToList();
             return View(model);
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -242,6 +270,7 @@ namespace PharmacuticalE_Commerce.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
