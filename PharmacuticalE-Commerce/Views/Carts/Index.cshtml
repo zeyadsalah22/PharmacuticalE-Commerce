@@ -18,6 +18,7 @@
         </div>
     </div>
 </section>
+
 <div class="page-wrapper">
     <div class="cart shopping">
         <div class="container">
@@ -27,11 +28,7 @@
                         <div class="product-list">
                             @if (Model.CartItems.Count > 0)
                             {
-                                if(ViewBag.ErrorMessage != null)
-                                {
-                                    <div class="alert alert-info">@ViewBag.ErrorMessage</div>
-                                }
-                                <form method="post">
+                                <form method="post" asp-action="RemoveCartItem">
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -54,11 +51,9 @@
                                                     <td>@item.Quantity</td>
                                                     <td>@(item.Quantity * item.Product.Price)</td>
                                                     <td>
-                                                        <form asp-action="RemoveCartItem" method="post">
-                                                            <input type="hidden" name="cartId" value="@Model.CartId" />
-                                                            <input type="hidden" name="productId" value="@item.ProductId" />
-                                                            <button type="submit" class="product-remove">Remove</button>
-                                                        </form>
+                                                        <input type="hidden" name="cartId" value="@Model.CartId" />
+                                                        <input type="hidden" name="productId" value="@item.ProductId" />
+                                                        <button type="submit" class="product-remove">Remove</button>
                                                     </td>
                                                 </tr>
                                             }
