@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmacuticalE_Commerce.Models;
 
@@ -11,9 +12,11 @@ using PharmacuticalE_Commerce.Models;
 namespace PharmacuticalE_Commerce.Migrations
 {
     [DbContext(typeof(PharmacySystemContext))]
-    partial class PharmacySystemContextModelSnapshot : ModelSnapshot
+    [Migration("20241018005309_editordersrss")]
+    partial class editordersrss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -692,10 +695,6 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnName("isDeleted");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()

@@ -10,10 +10,10 @@
         <div class="row">
             <div class="col-md-12">
                 <ul class="list-inline dashboard-menu text-center">
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="order.html">Orders</a></li>
-                    <li><a href="address.html">Address</a></li>
-                    <li><a class="active" href="profile-details.html">Profile Details</a></li>
+                    <li><a asp-action="Dashboard" asp-controller="Orders">Dashboard</a></li>
+                    <li><a asp-action="ListOrders" asp-controller="Orders">Orders</a></li>
+                    <li><a asp-action="Index" asp-controller="ShippingAddresses">Address</a></li>
+                    <li><a class="active" asp-action="Details" asp-controller="UserAuth" asp-route-username="@User.Identity.Name">Profile Details</a></li>
                 </ul>
                 <div class="dashboard-wrapper dashboard-user-profile">
                     <div class="media">

@@ -1,0 +1,24 @@
+﻿@model PharmacuticalE_Commerce.Models.Order
+
+@{
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+<h2>Edit Order</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="OrderId" />
+    <div class="form-group">
+        <label asp-for="Status" class="control-label"></label>
+        <input asp-for="Status" class="form-control" value="@Model.Status" />
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ShippingAddressId" class="control-label"></label>
+        <select asp-for="ShippingAddressId" class="form-control" asp-items="ViewBag.ShippingAddresses">
+        </select>
+        <span asp-validation-for="ShippingAddressId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
