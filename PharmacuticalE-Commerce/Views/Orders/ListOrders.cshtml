@@ -65,7 +65,7 @@
                                         </td>
                                         <td>
                                             <a asp-action="OrderView" class="btn btn-default" asp-route-id="@item.OrderId">View</a>
-                                            @if (item.Status == "Pending")
+                                            @if (item.Status == OrderStatus.Pending)
                                             {
                                                 <form asp-action="Cancel" asp-route-id="@item.OrderId">
                                                     <input type="hidden"  />

@@ -86,27 +86,6 @@ namespace PharmacuticalE_Commerce.Controllers
             return View(cart);
         }
 
-        // GET: Orders/Create
-        public IActionResult Create()
-        {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewData["ShippingAddresses"] = new SelectList(_shippingAddressRepository.GetShippingAddressByUserId(userId), "AddressId", "Address");
-            return View();
-        }
-
-        // POST: Orders/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Order order)
-        {
-            if (ModelState.IsValid)
-            {
-                _orderRepository.Create(order);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(order);
-        }
-
         // GET: Orders/Edit/5
         public IActionResult Edit(int id)
         {
@@ -123,7 +102,7 @@ namespace PharmacuticalE_Commerce.Controllers
         // POST: Orders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, int ShippingAddressId, string Status)
+        public IActionResult Edit(int id, int ShippingAddressId, OrderStatus Status)
         {
             var order = _orderRepository.GetById(id);
             if (order == null)
@@ -150,7 +129,7 @@ namespace PharmacuticalE_Commerce.Controllers
             {
                 return NotFound();
             }
-            order.Status = "Canceled";
+            order.Status = OrderStatus.Cancelled;
             if (ModelState.IsValid)
             {
                 _orderRepository.Update(order);
@@ -257,7 +236,7 @@ namespace PharmacuticalE_Commerce.Controllers
                 TotalAmount = totalAmount + ShippingPrice,
                 ShippingPrice = ShippingPrice,
                 Cart = cart,
-                Status = "Pending"
+                Status = OrderStatus.Pending
             };
 
             // Save the order to the database
