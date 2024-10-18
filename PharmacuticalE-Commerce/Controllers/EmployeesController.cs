@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
@@ -6,6 +7,7 @@ using PharmacuticalE_Commerce.ViewModels;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
+    [Authorize(Roles ="Admin,HR")]
     public class EmployeesController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;

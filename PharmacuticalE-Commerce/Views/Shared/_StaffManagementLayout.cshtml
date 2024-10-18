@@ -135,6 +135,35 @@
                             </ul>
                         </li>
                         <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-user-shield"></i>
+                                <p>
+                                    Users Mangemnet
+
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item has-treeview">
+                                    <a class="nav-link" asp-action="CustomersList" asp-controller="UserAuth">
+                                        <i class="fas fa-star"></i>
+                                        <p>
+                                            Customers
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item has-treeview">
+                                    <a class="nav-link" asp-action="AdminsList" asp-controller="UserAuth">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <p>
+                                            Admins
+
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
                             <a class="nav-link" asp-controller="Branches" asp-action="Index">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <p>
@@ -224,6 +253,8 @@
             $('#ShowAttendancesList').DataTable();
             $('#TakeAttendanceList').DataTable();
             $('#RolesList').DataTable();
+            $('#CustomersList').DataTable();
+            $('#AdminsList').DataTable();
         });
     </script>
 

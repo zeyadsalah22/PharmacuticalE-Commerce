@@ -9,7 +9,7 @@ namespace PharmacuticalE_Commerce
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +19,7 @@ namespace PharmacuticalE_Commerce
                 options.UseSqlServer(connectionString));
 
             builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>().AddDefaultUI()
                 .AddEntityFrameworkStores<PharmacySystemContext>();
             builder.Services.AddControllersWithViews();
 
@@ -32,6 +33,7 @@ namespace PharmacuticalE_Commerce
             builder.Services.AddScoped<IAttendanceRepository,AttendanceRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             //builder.Services.AddIdentity<User, IdentityRole>()
             //    .AddEntityFrameworkStores<PharmacySystemContext>();
@@ -62,7 +64,16 @@ namespace PharmacuticalE_Commerce
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roles = new[] { "Admin", "HR", "Moderator", "Customer" };
+                foreach (var role in roles)
+                {
+                    if (!await roleManger.RoleExistsAsync(role))
+                        await roleManger.CreateAsync(new IdentityRole(role));
+                }
+            }
             app.Run();
         }
     }
