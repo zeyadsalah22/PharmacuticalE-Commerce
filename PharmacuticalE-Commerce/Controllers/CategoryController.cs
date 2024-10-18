@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 namespace Categories.Controllers
 {
-
+    [Authorize(Roles = "Admin,Moderator")]
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _repository;

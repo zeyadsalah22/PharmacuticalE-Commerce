@@ -6,7 +6,7 @@
     ViewData["Title"] = "Shifts";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
-
+<a asp-action="ShiftCreate" class="btn btn-primary">Create New Shift</a>
 <table class="table" id="ShiftsList">
     <thead>
         <tr>
@@ -30,6 +30,7 @@
             </td>
             <td>
                     <a asp-action="ShiftEdit" asp-route-id="@item.ShiftId" class="btn btn-warning">Edit</a>
+                    <a asp-action="ShiftDelete" asp-route-id="@item.ShiftId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }

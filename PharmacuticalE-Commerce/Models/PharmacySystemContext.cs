@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Viewmodels;
+using PharmacuticalE_Commerce.Models;
 
 namespace PharmacuticalE_Commerce.Models;
 
@@ -540,4 +541,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
 public DbSet<PharmacuticalE_Commerce.Viewmodels.RegisterViewModel> RegisterViewModel { get; set; } = default!;
 
 public DbSet<PharmacuticalE_Commerce.Viewmodels.LoginViewModel> LoginViewModel { get; set; } = default!;
+
+public DbSet<PharmacuticalE_Commerce.Models.UserMetaData> UserMetaData { get; set; } = default!;
 }

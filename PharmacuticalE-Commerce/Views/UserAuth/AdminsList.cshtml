@@ -1,0 +1,49 @@
+﻿@model IEnumerable<PharmacuticalE_Commerce.ViewModels.UserViewModel>
+
+@{
+    ViewBag.PageTitle = "Admins";
+    ViewBag.CardTitle = "Admins List";
+    ViewData["Title"] = "AdminsList";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+<a asp-action="Create" class="btn btn-primary">Create</a>
+<table class="table" id="AdminsList">
+    <thead>
+        <tr>
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+            <th>
+                Email
+            </th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.RoleName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

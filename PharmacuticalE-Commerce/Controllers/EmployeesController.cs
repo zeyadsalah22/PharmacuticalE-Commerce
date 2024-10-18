@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
@@ -6,6 +7,7 @@ using PharmacuticalE_Commerce.ViewModels;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
+    [Authorize(Roles ="Admin,HR")]
     public class EmployeesController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
@@ -118,5 +120,38 @@ namespace PharmacuticalE_Commerce.Controllers
             return RedirectToAction(nameof(Shifts));
 
         }
+
+        public IActionResult ShiftCreate()
+        {
+            return View(new Shift());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ShiftCreate(Shift shift)
+        {
+            if (ModelState.IsValid)
+            {
+                _employeeRepository.CreateShift(shift);
+                return RedirectToAction(nameof(Shifts));
+            }
+            return View(shift);
+        }
+
+        public IActionResult ShiftDelete(int? id)
+        {
+            var shift = _employeeRepository.GetShiftsById(id);
+
+            return View(shift);
+        }
+
+        [HttpPost, ActionName("ShiftDelete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult ShiftDeleteConfirmed(int id)
+        {
+            _employeeRepository.DeleteShift(id);
+            return RedirectToAction(nameof(Shifts));
+        }
+
     }
 }

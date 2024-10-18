@@ -4,6 +4,7 @@ using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Day6Mydemo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
@@ -14,6 +15,7 @@ using PharmacuticalE_Commerce.Viewmodels;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
+    [Authorize(Roles = "Admin,Moderator")]
     public class ProductsController : Controller
     {
         [TempData]

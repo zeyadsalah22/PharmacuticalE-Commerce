@@ -30,7 +30,10 @@
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
+                    <a asp-controller="Home" asp-action="StaffManagement" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a asp-controller="UserAuth" asp-action="StaffLogin" class="nav-link">Log Out</a>
                 </li>
             </ul>
         </nav>
@@ -38,7 +41,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a asp-controller="Home" asp-action="Index" class="brand-link">
+            <a asp-controller="Home" asp-action="StaffManagement" class="brand-link">
                 <img src="~/images/Adminpharmacy.png"
                      alt="AdminLTE Logo"
                      class="brand-image img-circle elevation-3"
@@ -53,15 +56,6 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                              with font-awesome or any other icon font library -->
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-chart-bar"></i>
-                                <p>
-                                    Dashboard
-
-                                </p>
-                            </a>
-                        </li>
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
                                 <i class="fas fa-building"></i>
@@ -92,12 +86,6 @@
                                         <p>Employees Roles</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="./index3.html" class="nav-link">
-                                        <i class="fas fa-user-md"></i>
-                                        <p>Doctors</p>
-                                    </a>
-                                </li>
                             </ul>
                         </li>
                         <li class="nav-item has-treeview">
@@ -111,7 +99,7 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item has-treeview">
                                     <a class="nav-link" asp-action="Index" asp-controller="Products">
-                                        <i class="fas fa-clipboard-list"></i>
+                                        <i class="fas fa-shopping-bag"></i>
                                         <p>
                                             Products
 
@@ -135,6 +123,33 @@
                             </ul>
                         </li>
                         <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-user-shield"></i>
+                                <p>
+                                    Users Mangemnet
+
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item has-treeview">
+                                    <a class="nav-link" asp-action="CustomersList" asp-controller="UserAuth">
+                                        <i class="fas fa-star"></i>
+                                        <p>
+                                            Customers
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item has-treeview">
+                                    <a class="nav-link" asp-action="AdminsList" asp-controller="UserAuth">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <p>
+                                            Admins
+
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
                             <a class="nav-link" asp-controller="Orders" asp-action="Index">
                                 <i class="fas fa-truck"></i>
                                 <p>
@@ -232,6 +247,8 @@
             $('#ShowAttendancesList').DataTable();
             $('#TakeAttendanceList').DataTable();
             $('#RolesList').DataTable();
+            $('#CustomersList').DataTable();
+            $('#AdminsList').DataTable();
         });
     </script>
 

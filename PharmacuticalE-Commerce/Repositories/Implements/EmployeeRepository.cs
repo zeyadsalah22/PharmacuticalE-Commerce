@@ -93,5 +93,21 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
         {
             return _context.Shifts.Find(id);
         }
+
+        public void CreateShift(Shift shift)
+        {
+            _context.Shifts.Add(shift);
+            _context.SaveChanges();
+        }
+
+        public void DeleteShift(int? id)
+        {
+            var shift = _context.Shifts.Find(id);
+            if (shift != null)
+            {
+                _context.Shifts.Remove(shift);
+                _context.SaveChanges();
+            }
+        }
     }
 }

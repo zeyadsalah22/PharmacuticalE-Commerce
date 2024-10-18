@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 using PharmacuticalE_Commerce.ViewModels;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
+    [Authorize(Roles = "Admin,HR")]
     public class AttendancesController : Controller
     {
         private readonly IAttendanceRepository _attendanceRepository;
