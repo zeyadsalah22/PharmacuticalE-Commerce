@@ -1,9 +1,11 @@
 ﻿@model IEnumerable<PharmacuticalE_Commerce.Models.Order>
 @{
+    ViewBag.PageTitle = "Orders";
+    ViewBag.CardTitle = "Orders List";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
-<h2>Orders</h2>
-<table class="table">
+
+<table class="table" id="OrdersList">
     <thead>
         <tr>
             <th>Order ID</th>
@@ -11,7 +13,7 @@
             <th>Date</th>
             <th>Total Price</th>
             <th>Shipping Address</th>
-            <th>Actions</th>
+            <th>Options</th>
         </tr>
     </thead>
     <tbody>

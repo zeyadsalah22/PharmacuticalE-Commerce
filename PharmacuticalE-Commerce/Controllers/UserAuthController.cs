@@ -106,15 +106,21 @@ namespace PharmacuticalE_Commerce.Controllers
                     bool userFound = await _userManager.CheckPasswordAsync(user, loginViewModel.Password);
                     if (userFound)
                     {
+                        var roles = await _userManager.GetRolesAsync(user);
+                        if (roles.Contains("Customer"))
+                        {
+                            return RedirectToAction("Ecommerce", "Home");
+                        }
+
                         await _signInManager.SignInAsync(user, loginViewModel.RememberMe);
                         return RedirectToAction("StaffManagement", "Home");
                     }
                 }
                 ModelState.AddModelError(string.Empty, "Invalid UserName and/or Password");
-
             }
             return RedirectToAction(nameof(Login));
         }
+
 
         public async Task<IActionResult> Details(string username)
         {
