@@ -37,5 +37,14 @@ namespace PharmacuticalE_Commerce.Controllers
         {
             return View();
         }
-    }
+
+        public IActionResult About()
+        {
+            return View();
+		}
+		public IActionResult FAQ()
+		{
+			return View();
+		}
+	}
 }

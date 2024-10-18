@@ -58,6 +58,17 @@ namespace PharmacuticalE_Commerce.Controllers
             return View(order);
         }
 
+        public IActionResult OrderView(int id)
+        {
+            var order = _orderRepository.GetByIdWithDetails(id);
+            if (order == null || order.UserId!= User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+
         public async Task<IActionResult> OrderPartial()
         {
             var cart = await _cartRepository.GetActiveCartByUserAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -122,6 +133,25 @@ namespace PharmacuticalE_Commerce.Controllers
             }
 
             return View(order);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Cancel(int id)
+        {
+            var order = _orderRepository.GetById(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            order.Status = "Canceled";
+            if (ModelState.IsValid)
+            {
+                _orderRepository.Update(order);
+            }
+
+            return RedirectToAction(nameof(ListOrders));
+
         }
 
         // GET: Orders/Delete/5
@@ -211,7 +241,7 @@ namespace PharmacuticalE_Commerce.Controllers
             cart.Status = false;
             await _cartRepository.UpdateCartAsync(cart);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ListOrders));
         }
 
     }

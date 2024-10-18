@@ -15,7 +15,7 @@ using PharmacuticalE_Commerce.Viewmodels;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
-    [Authorize(Roles = "Admin,Moderator")]
+    [Authorize]
     public class ProductsController : Controller
     {
         [TempData]
@@ -30,9 +30,9 @@ namespace PharmacuticalE_Commerce.Controllers
             _repository = repository;
             _categoryRepository = categoryRepository;
         }
-
-        // GET: Products
-        public async Task<IActionResult> Index(string sortOrder, string categoryFilter, string searchString, int pageNumber = 1, int pageSize = 5)
+		[Authorize(Roles = "Admin,Moderator")]
+		// GET: Products
+		public async Task<IActionResult> Index(string sortOrder, string categoryFilter, string searchString, int pageNumber = 1, int pageSize = 5)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "price";
@@ -69,8 +69,8 @@ namespace PharmacuticalE_Commerce.Controllers
             return View(await PaginatedList<Product>.CreateAsync(products, pageNumber, pageSize));
         }
 
-        // GET: Products/Details/5
-        public async Task<IActionResult> Details(int? id)
+		[Authorize(Roles = "Admin,Moderator")]
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -103,17 +103,17 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(product);
 		}
 
-		// GET: Products/Create
+		[Authorize(Roles = "Admin,Moderator")]
 		public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_categoryRepository.GetChilds(), "CategoryId", "Name");
             return View();
         }
 
-        // POST: Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+		[Authorize(Roles = "Admin,Moderator")]
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([ModelBinder(BinderType=typeof(ProductBinder))] Product product)
         {
@@ -128,8 +128,8 @@ namespace PharmacuticalE_Commerce.Controllers
             return View(product);
         }
 
-        // GET: Products/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+		[Authorize(Roles = "Admin,Moderator")]
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -145,10 +145,10 @@ namespace PharmacuticalE_Commerce.Controllers
             return View(product);
         }
 
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+		[Authorize(Roles = "Admin,Moderator")]
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [ModelBinder(BinderType = typeof(ProductBinder))] Product product)
         {
@@ -180,8 +180,8 @@ namespace PharmacuticalE_Commerce.Controllers
             return View(product);
         }
 
-        // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+		[Authorize(Roles = "Admin,Moderator")]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -197,8 +197,8 @@ namespace PharmacuticalE_Commerce.Controllers
             return View(product);
         }
 
-        // POST: Products/Delete/5
-        [HttpPost, ActionName("Delete")]
+		[Authorize(Roles = "Admin,Moderator")]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -277,41 +277,7 @@ namespace PharmacuticalE_Commerce.Controllers
             return View("_CategoriesNavPartial", categories);
         }
 
-        //    public IActionResult GetProductsList(int pageNumber = 1, int pageSize = 5)
-        //    {
-        //        var totalRecords = _repository.GetAll().Count();
-        //        var products = _repository.GetAllWithCategories()
-        //            .OrderBy(p=>p.ProductId)
-        //            .Skip(pageSize*(pageNumber-1))
-        //            .Take(pageSize).ToList();
-        //        var viewModel = new ProductsPaginationViewModel
-        //        {
-        //            Products = products,
-        //            PageNumber = pageNumber,
-        //            PageSize = pageSize,
-        //            TotalRecords = totalRecords
-        //        };
-
-        //        return PartialView("_productListPartial", viewModel);
-        //    }
-
-        //    public IActionResult GetProductsGallery(int pageNumber = 1, int pageSize = 5)
-        //    {
-        //        var totalRecords = _repository.GetAll().Count();
-        //        var products = _repository.GetAllWithCategories()
-        //            .OrderBy(p => p.ProductId)
-        //            .Skip(pageSize * (pageNumber - 1))
-        //            .Take(pageSize).ToList();
-        //        var viewModel = new ProductsPaginationViewModel
-        //        {
-        //            Products = products,
-        //            PageNumber = pageNumber,
-        //            PageSize = pageSize,
-        //            TotalRecords = totalRecords
-        //        };
-
-        //        return PartialView("_productGalleryPartial", viewModel);
-        //    }
+        
         private bool ProductExists(int id)
         {
             return _repository.GetAll().Any(e => e.ProductId == id);
