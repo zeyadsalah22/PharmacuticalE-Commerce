@@ -1,0 +1,92 @@
+﻿@model IEnumerable<PharmacuticalE_Commerce.Models.Order>
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_EcommerceLayout.cshtml";
+}
+
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+                    <h1 class="page-name">Dashboard</h1>
+                    <ol class="breadcrumb">
+                        <li><a asp-action="Ecommerce" asp-controller="Home">Home</a></li>
+                        <li class="active">Dashboard</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="user-dashboard page-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-inline dashboard-menu text-center">
+                    <li><a class="active" asp-action="Dashboard" asp-controller="Orders">Dashboard</a></li>
+                    <li><a asp-action="ListOrders" asp-controller="Orders">Orders</a></li>
+                    <li><a asp-action="Index" asp-controller="ShippingAddresses">Address</a></li>
+                    <li><a asp-action="Details" asp-controller="UserAuth" asp-route-username="@User.Identity.Name">Profile Details</a></li>
+                </ul>
+                <div class="dashboard-wrapper user-dashboard">
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="media-object user-img" src="~/images/avater.jpg" alt="Image">
+                        </div>
+                        <div class="media-body">
+                            <h2 class="media-heading">Welcome @(User.Identity.Name)</h2>
+                            <p>
+                                We're glad to have you with us. Here, you can track your recent orders, update your shipping address, and manage your profile.
+                                Check your total orders below, and feel free to explore the various sections of your dashboard to make the most of your shopping experience with us.
+                            </p>
+                            <p>
+                                If you need any assistance, don't hesitate to <a href="/contact-support">reach out to our support team</a>.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="total-order mt-20">
+                        <h4>Total Orders</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Date</th>
+                                        <th>Items</th>
+                                        <th>Total Price</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.OrderId)
+                                            </td>
+                                            <td>
+                                                @(item.OrderDate.Value.ToString("yyyy-MM-dd"))
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TotalItems)
+                                            </td>
+                                            <td>
+
+                                                $ @Html.DisplayFor(modelItem => item.TotalAmount)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+

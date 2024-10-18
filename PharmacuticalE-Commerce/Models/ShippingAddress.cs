@@ -11,6 +11,12 @@ public partial class ShippingAddress
 
     public string Address { get; set; } = null!;
 
+    public string City { get; set; } = null!;
+
+    public string ZIP { get; set; } = null!;
+
+    public string Phone { get; set; } = null!;
+
     public bool? IsDefault { get; set; }
 
     public bool? IsDeleted { get; set; }

@@ -1,0 +1,47 @@
+﻿@model Cart
+
+@{
+    Layout = null;
+}
+
+<div class="block">
+    <h4 class="widget-title">Order Summary</h4>
+    @foreach (var item in Model.CartItems)
+    {
+        <div class="media product-card">
+            <a class="pull-left" asp-action="CardDetails" asp-controller="Products" asp-route-id="@item.Product.ProductId">
+                <img class="media-object" src="@Url.Content("~/images/products/" + item.Product.Photo)" alt="@item.Product.Name" />
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading"><a asp-action="CardDetails" asp-controller="Products" asp-route-id="@item.Product.ProductId">@item.Product.Name</a></h4>
+                <p class="price">@item.Quantity x @item.Product.Price.ToString("C")</p>
+                <form asp-action="RemoveCartItem" method="post">
+                    <input type="hidden" name="cartId" value="@Model.CartId" />
+                    <input type="hidden" name="productId" value="@item.ProductId" />
+                    <button type="submit" class="remove">Remove</button>
+                </form>
+            </div>
+        </div>
+    }
+    <div class="discount-code">
+        <p>Have a discount ? <a data-toggle="modal" data-target="#coupon-modal" href="#!">enter it here</a></p>
+    </div>
+    <ul class="summary-prices">
+        <li>
+            <span>Subtotal:</span>
+            <span class="price">$ @Model.TotalPrice</span>
+        </li>
+        <li>
+            <span>Shipping:</span>
+            <span>$ @ViewBag.ShippingPrice</span>
+        </li>
+    </ul>
+    <div class="summary-total">
+        <span>Total</span>
+        <span>$ @(Model.TotalPrice + ViewBag.ShippingPrice )</span>
+    </div>
+    <div class="verified-icon">
+        <img src="~/images/shop/verified.png">
+    </div>
+</div>
+

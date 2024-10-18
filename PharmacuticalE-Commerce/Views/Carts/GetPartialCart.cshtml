@@ -30,7 +30,14 @@
 		<span class="total-price">@Model.TotalPrice</span>
 	</div>
 	<ul class="text-center cart-buttons">
-		<li><a asp-action="Index" asp-controller="Carts" class="btn btn-small">View Cart</a></li>
-		<li><a href="checkout.html" class="btn btn-small btn-solid-border">Checkout</a></li>
+		@if(Model.CartItems.Count > 0)
+        {
+			<li><a asp-action="Index" asp-controller="Carts" class="btn btn-small">View Cart</a></li>
+			<li><a asp-action="PlaceOrder" asp-controller="Orders" class="btn btn-small btn-solid-border">Checkout</a></li>
+		}
+		else
+		{
+			<li><a asp-action="Index" asp-controller="Carts" class="btn ">View Cart</a></li>
+		}
 	</ul>
 </div>

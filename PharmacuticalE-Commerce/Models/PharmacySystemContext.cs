@@ -292,14 +292,14 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
 
             entity.ToTable("Order");
 
-            entity.HasIndex(e => e.AddressId, "IX_Order_addressId");
+            entity.HasIndex(e => e.ShippingAddressId, "IX_Order_addressId");
 
             entity.HasIndex(e => e.CartId, "IX_Order_cartId");
 
             entity.HasIndex(e => e.UserId, "IX_Order_userId");
 
             entity.Property(e => e.OrderId).HasColumnName("orderId");
-            entity.Property(e => e.AddressId).HasColumnName("addressId");
+            entity.Property(e => e.ShippingAddressId).HasColumnName("addressId");
             entity.Property(e => e.CartId).HasColumnName("cartId");
             entity.Property(e => e.OrderDate)
                 .HasDefaultValueSql("(getdate())")
@@ -316,8 +316,8 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
                 .HasColumnName("totalAmount");
             entity.Property(e => e.UserId).HasColumnName("userId");
 
-            entity.HasOne(d => d.Address).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.AddressId)
+            entity.HasOne(d => d.ShippingAddress).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.ShippingAddressId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Order__addressId__70DDC3D8");
 

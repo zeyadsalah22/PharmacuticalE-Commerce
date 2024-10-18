@@ -11,17 +11,26 @@ public partial class Order
 
     public string UserId { get; set; }
 
-    public int AddressId { get; set; }
+    public int ShippingAddressId { get; set; }
 
-    public DateTime? OrderDate { get; set; }
+    public DateTime? OrderDate { get; set; } = DateTime.Now;
 
     public decimal TotalAmount { get; set; }
 
-    public decimal? ShippingPrice { get; set; }
+	public int TotalItems
+	{
+		get
+		{
+			return Cart.CartItems.Sum(item => item.Quantity);
+		}
+	}
+
+	public decimal? ShippingPrice { get; set; }
 
     public string? PromoCode { get; set; }
+    public string? Status { get; set; }
 
-    public virtual ShippingAddress Address { get; set; } = null!;
+    public virtual ShippingAddress ShippingAddress { get; set; } = null!;
 
     public virtual Cart Cart { get; set; } = null!;
 
