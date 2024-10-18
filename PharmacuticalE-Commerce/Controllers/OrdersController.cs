@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories;
 using PharmacuticalE_Commerce.Repositories.Implements;
@@ -139,7 +140,7 @@ namespace PharmacuticalE_Commerce.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Cancel(int id)
         {
-            var order = _orderRepository.GetById(id);
+            var order = _orderRepository.GetByIdWithDetails(id);
             if (order == null)
             {
                 return NotFound();
@@ -148,6 +149,10 @@ namespace PharmacuticalE_Commerce.Controllers
             if (ModelState.IsValid)
             {
                 _orderRepository.Update(order);
+                foreach(var item in order.Cart.CartItems)
+                {
+                    item.Product.Stock += item.Quantity;
+                }
             }
 
             return RedirectToAction(nameof(ListOrders));
@@ -198,7 +203,13 @@ namespace PharmacuticalE_Commerce.Controllers
             {
                 return RedirectToAction("Index", "Carts");  // Redirect to the cart if it's empty
             }
-
+            foreach(var item in cart.CartItems) {
+                if (item.Product.Stock < item.Quantity)
+                {
+                    ViewBag.ErrorMessage = $"{item.Product.Name} in your cart is out of stock";
+                    return RedirectToAction("Index", "Carts");  
+                }
+            }
             if (shippingAddress.AddressId != 0)
             {
                 shippingAddress = _shippingAddressRepository.GetById(shippingAddress.AddressId);
@@ -208,6 +219,13 @@ namespace PharmacuticalE_Commerce.Controllers
                 }
             }
             else {
+                ModelState.Remove("AddressId");
+                ModelState.Remove("UserId");
+                ModelState.Remove("User");
+                if (!ModelState.IsValid)
+				{
+					return View(shippingAddress);
+				}
                 shippingAddress = new ShippingAddress
                 {
                     Address = shippingAddress.Address,
@@ -238,6 +256,9 @@ namespace PharmacuticalE_Commerce.Controllers
             _orderRepository.Create(order);
 
             // Clear the cart after placing the order
+            foreach(var item in cart.CartItems) {
+                item.Product.Stock -= item.Quantity;
+            }
             cart.Status = false;
             await _cartRepository.UpdateCartAsync(cart);
 

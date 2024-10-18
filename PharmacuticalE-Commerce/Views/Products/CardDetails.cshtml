@@ -39,15 +39,22 @@
 
 						</ul>
 					</div>
+
 					@if (User.Identity.IsAuthenticated)
 					{
-						<form method="post" asp-action="AddCartItem" asp-controller="Carts">
+						<form method="post" asp-action="AddCartItem" asp-controller="Carts" onsubmit="syncQuantity()">
+							@if (ViewBag.ErrorMessage != null)
+							{
+								<p class="text-danger">@ViewBag.quantityError</p>
+							}
 							<div class="product-quantity">
 								<span>Quantity:</span>
 								<div class="product-quantity-slider">
-									<input id="product-quantity" type="text" value="1" min="1" max="@Model.Stock" name="quantity">
+									<input id="product-quantity" type="text" value="1" min="1" max="@Model.Stock" name="product-quantity">
 								</div>
 							</div>
+							<!-- Hidden input to capture the correct value for the backend -->
+							<input type="hidden" id="backend-quantity" name="quantity" value="1" />
 							<input type="hidden" name="productId" value="@Model.ProductId"/>
 							<button type="submit" class="btn btn-main mt-20">Add To Cart</button>
 						</form>
@@ -72,7 +79,11 @@
 		$(document).ready(function () {
             loadPage('@Html.Raw(Model.Category.Name)', @Model.ProductId);
 		});
-
+		function syncQuantity() {
+			// Copy the value from the template's product-quantity input to the hidden input
+			var quantity = document.getElementById('product-quantity').value;
+			document.getElementById('backend-quantity').value = quantity;
+		}
 		function loadPage(category, productId) {
 			$.ajax({
 				url: '/Products/GetRelatedProducts',

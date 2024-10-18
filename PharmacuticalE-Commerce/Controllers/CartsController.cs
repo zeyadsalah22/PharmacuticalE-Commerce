@@ -44,7 +44,8 @@ namespace PharmacuticalE_Commerce.Controllers
         {
             if (quantity < 1)
             {
-                return Content("Quantity must be more than 1");
+                ViewBag.ErrorMessage = "Quantity must be more than 1";
+                return RedirectToAction("CardDetails", "Products", new { Id = productId }); 
             }
 			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -64,7 +65,9 @@ namespace PharmacuticalE_Commerce.Controllers
             }
 			if (quantity > product.Stock)
 			{
-				return Content($"Proudct stock is {product.Stock}");
+				ViewBag.ErrorMessage = $"Proudct stock is {product.Stock}";
+				return RedirectToAction("CardDetails", "Products", new { Id = productId });
+
 			}
 			// Check if the cart already contains the item
 			var existingCartItem = activeCart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);

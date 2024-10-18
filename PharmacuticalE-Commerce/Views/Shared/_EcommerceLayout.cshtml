@@ -210,19 +210,16 @@
 					</ul>
 					<ul class="footer-menu text-uppercase">
 						<li>
-							<a href="contact.html">CONTACT</a>
+							<a asp-action="Gallery" asp-controller="Products">SHOP</a>
 						</li>
 						<li>
-							<a href="shop.html">SHOP</a>
+							<a asp-action="About" asp-controller="Home">About Us</a>
 						</li>
 						<li>
-							<a href="pricing.html">Pricing</a>
-						</li>
-						<li>
-							<a href="contact.html">PRIVACY POLICY</a>
+							<a asp-action="FAQ" asp-controller="Home">FAQ</a>
 						</li>
 					</ul>
-					<p class="copyright-text">Copyright &copy;2021, Designed &amp; Developed by <a href="https://themefisher.com/">Themefisher</a></p>
+					<p class="copyright-text">Copyright &copy;2024, Designed &amp; Developed by PharmaEase Team</p>
 				</div>
 			</div>
 		</div>
@@ -230,7 +227,6 @@
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
-	@await RenderSectionAsync("Scripts", required: false)
 	@RenderSection("MySection", required: false))
 	<!--
 		Essential Scripts
@@ -287,6 +283,7 @@
 			});
 		}
 	</script>
+	@await RenderSectionAsync("Scripts", required: false)
 
 
 </body>

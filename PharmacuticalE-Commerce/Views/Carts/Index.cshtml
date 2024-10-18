@@ -27,6 +27,10 @@
                         <div class="product-list">
                             @if (Model.CartItems.Count > 0)
                             {
+                                if(ViewBag.ErrorMessage != null)
+                                {
+                                    <div class="alert alert-info">@ViewBag.ErrorMessage</div>
+                                }
                                 <form method="post">
                                     <table class="table">
                                         <thead>
