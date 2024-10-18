@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmacuticalE_Commerce.Models;
 
@@ -11,9 +12,11 @@ using PharmacuticalE_Commerce.Models;
 namespace PharmacuticalE_Commerce.Migrations
 {
     [DbContext(typeof(PharmacySystemContext))]
-    partial class PharmacySystemContextModelSnapshot : ModelSnapshot
+    [Migration("20241017214357_editorders")]
+    partial class editorders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -441,6 +444,10 @@ namespace PharmacuticalE_Commerce.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int")
+                        .HasColumnName("addressId");
+
                     b.Property<int>("CartId")
                         .HasColumnType("int")
                         .HasColumnName("cartId");
@@ -456,16 +463,9 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("promoCode");
 
-                    b.Property<int>("ShippingAddressId")
-                        .HasColumnType("int")
-                        .HasColumnName("addressId");
-
                     b.Property<decimal?>("ShippingPrice")
                         .HasColumnType("decimal(10, 2)")
                         .HasColumnName("shippingPrice");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(10, 2)")
@@ -479,7 +479,7 @@ namespace PharmacuticalE_Commerce.Migrations
                     b.HasKey("OrderId")
                         .HasName("PK__Order__0809335DE1283F0A");
 
-                    b.HasIndex(new[] { "ShippingAddressId" }, "IX_Order_addressId");
+                    b.HasIndex(new[] { "AddressId" }, "IX_Order_addressId");
 
                     b.HasIndex(new[] { "CartId" }, "IX_Order_cartId");
 
@@ -692,10 +692,6 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnName("isDeleted");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -1063,17 +1059,17 @@ namespace PharmacuticalE_Commerce.Migrations
 
             modelBuilder.Entity("PharmacuticalE_Commerce.Models.Order", b =>
                 {
+                    b.HasOne("PharmacuticalE_Commerce.Models.ShippingAddress", "Address")
+                        .WithMany("Orders")
+                        .HasForeignKey("AddressId")
+                        .IsRequired()
+                        .HasConstraintName("FK__Order__addressId__70DDC3D8");
+
                     b.HasOne("PharmacuticalE_Commerce.Models.Cart", "Cart")
                         .WithMany("Orders")
                         .HasForeignKey("CartId")
                         .IsRequired()
                         .HasConstraintName("FK__Order__cartId__6EF57B66");
-
-                    b.HasOne("PharmacuticalE_Commerce.Models.ShippingAddress", "ShippingAddress")
-                        .WithMany("Orders")
-                        .HasForeignKey("ShippingAddressId")
-                        .IsRequired()
-                        .HasConstraintName("FK__Order__addressId__70DDC3D8");
 
                     b.HasOne("PharmacuticalE_Commerce.Models.User", "User")
                         .WithMany("Orders")
@@ -1081,9 +1077,9 @@ namespace PharmacuticalE_Commerce.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__Order__userId__6FE99F9F");
 
-                    b.Navigation("Cart");
+                    b.Navigation("Address");
 
-                    b.Navigation("ShippingAddress");
+                    b.Navigation("Cart");
 
                     b.Navigation("User");
                 });

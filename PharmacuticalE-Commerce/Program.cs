@@ -34,6 +34,8 @@ namespace PharmacuticalE_Commerce
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IShippingAddressRepository, ShippingAddressRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
             //builder.Services.AddIdentity<User, IdentityRole>()
             //    .AddEntityFrameworkStores<PharmacySystemContext>();
