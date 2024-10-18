@@ -1,9 +1,10 @@
 ﻿@model PharmacuticalE_Commerce.Models.Order
 
 @{
+    ViewBag.PageTitle = "Orders";
+    ViewBag.CardTitle = "Edit Order";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
-<h2>Edit Order</h2>
 
 <form asp-action="Edit">
     <input type="hidden" asp-for="OrderId" />

@@ -1,9 +1,9 @@
 ﻿@model PharmacuticalE_Commerce.Models.Order
 @{
+    ViewBag.PageTitle = "Orders";
+    ViewBag.CardTitle = "Order Details";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
-<h2>Order Details</h2>
-
 <p>Order ID: @Model.OrderId</p>
 <p>User ID: @Model.UserId</p>
 <p>Date: @Model.OrderDate</p>

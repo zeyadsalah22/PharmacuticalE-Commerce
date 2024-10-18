@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.PageTitle = "Home Page";
-    ViewBag.CardTitle = "Staff Management";
+    ViewBag.CardTitle = "Management";
     ViewData["Title"] = "StaffManagement";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
@@ -119,6 +119,26 @@
                 </a>
             </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </ul>
+    </li>
+    <li class="nav-item has-treeview">
+        <a class="nav-link">
+            <i class="fas fa-truck"></i>
+            <p>
+                Orders Mangemnet
+
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item has-treeview">
+                <a class="btn btn-dark" asp-controller="Orders" asp-action="Index">
+                    <i class="fas fa-truck"></i>
+                    <p>
+                        Orders
+
+                    </p>
+                </a>
+            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </ul>
     </li>
 </ul>
 
