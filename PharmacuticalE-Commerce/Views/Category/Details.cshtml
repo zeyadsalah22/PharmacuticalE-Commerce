@@ -1,0 +1,24 @@
+﻿@model Category
+@{
+    ViewBag.PageTitle = "Categories";
+    ViewBag.CardTitle = "Category Details";
+    Layout = "_StaffManagementLayout";
+    ViewData["Title"] = "Deatils";
+}
+
+<div>
+    <h4>@Model.Name</h4>
+    @if (Model.ParentCategoryId != null)
+    {
+        <p>@Model.ParentCategory.Name</p>
+
+    }
+    else
+    {
+        <p>No Parent Category</p>
+
+    }
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

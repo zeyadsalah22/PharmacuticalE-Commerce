@@ -1,0 +1,57 @@
+﻿@model PharmacuticalE_Commerce.Models.User
+
+@{
+    ViewBag.PageTitle = "Delete User";
+    ViewBag.CardTitle = "Delete";
+    ViewData["Title"] = "Delete User";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+<h3>Are you sure you want to delete @Model.Fname @Model.Lname?</h3>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            First Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Fname
+        </dd>
+        <dt class="col-sm-2">
+            Last Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Lname
+        </dd>
+        <dt class="col-sm-2">
+            Email
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Email
+        </dd>
+        <dt class="col-sm-2">
+            Phone Number
+        </dt>
+        <dd class="col-sm-10">
+            @Model.PhoneNumber
+        </dd>
+        <dt class="col-sm-2">
+            Username
+        </dt>
+        <dd class="col-sm-10">
+            @Model.UserName
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="CustomersList" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

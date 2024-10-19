@@ -1,0 +1,34 @@
+﻿@model PharmacuticalE_Commerce.Models.Order
+@{
+    ViewBag.PageTitle = "Orders";
+    ViewBag.CardTitle = "Order Details";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+<p>Order ID: @Model.OrderId</p>
+    <p>User ID: @Model.UserId</p>
+<p>Date: @Model.OrderDate</p>
+<p>Total Price: @Model.TotalAmount.ToString("C")</p>
+
+<h3>Shipping Address</h3>
+<p>@Model.ShippingAddress.Address, @Model.ShippingAddress.City, @Model.ShippingAddress.ZIP</p>
+
+<h3>Order Items</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Cart.CartItems)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.Product.Price.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,43 @@
+﻿@model Cart
+@{
+	Layout = null;
+}
+<div class="dropdown-menu cart-dropdown">
+	@foreach (var item in Model.CartItems)
+	{
+		<div class="media">
+			<a class="pull-left" asp-action="CardDetails" asp-controller="Products" asp-route-id="@item.Product.ProductId">
+				<img class="media-object" src="@Url.Content("~/images/products/" + item.Product.Photo)" alt="@item.Product.Name" />
+			</a>
+			<div class="media-body">
+				<h4 class="media-heading"><a asp-action="CardDetails" asp-controller="Products" asp-route-id="@item.Product.ProductId">@item.Product.Name</a></h4>
+				<div class="cart-price">
+					<span>@item.Quantity x</span>
+					<span>@item.Product.Price</span>
+				</div>
+				<h5><strong>@(item.Quantity * item.Product.Price)</strong></h5>
+			</div>
+			<form asp-action="RemoveCartItem" method="post">
+				<input type="hidden" name="cartId" value="@Model.CartId" />
+				<input type="hidden" name="productId" value="@item.ProductId" />
+				<button type="submit" class="remove"><i class="tf-ion-close"></i></button>
+			</form>
+		</div>
+	}
+
+	<div class="cart-summary">
+		<span>Total</span>
+		<span class="total-price">@Model.TotalPrice</span>
+	</div>
+	<ul class="text-center cart-buttons">
+		@if(Model.CartItems.Count > 0)
+        {
+			<li><a asp-action="Index" asp-controller="Carts" class="btn btn-small">View Cart</a></li>
+			<li><a asp-action="PlaceOrder" asp-controller="Orders" class="btn btn-small btn-solid-border">Checkout</a></li>
+		}
+		else
+		{
+			<li><a asp-action="Index" asp-controller="Carts" class="btn ">View Cart</a></li>
+		}
+	</ul>
+</div>

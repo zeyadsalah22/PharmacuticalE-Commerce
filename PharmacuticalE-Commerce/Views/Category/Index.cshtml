@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Category>
+@{
+    ViewBag.PageTitle = "Categories";
+    ViewBag.CardTitle = "Create New Category";
+    Layout = "_StaffManagementLayout";
+    ViewData["Title"] = "Index";
+}
+<a asp-action="Create" class="btn btn-primary">Create New</a>
+
+<table class="table" id="CategoryList">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Name")
+
+            </th>
+            <th>
+                @Html.DisplayName("Parent Category")
+            </th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Name</td>
+                @if (category.ParentCategoryId != null)
+                {
+                    <td>@category.ParentCategory.Name</td>
+
+                }
+                else
+                {
+                    <td>No Parent Category</td>
+
+                }
+                <td>
+                    <a asp-action="Edit" asp-route-id="@category.CategoryId" class="btn btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@category.CategoryId" class="btn btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@category.CategoryId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

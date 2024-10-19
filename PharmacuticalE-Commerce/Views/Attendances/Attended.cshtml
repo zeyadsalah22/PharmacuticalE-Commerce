@@ -1,0 +1,50 @@
+﻿@model PharmacuticalE_Commerce.Models.Attendance
+
+@{
+    ViewBag.PageTitle = "Attendance";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<div>
+    <div class="col-md-4">
+        Employee ID: @Model.EmployeeId
+        <br />
+        Shift ID: @Model.ShiftId
+        <br />
+        Branch ID: @Model.BranchId
+    </div>
+    <br />
+    <hr />
+    <div class="col-md-4">
+        <form asp-action="tAttended" method="post">
+            <input type="hidden" asp-for="EmployeeId" />
+            <input type="hidden" asp-for="ShiftId" />
+            <input type="hidden" asp-for="BranchId" />
+
+            <div class="form-group">
+                <label asp-for="AttendedAt" class="control-label"></label>
+                <input asp-for="AttendedAt" class="form-control" value="" />
+                <span asp-validation-for="AttendedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LeftAt" class="control-label"></label>
+                <input asp-for="LeftAt" class="form-control" value="" />
+                <span asp-validation-for="LeftAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

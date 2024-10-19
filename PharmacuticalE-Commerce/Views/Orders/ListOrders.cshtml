@@ -1,0 +1,85 @@
+﻿@model IEnumerable<PharmacuticalE_Commerce.Models.Order>
+
+@{
+    ViewData["Title"] = "ListOrders";
+    Layout = "~/Views/Shared/_EcommerceLayout.cshtml";
+}
+
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+                    <h1 class="page-name">Orders</h1>
+                    <ol class="breadcrumb">
+                        <li><a asp-action="Ecommerce" asp-controller="Home">Home</a></li>
+                        <li class="active">Orders</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="user-dashboard page-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="list-inline dashboard-menu text-center">
+                    <li><a asp-action="Dashboard" asp-controller="Orders">Dashboard</a></li>
+                    <li><a class="active" asp-action="ListOrders" asp-controller="Orders">Orders</a></li>
+                    <li><a asp-action="Index" asp-controller="ShippingAddresses">Address</a></li>
+                    <li><a asp-action="Details" asp-controller="UserAuth" asp-route-username="@User.Identity.Name">Profile Details</a></li>
+				</ul>
+				<div class="dashboard-wrapper user-dashboard">
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Order ID</th>
+									<th>Date</th>
+									<th>Items</th>
+									<th>Total Price</th>
+									<th>Status</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OrderId)
+                                        </td>
+                                        <td>
+                                            @(item.OrderDate.Value.ToString("yyyy-MM-dd"))
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TotalItems)
+                                        </td>
+                                        <td>
+                                            
+                                            $ @Html.DisplayFor(modelItem => item.TotalAmount)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+                                        <td>
+                                            <a asp-action="OrderView" class="btn btn-default" asp-route-id="@item.OrderId">View</a>
+                                            @if (item.Status == OrderStatus.Pending)
+                                            {
+                                                <form asp-action="Cancel" asp-route-id="@item.OrderId">
+                                                    <input type="hidden"  />
+                                                    <button type="submit" class="btn btn-default">Cancel</button>
+                                                </form>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

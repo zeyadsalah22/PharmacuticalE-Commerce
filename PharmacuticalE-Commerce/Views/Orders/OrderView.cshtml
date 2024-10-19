@@ -1,0 +1,138 @@
+﻿@model PharmacuticalE_Commerce.Models.Order
+
+@{
+    ViewData["Title"] = "OrderView";
+    Layout = "~/Views/Shared/_EcommerceLayout.cshtml";
+}
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+                    <h1 class="page-name">Order Details</h1>
+                    <ol class="breadcrumb">
+                        <li><a asp-action="Ecommerce" asp-controller="Home">Home</a></li>
+                        <li><a asp-action="ListOrders" asp-controller="Orders">Orders</a></li>
+                        <li class="active">Order Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="page-wrapper">
+    <div class="cart shopping">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Order Summary</h4>
+                            <p>Order ID: @Model.OrderId</p>
+                            <p>Date: @Model.OrderDate</p>
+                            <p>Total Price: @Model.TotalAmount.ToString("C")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Shipping Address</h4>
+                            <p>City: @Model.ShippingAddress.City</p>
+                            <p>Postal Code: @Model.ShippingAddress.ZIP</p>
+                            <p>Address: @Model.ShippingAddress.Address</p>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="block">
+                        <h4>Order Items</h4>
+                        <div class="product-list">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="">Item Name</th>
+                                        <th class="">Quantity</th>
+                                        <th class="">Total Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Cart.CartItems)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="product-info">
+                                                    <img width="80" src="@Url.Content("~/images/products/" + item.Product.Photo)" alt="@item.Product.Name" />
+                                                    <a asp-action="CardDetails" asp-controller="Products" asp-route-id="@item.Product.ProductId">@item.Product.Name</a>
+                                                </div>
+                                            </td>
+                                            <td>@item.Quantity</td>
+                                            <td>@(item.Quantity * item.Product.Price)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    @if ((Model.Status == OrderStatus.Pending || Model.Status == OrderStatus.Delevering) && !Model.IsPaid)
+                    {
+                        <div class="row">
+                            <form asp-action="PayVisa" method="post">
+                                <div class="form-group pt-2">
+                                    <input type="hidden" class="form-control" id="productName" name="productName" placeholder="Enter product name" value="@Model.OrderId.ToString()">
+                                </div>
+                                <div class="form-group pt-2">
+                                    <input type="hidden" class="form-control" id="productDescription" name="productDescription" placeholder="Enter product description" value="@Model.ShippingAddress.Address">
+                                </div>
+                                <div class="form-group pt-2">
+                                    <input type="hidden" class="form-control" id="amount" name="amount" placeholder="Enter amount" value="@Model.TotalAmount">
+                                </div>
+                                <div class="form-group pt-2">
+                                    <input type="hidden" class="form-control" id="currency" name="currency" value="usd">
+                                </div>
+                                <button type="button" id="checkout-button" class="btn btn-main mt-20">Pay with Visa</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section MySection {
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('pk_test_51QBKRM08kuWvYrxHMsB8UvoFJH9lDrxjQvgGSwEYa7a6Ee4Zmt8WN3N4UkB49H91i5PRueiXO5vfbZoby3lHSmrD000nC9swSl');
+
+        document.getElementById('checkout-button').addEventListener('click', function () {
+            var amount = document.getElementById('amount').value;
+
+            // Convert to cents (assuming USD)
+            var amountInCents = Math.round(parseFloat(amount) * 100);
+
+            fetch('/checkout/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productName: document.getElementById('productName').value,
+                    productDescription: document.getElementById('productDescription').value,
+                    amount: amountInCents,
+                    currency: document.getElementById('currency').value
+                })
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (session) {
+                    console.log(session.sessionId);
+                    return stripe.redirectToCheckout({ sessionId: session.sessionId });
+                })
+                .then(function (result) {
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+}

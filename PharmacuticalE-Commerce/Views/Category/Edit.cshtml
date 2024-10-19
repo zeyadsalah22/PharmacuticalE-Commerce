@@ -1,0 +1,35 @@
+﻿@model Category
+@{
+    ViewBag.PageTitle = "Categories";
+    ViewBag.CardTitle = $"Edit Category";
+    Layout = "_StaffManagementLayout";
+    ViewData["Title"] = "Edit";
+}
+
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="CategoryId" />
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <input type="text" class="form-control" asp-for="Name" />
+    </div>
+    @if (Model.ParentCategoryId != null)
+    {
+        <div class="form-group">
+            <label asp-for="ParentCategoryId" class="control-label"></label>
+            <select asp-for="ParentCategoryId" class="form-control" asp-items="ViewBag.CategoryId">
+                <option value=0>No Parent</option>
+            </select>
+            <span asp-validation-for="ParentCategoryId" class="text-danger"></span>
+        </div>
+    }
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>&nbsp;&nbsp;&nbsp;
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

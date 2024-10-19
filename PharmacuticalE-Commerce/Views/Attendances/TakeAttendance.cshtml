@@ -1,0 +1,41 @@
+﻿@model IEnumerable<PharmacuticalE_Commerce.ViewModels.AttendancesViewModel>
+
+@{
+    ViewBag.PageTitle = "Take Attendance";
+    ViewBag.CardTitle = "Employees";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+<table class="table" id="TakeAttendanceList">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Branch</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.FirstName @item.LastName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BranchAddress)
+                </td>
+                <td>
+                    <form method="get" asp-action="Attended">
+                        <input type="hidden" name="employeeId" value="@item.EmployeeId" />
+                        <input type="hidden" name="shiftId" value="@item.ShiftId" />
+                        <input type="hidden" name="branchId" value="@item.BranchId" />
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary" value="Mark Attended" />
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a class="btn btn-secondary" asp-action="Index">Cancel</a>

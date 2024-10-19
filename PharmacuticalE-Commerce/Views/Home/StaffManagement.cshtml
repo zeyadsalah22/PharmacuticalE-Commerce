@@ -1,0 +1,138 @@
+﻿@{
+    ViewBag.PageTitle = "Home Page";
+    ViewBag.CardTitle = "Management";
+    ViewData["Title"] = "StaffManagement";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+<ul>
+    <li class="nav-item has-treeview">
+        <a class="nav-link">
+            <i class="fas fa-building"></i>
+            <p>
+                Staff Mangemnet
+
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item has-treeview">
+                <a class="btn btn-dark" asp-controller="Attendances" asp-action="Index">
+                    <i class="fas fa-calendar-check"></i>
+                    <p>
+                        Attendance
+
+                    </p>
+                </a>
+            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <li class="nav-item">
+                <a class="btn btn-dark" asp-controller="Employees" asp-action="Index">
+                    <i class="fas fa-users"></i>
+                    <p>Employees</p>
+                </a>
+            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <li class="nav-item">
+                <a class="btn btn-dark" asp-controller="Roles" asp-action="Index">
+                    <i class="fas fa-user-cog"></i>
+                    <p>Employees Roles</p>
+                </a>
+            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </ul>
+    </li>
+    <li class="nav-item has-treeview">
+        <a  class="nav-link">
+            <i class="fas fa-boxes"></i>
+            <p>
+                Products Mangemnet
+
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item has-treeview">
+                <a class="btn btn-dark" asp-action="Index" asp-controller="Products">
+                    <i class="fas fa-shopping-bag"></i>
+                    <p>
+                        Products
+
+                    </p>
+                </a>
+            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <li class="nav-item has-treeview">
+                <a class="btn btn-dark" asp-action="Index" asp-controller="Category">
+                    <i class="fas fa-clipboard-list"></i>
+                    <p>
+                        Categories
+                    </p>
+                </a>
+            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </ul>
+    </li>
+    <li class="nav-item has-treeview">
+        <a  class="nav-link">
+            <i class="fas fa-user-shield"></i>
+            <p>
+                Users Mangemnet
+
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item has-treeview">
+                <a class="btn btn-dark" asp-action="CustomersList" asp-controller="UserAuth">
+                    <i class="fas fa-star"></i>
+                    <p>
+                        Customers
+
+                    </p>
+                </a>
+            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <li class="nav-item has-treeview">
+                <a class="btn btn-dark" asp-action="AdminsList" asp-controller="UserAuth">
+                    <i class="fas fa-shield-alt"></i>
+                    <p>
+                        Admins
+
+                    </p>
+                </a>
+            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </ul>
+    </li>
+    <li class="nav-item has-treeview">
+    <a class="nav-link">
+        <i class="fas fa-map-marker-alt"></i>
+        <p>
+            Branches Mangemnet
+
+        </p>
+    </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item has-treeview">
+                <a class="btn btn-dark" asp-controller="Branches" asp-action="Index">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>
+                        Branches
+
+                    </p>
+                </a>
+            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </ul>
+    </li>
+    <li class="nav-item has-treeview">
+        <a class="nav-link">
+            <i class="fas fa-truck"></i>
+            <p>
+                Orders Mangemnet
+
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item has-treeview">
+                <a class="btn btn-dark" asp-controller="Orders" asp-action="Index">
+                    <i class="fas fa-truck"></i>
+                    <p>
+                        Orders
+
+                    </p>
+                </a>
+            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </ul>
+    </li>
+</ul>
+

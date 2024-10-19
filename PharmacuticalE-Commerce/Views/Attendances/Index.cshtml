@@ -1,0 +1,44 @@
+﻿@model PharmacuticalE_Commerce.ViewModels.AttendancesViewModel
+
+@{
+    ViewBag.PageTitle = "Attendances";
+    ViewBag.CardTitle = "Select Date";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+<form method="get" asp-action="ShowAttendances">
+    <div class="mb-3">
+        <label asp-for="ShiftId" class="form-label">Shift : </label>
+        <select asp-for="ShiftId" class="form-select">
+            <option value="">-- Select Shift --</option>
+            @foreach (var item in Model.Shifts)
+            {
+                <option value="@item.ShiftId">@item.FromTime</option>
+            }
+        </select>
+        <span asp-validation-for="ShiftId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="Branch" class="form-label">Branch:</label>
+        <select id="Branch" name="Branch" class="form-select">
+            @foreach (var item in Model.Branch)
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="Date" class="form-label">Date:</label>
+        <input type="date" id="Date" name="Date" class="form-control" asp-for="AttendedAt" value="" min="2000-01-01">
+        <span asp-validation-for="AttendedAt" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Show</button>
+    <button type="submit" class="btn btn-primary" asp-action="TakeAttendance">Take Attendance</button>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

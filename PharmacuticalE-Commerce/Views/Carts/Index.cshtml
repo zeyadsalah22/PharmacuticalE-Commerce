@@ -1,0 +1,75 @@
+﻿@model PharmacuticalE_Commerce.Models.Cart
+@{
+    Layout = "_EcommerceLayout";
+}
+
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+                    <h1 class="page-name">Cart</h1>
+                    <ol class="breadcrumb">
+                        <li><a asp-action="Ecommerce" asp-controller="Home">Home</a></li>
+                        <li class="active">Cart</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="page-wrapper">
+    <div class="cart shopping">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="block">
+                        <div class="product-list">
+                            @if (Model.CartItems.Count > 0)
+                            {
+                                <form method="post" asp-action="RemoveCartItem">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="">Item Name</th>
+                                                <th class="">Quantity</th>
+                                                <th class="">Total Price</th>
+                                                <th class="">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.CartItems)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <div class="product-info">
+                                                            <img width="80" src="@Url.Content("~/images/products/" + item.Product.Photo)" alt="@item.Product.Name" />
+                                                            <a asp-action="CardDetails" asp-controller="Products" asp-route-id="@item.Product.ProductId">@item.Product.Name</a>
+                                                        </div>
+                                                    </td>
+                                                    <td>@item.Quantity</td>
+                                                    <td>@(item.Quantity * item.Product.Price)</td>
+                                                    <td>
+                                                        <input type="hidden" name="cartId" value="@Model.CartId" />
+                                                        <input type="hidden" name="productId" value="@item.ProductId" />
+                                                        <button type="submit" class="product-remove">Remove</button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <a asp-action="PlaceOrder" asp-controller="Orders" class="btn btn-main pull-right">Checkout</a>
+                                </form>
+                            }
+                            else
+                            {
+                                <p>No items in your cart.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
