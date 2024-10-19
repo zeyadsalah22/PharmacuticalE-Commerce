@@ -18,7 +18,7 @@ namespace PharmacuticalE_Commerce.Controllers
 
 		public async Task<IActionResult> Index()
 		{
-			var branches = await _branchRepository.GetAllBranches();
+			var branches = await _branchRepository.GetAll();
 			return View(branches);
 		}
 
@@ -31,14 +31,13 @@ namespace PharmacuticalE_Commerce.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(Branch branch)
 		{
-			await _branchRepository.AddBranch(branch);
-			await _branchRepository.Save();
+			await _branchRepository.Create(branch);
 			return RedirectToAction(nameof(Index));
 		}
 
 		public async Task<IActionResult> Edit(int? id)
 		{
-			var branch = await _branchRepository.GetBranchById(id);
+			var branch = await _branchRepository.GetById(id);
 			return View(branch);
 		}
 
@@ -46,14 +45,13 @@ namespace PharmacuticalE_Commerce.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, Branch branch)
 		{
-			await _branchRepository.UpdateBranch(branch);
-			await _branchRepository.Save();
+			await _branchRepository.Update(branch);
 			return RedirectToAction(nameof(Index));
 		}
 
 		public async Task<IActionResult> Delete(int? id)
 		{
-			var branch = await _branchRepository.GetBranchById(id);
+			var branch = await _branchRepository.GetById(id);
 			return View(branch);
 		}
 
@@ -61,8 +59,7 @@ namespace PharmacuticalE_Commerce.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
-			await _branchRepository.DeleteBranch(id);
-			await _branchRepository.Save();
+			await _branchRepository.Delete(id);
 			return RedirectToAction(nameof(Index));
 		}
 	}

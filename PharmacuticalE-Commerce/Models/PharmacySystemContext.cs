@@ -50,10 +50,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
 
     public virtual DbSet<UserCard> UserCards { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=PharmacySystem;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -537,9 +533,5 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-public DbSet<PharmacuticalE_Commerce.Viewmodels.RegisterViewModel> RegisterViewModel { get; set; } = default!;
-
-public DbSet<PharmacuticalE_Commerce.Viewmodels.LoginViewModel> LoginViewModel { get; set; } = default!;
 
 }
