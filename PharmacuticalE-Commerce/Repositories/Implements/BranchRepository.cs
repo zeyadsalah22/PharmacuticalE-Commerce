@@ -3,75 +3,76 @@ using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce.Repositories.Implements
 {
-    public class BranchRepository : IBranchRepository
-    {
-        private readonly PharmacySystemContext _context;
+	public class BranchRepository : IBranchRepository
+	{
+		private readonly PharmacySystemContext _context;
 
-        public BranchRepository(PharmacySystemContext context)
-        {
-            _context = context;
-        }
+		public BranchRepository(PharmacySystemContext context)
+		{
+			_context = context;
+		}
 
-        public IEnumerable<Branch> GetAllBranches()
-        {
-            return _context.Branches.ToList();
-        }
+		public async Task<IEnumerable<Branch>> GetAllBranches()
+		{
+			return await Task.FromResult(_context.Branches.ToList());
+		}
 
-        public Branch GetBranchById(int? id)
-        {
-            return _context.Branches.Find(id);
-        }
+		public async Task<Branch> GetBranchById(int? id)
+		{
+			return await _context.Branches.FindAsync(id);
+		}
 
-        public void AddBranch(Branch branch)
-        {
-            _context.Add(branch);
-        }
+		public async Task AddBranch(Branch branch)
+		{
+			await _context.AddAsync(branch);
+		}
 
-        public void UpdateBranch(Branch branch)
-        {
-            _context.Update(branch);
-        }
+		public async Task UpdateBranch(Branch branch)
+		{
+			_context.Update(branch);
+			await Task.CompletedTask;
+		}
 
-        public void DeleteBranch(int id)
-        {
-            var branch = _context.Branches.Find(id);
-            if (branch != null)
-            {
-                _context.Branches.Remove(branch);
-            }
-        }
+		public async Task DeleteBranch(int id)
+		{
+			var branch = await _context.Branches.FindAsync(id);
+			if (branch != null)
+			{
+				_context.Branches.Remove(branch);
+			}
+		}
 
-        public bool BranchExists(int id)
-        {
-            return _context.Branches.Any(e => e.BranchId == id);
-        }
+		public async Task<bool> BranchExists(int id)
+		{
+			return _context.Branches.Any(e => e.BranchId == id);
+		}
 
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
+		public async Task Save()
+		{
+			await _context.SaveChangesAsync();
+		}
 
-		public Branch GetById(int? id)
+		public async Task<Branch> GetById(int? id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<Branch> GetAll()
+		public async Task<IEnumerable<Branch>> GetAll()
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Create(Branch entity)
+		public async Task Create(Branch entity)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Update(Branch entity)
+		public async Task Update(Branch entity)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Delete(int? id)
+		public async Task Delete(int? id)
 		{
 			throw new NotImplementedException();
 		}

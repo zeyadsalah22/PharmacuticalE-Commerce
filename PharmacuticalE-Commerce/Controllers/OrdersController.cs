@@ -16,242 +16,242 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace PharmacuticalE_Commerce.Controllers
 {
     [Authorize]
-    public class OrdersController : Controller
-    {
-        private readonly IOrderRepository _orderRepository;
-        private readonly ICartRepository _cartRepository;
-        private readonly IShippingAddressRepository _shippingAddressRepository;
-        private readonly IConfiguration _configuration;
-        private readonly decimal ShippingPrice = 50.00M;
-        public OrdersController(IOrderRepository orderRepository, ICartRepository cartRepository, IShippingAddressRepository shippingAddressRepository, IConfiguration configuration)
-        {
-            _orderRepository = orderRepository;
-            _cartRepository = cartRepository;
-            _shippingAddressRepository = shippingAddressRepository;
-            _configuration = configuration;
-        }
+	public class OrdersController : Controller
+	{
+		private readonly IOrderRepository _orderRepository;
+		private readonly ICartRepository _cartRepository;
+		private readonly IShippingAddressRepository _shippingAddressRepository;
+		private readonly IConfiguration _configuration;
+		private readonly decimal ShippingPrice = 50.00M;
+		public OrdersController(IOrderRepository orderRepository, ICartRepository cartRepository, IShippingAddressRepository shippingAddressRepository, IConfiguration configuration)
+		{
+			_orderRepository = orderRepository;
+			_cartRepository = cartRepository;
+			_shippingAddressRepository = shippingAddressRepository;
+			_configuration = configuration;
+		}
 
-        // GET: Orders/Index
-        public IActionResult Index()
-        {
-            var orders = _orderRepository.GetAll();
-            return View(orders);
-        }
+		// GET: Orders/Index
+		public async Task<IActionResult> Index()
+		{
+			var orders = await _orderRepository.GetAll();
+			return View(orders);
+		}
 
-        public IActionResult ListOrders()
-        {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var orders = _orderRepository.GetOrdersByUserId(userId);
-            return View(orders);
-        }
+		public async Task<IActionResult> ListOrders()
+		{
+			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var orders = await _orderRepository.GetOrdersByUserId(userId);
+			return View(orders);
+		}
 
-        public IActionResult Dashboard()
-        {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var orders = _orderRepository.GetOrdersByUserId(userId);
-            return View(orders);
-        }
+		public async Task<IActionResult> Dashboard()
+		{
+			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var orders = await _orderRepository.GetOrdersByUserId(userId);
+			return View(orders);
+		}
 
-        // GET: Orders/Details/5
-        public IActionResult Details(int id)
-        {
-            var order = _orderRepository.GetByIdWithDetails(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
+		// GET: Orders/Details/5
+		public async Task<IActionResult> Details(int id)
+		{
+			var order = await _orderRepository.GetByIdWithDetails(id);
+			if (order == null)
+			{
+				return NotFound();
+			}
 
-            return View(order);
-        }
+			return View(order);
+		}
 
-        public IActionResult OrderView(int id)
-        {
-            var order = _orderRepository.GetByIdWithDetails(id);
-            if (order == null || order.UserId != User.FindFirstValue(ClaimTypes.NameIdentifier))
-            {
-                return NotFound();
-            }
+		public async Task<IActionResult> OrderView(int id)
+		{
+			var order = await _orderRepository.GetByIdWithDetails(id);
+			if (order == null || order.UserId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+			{
+				return NotFound();
+			}
 
-            return View(order);
-        }
+			return View(order);
+		}
 
-        public async Task<IActionResult> OrderPartial()
-        {
-            var cart = await _cartRepository.GetActiveCartByUserAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            if (cart == null)
-            {
-                return NotFound();
-            }
-            ViewData["ShippingPrice"] = ShippingPrice;
-            return View(cart);
-        }
+		public async Task<IActionResult> OrderPartial()
+		{
+			var cart = await _cartRepository.GetActiveCartByUserAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+			if (cart == null)
+			{
+				return NotFound();
+			}
+			ViewData["ShippingPrice"] = ShippingPrice;
+			return View(cart);
+		}
 
-        // GET: Orders/Edit/5
-        public IActionResult Edit(int id)
-        {
-            var order = _orderRepository.GetByIdWithDetails(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-            string userId = order.UserId;
-            ViewData["ShippingAddresses"] = new SelectList(_shippingAddressRepository.GetShippingAddressByUserId(userId), "AddressId", "Address");
-            return View(order);
-        }
+		// GET: Orders/Edit/5
+		public async Task<IActionResult> Edit(int id)
+		{
+			var order = await _orderRepository.GetByIdWithDetails(id);
+			if (order == null)
+			{
+				return NotFound();
+			}
+			string userId = order.UserId;
+			ViewData["ShippingAddresses"] = new SelectList(await _shippingAddressRepository.GetShippingAddressByUserId(userId), "AddressId", "Address");
+			return View(order);
+		}
 
-        // POST: Orders/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, int ShippingAddressId, OrderStatus Status)
-        {
-            var order = _orderRepository.GetById(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-            order.Status = Status;
-            order.ShippingAddressId = ShippingAddressId;
-            if (ModelState.IsValid)
-            {
-                _orderRepository.Update(order);
-                return RedirectToAction(nameof(Index));
-            }
+		// POST: Orders/Edit/5
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(int id, int ShippingAddressId, OrderStatus Status)
+		{
+			var order = await _orderRepository.GetById(id);
+			if (order == null)
+			{
+				return NotFound();
+			}
+			order.Status = Status;
+			order.ShippingAddressId = ShippingAddressId;
+			if (ModelState.IsValid)
+			{
+				await _orderRepository.Update(order);
+				return RedirectToAction(nameof(Index));
+			}
 
-            return View(order);
-        }
+			return View(order);
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Cancel(int id)
-        {
-            var order = _orderRepository.GetByIdWithDetails(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-            order.Status = OrderStatus.Cancelled;
-            if (ModelState.IsValid)
-            {
-                _orderRepository.Update(order);
-                foreach (var item in order.Cart.CartItems)
-                {
-                    item.Product.Stock += item.Quantity;
-                }
-            }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Cancel(int id)
+		{
+			var order = await _orderRepository.GetByIdWithDetails(id);
+			if (order == null)
+			{
+				return NotFound();
+			}
+			order.Status = OrderStatus.Cancelled;
+			if (ModelState.IsValid)
+			{
+				await _orderRepository.Update(order);
+				foreach (var item in order.Cart.CartItems)
+				{
+					item.Product.Stock += item.Quantity;
+				}
+			}
 
-            return RedirectToAction(nameof(ListOrders));
+			return RedirectToAction(nameof(ListOrders));
 
-        }
+		}
 
-        // GET: Orders/Delete/5
-        public IActionResult Delete(int id)
-        {
-            var order = _orderRepository.GetById(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
+		// GET: Orders/Delete/5
+		public async Task<IActionResult> Delete(int id)
+		{
+			var order = await _orderRepository.GetById(id);
+			if (order == null)
+			{
+				return NotFound();
+			}
 
-            return View(order);
-        }
+			return View(order);
+		}
 
-        // POST: Orders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
-        {
-            var order = _orderRepository.GetById(id);
-            if (order != null)
-            {
-                _orderRepository.Delete(id);
-            }
-            return RedirectToAction(nameof(Index));
-        }
+		// POST: Orders/Delete/5
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+			var order = await _orderRepository.GetById(id);
+			if (order != null)
+			{
+				await _orderRepository.Delete(id);
+			}
+			return RedirectToAction(nameof(Index));
+		}
 
-        public async Task<IActionResult> PlaceOrder()
-        {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewData["ShippingAddresses"] = new SelectList(_shippingAddressRepository.GetShippingAddressByUserId(userId), "AddressId", "Address");
-            return View();
-        }
+		public async Task<IActionResult> PlaceOrder()
+		{
+			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			ViewData["ShippingAddresses"] = new SelectList(await _shippingAddressRepository.GetShippingAddressByUserId(userId), "AddressId", "Address");
+			return View();
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PlaceOrder(ShippingAddress shippingAddress)
-        {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> PlaceOrder(ShippingAddress shippingAddress)
+		{
+			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Get the active cart for the user
-            var cart = await _cartRepository.GetActiveCartByUserAsync(userId);
-            if (cart == null || cart.CartItems.Count == 0)
-            {
-                return RedirectToAction("Index", "Carts");  // Redirect to the cart if it's empty
-            }
-            foreach (var item in cart.CartItems)
-            {
-                if (item.Product.Stock < item.Quantity)
-                {
-                    ViewBag.ErrorMessage = $"{item.Product.Name} in your cart is out of stock";
-                    return RedirectToAction("Index", "Carts");
-                }
-            }
-            if (shippingAddress.AddressId != 0)
-            {
-                shippingAddress = _shippingAddressRepository.GetById(shippingAddress.AddressId);
-                if (shippingAddress == null || shippingAddress.UserId != userId)
-                {
-                    return NotFound();
-                }
-            }
-            else
-            {
-                ModelState.Remove("AddressId");
-                ModelState.Remove("UserId");
-                ModelState.Remove("User");
-                if (!ModelState.IsValid)
-                {
-                    return View(shippingAddress);
-                }
-                shippingAddress = new ShippingAddress
-                {
-                    Address = shippingAddress.Address,
-                    UserId = userId,
-                    ZIP = shippingAddress.ZIP,
-                    City = shippingAddress.City,
-                    Phone = shippingAddress.Phone
-                };
-                _shippingAddressRepository.Create(shippingAddress);
-            }
+			// Get the active cart for the user
+			var cart = await _cartRepository.GetActiveCartByUserAsync(userId);
+			if (cart == null || cart.CartItems.Count == 0)
+			{
+				return RedirectToAction("Index", "Carts");  // Redirect to the cart if it's empty
+			}
+			foreach (var item in cart.CartItems)
+			{
+				if (item.Product.Stock < item.Quantity)
+				{
+					ViewBag.ErrorMessage = $"{item.Product.Name} in your cart is out of stock";
+					return RedirectToAction("Index", "Carts");
+				}
+			}
+			if (shippingAddress.AddressId != 0)
+			{
+				shippingAddress = await _shippingAddressRepository.GetById(shippingAddress.AddressId);
+				if (shippingAddress == null || shippingAddress.UserId != userId)
+				{
+					return NotFound();
+				}
+			}
+			else
+			{
+				ModelState.Remove("AddressId");
+				ModelState.Remove("UserId");
+				ModelState.Remove("User");
+				if (!ModelState.IsValid)
+				{
+					return View(shippingAddress);
+				}
+				shippingAddress = new ShippingAddress
+				{
+					Address = shippingAddress.Address,
+					UserId = userId,
+					ZIP = shippingAddress.ZIP,
+					City = shippingAddress.City,
+					Phone = shippingAddress.Phone
+				};
+				await _shippingAddressRepository.Create(shippingAddress);
+			}
 
 
-            // Calculate the total price of the cart
-            decimal totalAmount = cart.CartItems.Sum(item => item.Quantity * item.Product.Price);
+			// Calculate the total price of the cart
+			decimal totalAmount = cart.CartItems.Sum(item => item.Quantity * item.Product.Price);
 
-            // Create a new order entity
-            var order = new Order
-            {
-                UserId = userId,
-                ShippingAddress = shippingAddress,
-                OrderDate = DateTime.Now,
-                TotalAmount = totalAmount + ShippingPrice,
-                ShippingPrice = ShippingPrice,
-                Cart = cart,
-                Status = OrderStatus.Pending
-            };
+			// Create a new order entity
+			var order = new Order
+			{
+				UserId = userId,
+				ShippingAddress = shippingAddress,
+				OrderDate = DateTime.Now,
+				TotalAmount = totalAmount + ShippingPrice,
+				ShippingPrice = ShippingPrice,
+				Cart = cart,
+				Status = OrderStatus.Pending
+			};
 
-            // Save the order to the database
-            _orderRepository.Create(order);
+			// Save the order to the database
+			await _orderRepository.Create(order);
 
-            // Clear the cart after placing the order
-            foreach (var item in cart.CartItems)
-            {
-                item.Product.Stock -= item.Quantity;
-            }
-            cart.Status = false;
-            await _cartRepository.UpdateCartAsync(cart);
+			// Clear the cart after placing the order
+			foreach (var item in cart.CartItems)
+			{
+				item.Product.Stock -= item.Quantity;
+			}
+			cart.Status = false;
+			await _cartRepository.UpdateCartAsync(cart);
 
-            return RedirectToAction("OrderView", new { id = order.OrderId });
-        }
-        
-    }
+			return RedirectToAction("OrderView", new { id = order.OrderId });
+		}
+
+	}
 }

@@ -5,8 +5,8 @@ namespace PharmacuticalE_Commerce.Repositories.Interfaces
 {
     public interface IUserRepository : IRepository<User>
     {
-        User GetUserByEmail(string email);
-        User GetUserByUsername(string username);
+        Task<User> GetUserByEmail(string email);
+        Task<User> GetUserByUsername(string username);
         Task<UserViewModel> GetUserViewModelById(string id);
         Task<List<UserViewModel>> GetAllUserViewModels();
         Task<List<UserViewModel>> GetAllCustomerUserViewModels();

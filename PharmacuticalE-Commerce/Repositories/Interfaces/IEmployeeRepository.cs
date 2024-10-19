@@ -2,18 +2,18 @@
 
 namespace PharmacuticalE_Commerce.Repositories.Interfaces
 {
-    public interface IEmployeeRepository : IRepository<Employee>
-    {
-        IEnumerable<Employee> GetAllWithDetails();
-        Employee GetByIdWithDetails(int? id);
-        bool EmployeeExists(int id);
-        IEnumerable<Branch> GetBranches();
-        IEnumerable<Role> GetRoles();
-        IEnumerable<Shift> GetShifts();
-        Shift GetShiftsById(int? id);
-        void UpdateShift(Shift shift);
-        void DeleteShift(int? id);
-        void CreateShift(Shift shift);
-    }
+	public interface IEmployeeRepository : IRepository<Employee>
+	{
+		Task<IEnumerable<Employee>> GetAllWithDetails();
+		Task<Employee> GetByIdWithDetails(int? id);
+		Task<bool> EmployeeExists(int id);
+		Task<IEnumerable<Branch>> GetBranches();
+		Task<IEnumerable<Role>> GetRoles();
+		Task<IEnumerable<Shift>> GetShifts();
+		Task<Shift> GetShiftsById(int? id);
+		Task UpdateShift(Shift shift);
+		Task DeleteShift(int? id);
+		Task CreateShift(Shift shift);
+	}
 
 }

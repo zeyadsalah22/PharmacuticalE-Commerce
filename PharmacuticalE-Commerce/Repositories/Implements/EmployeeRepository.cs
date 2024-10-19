@@ -4,110 +4,110 @@ using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce.Repositories.Implements
 {
-    public class EmployeeRepository : IEmployeeRepository
-    {
-        private readonly PharmacySystemContext _context;
+	public class EmployeeRepository : IEmployeeRepository
+	{
+		private readonly PharmacySystemContext _context;
 
-        public EmployeeRepository(PharmacySystemContext context)
-        {
-            _context = context;
-        }
+		public EmployeeRepository(PharmacySystemContext context)
+		{
+			_context = context;
+		}
 
-        public IEnumerable<Employee> GetAllWithDetails()
-        {
-            return _context.Employees
-                           .Include(e => e.Branch)
-                           .Include(e => e.Role)
-                           .Include(e => e.Shift)
-                           .ToList();
-        }
+		public async Task<IEnumerable<Employee>> GetAllWithDetails()
+		{
+			return await _context.Employees
+				.Include(e => e.Branch)
+				.Include(e => e.Role)
+				.Include(e => e.Shift)
+				.ToListAsync();
+		}
 
-        public Employee GetByIdWithDetails(int? id)
-        {
-            return _context.Employees
-                           .Include(e => e.Branch)
-                           .Include(e => e.Role)
-                           .Include(e => e.Shift)
-                           .FirstOrDefault(e => e.EmployeeId == id);
-        }
+		public async Task<Employee> GetByIdWithDetails(int? id)
+		{
+			return await _context.Employees
+				.Include(e => e.Branch)
+				.Include(e => e.Role)
+				.Include(e => e.Shift)
+				.FirstOrDefaultAsync(e => e.EmployeeId == id);
+		}
 
-        public bool EmployeeExists(int id)
-        {
-            return _context.Employees.Any(e => e.EmployeeId == id);
-        }
+		public async Task<bool> EmployeeExists(int id)
+		{
+			return await _context.Employees.AnyAsync(e => e.EmployeeId == id);
+		}
 
-        public IEnumerable<Branch> GetBranches()
-        {
-            return _context.Branches.ToList();
-        }
+		public async Task<IEnumerable<Branch>> GetBranches()
+		{
+			return await _context.Branches.ToListAsync();
+		}
 
-        public IEnumerable<Role> GetRoles()
-        {
-            return _context.Roles.ToList();
-        }
+		public async Task<IEnumerable<Role>> GetRoles()
+		{
+			return await _context.Roles.ToListAsync();
+		}
 
-        public IEnumerable<Shift> GetShifts()
-        {
-            return _context.Shifts.ToList();
-        }
+		public async Task<IEnumerable<Shift>> GetShifts()
+		{
+			return await _context.Shifts.ToListAsync();
+		}
 
-        public Employee GetById(int? id)
-        {
-            return _context.Employees.Find(id);
-        }
+		public async Task<Employee> GetById(int? id)
+		{
+			return await _context.Employees.FindAsync(id);
+		}
 
-        public IEnumerable<Employee> GetAll()
-        {
-            return _context.Employees.ToList();
-        }
+		public async Task<IEnumerable<Employee>> GetAll()
+		{
+			return await _context.Employees.ToListAsync();
+		}
 
-        public void Create(Employee employee)
-        {
-            _context.Employees.Add(employee);
-            _context.SaveChanges();
-        }
+		public async Task Create(Employee employee)
+		{
+			_context.Employees.Add(employee);
+			await _context.SaveChangesAsync();
+		}
 
-        public void Update(Employee employee)
-        {
-            _context.Employees.Update(employee);
-            _context.SaveChanges();
-        }
+		public async Task Update(Employee employee)
+		{
+			_context.Employees.Update(employee);
+			await _context.SaveChangesAsync();
+		}
 
-        public void Delete(int? id)
-        {
-            var employee = _context.Employees.Find(id);
-            if (employee != null)
-            {
-                _context.Employees.Remove(employee);
-                _context.SaveChanges();
-            }
-        }
+		public async Task Delete(int? id)
+		{
+			var employee = await _context.Employees.FindAsync(id);
+			if (employee != null)
+			{
+				_context.Employees.Remove(employee);
+				await _context.SaveChangesAsync();
+			}
+		}
 
-        public void UpdateShift(Shift shift)
-        {
-            _context.Shifts.Update(shift);
-            _context.SaveChanges();
-        }
+		public async Task UpdateShift(Shift shift)
+		{
+			_context.Shifts.Update(shift);
+			await _context.SaveChangesAsync();
+		}
 
-        public Shift GetShiftsById(int? id)
-        {
-            return _context.Shifts.Find(id);
-        }
+		public async Task<Shift> GetShiftsById(int? id)
+		{
+			return await _context.Shifts.FindAsync(id);
+		}
 
-        public void CreateShift(Shift shift)
-        {
-            _context.Shifts.Add(shift);
-            _context.SaveChanges();
-        }
+		public async Task CreateShift(Shift shift)
+		{
+			_context.Shifts.Add(shift);
+			await _context.SaveChangesAsync();
+		}
 
-        public void DeleteShift(int? id)
-        {
-            var shift = _context.Shifts.Find(id);
-            if (shift != null)
-            {
-                _context.Shifts.Remove(shift);
-                _context.SaveChanges();
-            }
-        }
-    }
+		public async Task DeleteShift(int? id)
+		{
+			var shift = await _context.Shifts.FindAsync(id);
+			if (shift != null)
+			{
+				_context.Shifts.Remove(shift);
+				await _context.SaveChangesAsync();
+			}
+		}
+	}
 }

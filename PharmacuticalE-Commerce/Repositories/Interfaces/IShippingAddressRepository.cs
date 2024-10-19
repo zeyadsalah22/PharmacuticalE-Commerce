@@ -2,8 +2,8 @@
 
 namespace PharmacuticalE_Commerce.Repositories.Interfaces
 {
-    public interface IShippingAddressRepository : IRepository<ShippingAddress>
-    {
-        public IEnumerable<ShippingAddress> GetShippingAddressByUserId(string userId);
-    }
+	public interface IShippingAddressRepository : IRepository<ShippingAddress>
+	{
+		Task<IEnumerable<ShippingAddress>> GetShippingAddressByUserId(string userId);
+	}
 }

@@ -3,45 +3,45 @@ using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce.Repositories.Implements
 {
-    public class RoleRepository : IRoleRepository
-    {
-        private readonly PharmacySystemContext _context;
+	public class RoleRepository : IRoleRepository
+	{
+		private readonly PharmacySystemContext _context;
 
-        public RoleRepository(PharmacySystemContext context)
-        {
-            _context = context;
-        }
+		public RoleRepository(PharmacySystemContext context)
+		{
+			_context = context;
+		}
 
-        public Role GetById(int? id)
-        {
-            return _context.Roles.FirstOrDefault(r => r.RoleId == id);
-        }
+		public async Task<Role> GetById(int? id)
+		{
+			return _context.Roles.FirstOrDefault(r => r.RoleId == id);
+		}
 
-        public IEnumerable<Role> GetAll()
-        {
-            return _context.Roles.ToList();
-        }
+		public async Task<IEnumerable<Role>> GetAll()
+		{
+			return _context.Roles.ToList();
+		}
 
-        public void Create(Role role)
-        {
-            _context.Roles.Add(role);
-            _context.SaveChanges();
-        }
+		public async Task Create(Role role)
+		{
+			_context.Roles.Add(role);
+			await _context.SaveChangesAsync();
+		}
 
-        public void Update(Role role)
-        {
-            _context.Roles.Update(role);
-            _context.SaveChanges();
-        }
+		public async Task Update(Role role)
+		{
+			_context.Roles.Update(role);
+			await _context.SaveChangesAsync();
+		}
 
-        public void Delete(int? id)
-        {
-            var role = GetById(id);
-            if (role != null)
-            {
-                _context.Roles.Remove(role);
-                _context.SaveChanges();
-            }
-        }
-    }
+		public async Task Delete(int? id)
+		{
+			var role = await GetById(id);
+			if (role != null)
+			{
+				_context.Roles.Remove(role);
+				await _context.SaveChangesAsync();
+			}
+		}
+	}
 }
