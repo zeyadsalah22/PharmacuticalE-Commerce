@@ -2,12 +2,11 @@
 
 @{
     ViewBag.PageTitle = "Branches";
-    ViewBag.Cardtitle = "Edit Branch";
+    ViewBag.CardTitle = "Edit Branch";
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
 
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -19,6 +18,16 @@
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -26,7 +35,7 @@
 </div>
 
 <div>
-    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
 @section Scripts {
