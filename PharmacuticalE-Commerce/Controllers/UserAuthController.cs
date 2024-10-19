@@ -86,8 +86,22 @@ namespace PharmacuticalE_Commerce.Controllers
 					if (userFound)
 					{
 						await _signInManager.SignInAsync(user, loginViewModel.RememberMe);
-						return RedirectToAction("Ecommerce", "Home");
-					}
+                        // Retrieve user roles
+                        var roles = await _userManager.GetRolesAsync(user);
+
+                        // Check if the user is a customer
+                        if (roles.Contains("Customer"))
+                        {
+                            // Redirect to e-commerce homepage
+                            return RedirectToAction("Ecommerce", "Home");
+                        }
+                        else
+                        {
+                            // Redirect to staff management page
+                            return RedirectToAction("StaffManagement", "Home");
+                        }
+
+                    }
 				}
 				ModelState.AddModelError(string.Empty, "Invalid UserName and/or Password");
 
@@ -295,5 +309,9 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(user);
 		}
 
+		public async Task<IActionResult> AccessDenied()
+		{
+			return View();
+		}
 	}
 }

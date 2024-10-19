@@ -1,3 +1,4 @@
+using Azure.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
@@ -18,14 +19,23 @@ namespace PharmacuticalE_Commerce
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<PharmacySystemContext>(options =>
                 options.UseSqlServer(connectionString));
+            
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
             StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+            
             builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>().AddDefaultUI()
                 .AddEntityFrameworkStores<PharmacySystemContext>();
-            builder.Services.AddControllersWithViews();
+            
+            builder.Services.ConfigureApplicationCookie(options =>
+			{
+				options.AccessDeniedPath = "/UserAuth/AccessDenied";
+                options.LoginPath = "/UserAuth/Login";
 
-            // 34an mn3ml4 Rebuild kol ma n3dl el view
+            });
+
+			builder.Services.AddControllersWithViews();
+
             builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
             builder.Services.AddScoped<IProductRepository,ProductRepository>();
@@ -60,6 +70,8 @@ namespace PharmacuticalE_Commerce
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

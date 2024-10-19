@@ -35,7 +35,7 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View();
 		}
     
-    [Authorize(Roles = "Admin,Moderator,HR")]
+		[Authorize(Roles = "Admin,Moderator,HR")]
 		public async Task<IActionResult> StaffManagement()
 		{
 			return View();
