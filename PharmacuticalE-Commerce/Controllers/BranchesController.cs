@@ -7,72 +7,63 @@ using PharmacuticalE_Commerce.Repositories.Interfaces;
 namespace PharmacuticalE_Commerce.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class BranchesController : Controller
-    {
-        private readonly IBranchRepository _branchRepository;
+	public class BranchesController : Controller
+	{
+		private readonly IBranchRepository _branchRepository;
 
-        public BranchesController(IBranchRepository branchRepository)
-        {
-            _branchRepository = branchRepository;
-        }
+		public BranchesController(IBranchRepository branchRepository)
+		{
+			_branchRepository = branchRepository;
+		}
 
-        public IActionResult Index()
-        {
-            var branches = _branchRepository.GetAllBranches();
-            return View(branches);
-        }
+		public async Task<IActionResult> Index()
+		{
+			var branches = await _branchRepository.GetAllBranches();
+			return View(branches);
+		}
 
-        public IActionResult Create()
-        {
-            return View();
-        }
+		public IActionResult Create()
+		{
+			return View();
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Branch branch)
-        {
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(Branch branch)
+		{
+			await _branchRepository.AddBranch(branch);
+			await _branchRepository.Save();
+			return RedirectToAction(nameof(Index));
+		}
 
-            _branchRepository.AddBranch(branch);
-            _branchRepository.Save();
-            return RedirectToAction(nameof(Index));
+		public async Task<IActionResult> Edit(int? id)
+		{
+			var branch = await _branchRepository.GetBranchById(id);
+			return View(branch);
+		}
 
-        }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(int id, Branch branch)
+		{
+			await _branchRepository.UpdateBranch(branch);
+			await _branchRepository.Save();
+			return RedirectToAction(nameof(Index));
+		}
 
-        public IActionResult Edit(int? id)
-        {
+		public async Task<IActionResult> Delete(int? id)
+		{
+			var branch = await _branchRepository.GetBranchById(id);
+			return View(branch);
+		}
 
-            var branch = _branchRepository.GetBranchById(id);
-
-            return View(branch);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Branch branch)
-        {
-
-            _branchRepository.UpdateBranch(branch);
-            _branchRepository.Save();
-
-            return RedirectToAction(nameof(Index));
-
-        }
-
-        public IActionResult Delete(int? id)
-        {
- 
-            var branch = _branchRepository.GetBranchById(id);
-
-            return View(branch);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
-        {
-            _branchRepository.DeleteBranch(id);
-            _branchRepository.Save();
-            return RedirectToAction(nameof(Index));
-        }
-    }
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+			await _branchRepository.DeleteBranch(id);
+			await _branchRepository.Save();
+			return RedirectToAction(nameof(Index));
+		}
+	}
 }

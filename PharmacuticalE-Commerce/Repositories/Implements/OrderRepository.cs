@@ -6,56 +6,56 @@ using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce.Repositories.Implements
 {
-    public class OrderRepository : IOrderRepository
-    {
-        public Guid lifetime { get; set; }
-        private readonly PharmacySystemContext _context;
-        public OrderRepository(PharmacySystemContext context)
-        {
-            lifetime = Guid.NewGuid();
-            _context = context;
-        }
-        public void Create(Order entity)
-        {
-            _context.Orders.Add(entity);
-            _context.SaveChanges();
-        }
+	public class OrderRepository : IOrderRepository
+	{
+		public Guid lifetime { get; set; }
+		private readonly PharmacySystemContext _context;
+		public OrderRepository(PharmacySystemContext context)
+		{
+			lifetime = Guid.NewGuid();
+			_context = context;
+		}
+		public async Task Create(Order entity)
+		{
+			_context.Orders.Add(entity);
+			await _context.SaveChangesAsync();
+		}
 
-        public void Delete(int? id)
-        {
-            _context.Orders.Remove(GetById(id));
-            _context.SaveChanges();
-        }
+		public async Task Delete(int? id)
+		{
+			_context.Orders.Remove(await GetById(id));
+			await _context.SaveChangesAsync();
+		}
 
-        public IEnumerable<Order> GetAll()
-        {
-            return _context.Orders.Include(o=>o.ShippingAddress).ToList();
-        }
+		public async Task<IEnumerable<Order>> GetAll()
+		{
+			return await _context.Orders.Include(o => o.ShippingAddress).ToListAsync();
+		}
 
-        public Order GetById(int? id)
-        {
-            return _context.Orders.Find(id);
-        }
+		public async Task<Order> GetById(int? id)
+		{
+			return await _context.Orders.FindAsync(id);
+		}
 
-        public IEnumerable<Order> GetOrdersByUserId(string userId)
-        {
-            return _context.Orders.Include(o=>o.Cart).ThenInclude(oc=>oc.CartItems).Where(o => o.UserId == userId).ToList();
-        }
+		public async Task<IEnumerable<Order>> GetOrdersByUserId(string userId)
+		{
+			return await _context.Orders.Include(o => o.Cart).ThenInclude(oc => oc.CartItems).Where(o => o.UserId == userId).ToListAsync();
+		}
 
-        public void Update(Order entity)
-        {
-            _context.Orders.Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChanges();
-        }
+		public async Task Update(Order entity)
+		{
+			_context.Orders.Attach(entity);
+			_context.Entry(entity).State = EntityState.Modified;
+			await _context.SaveChangesAsync();
+		}
 
-        public Order GetByIdWithDetails(int? Id)
-        {
-            return _context.Orders.Include(o => o.ShippingAddress)
-                .Include(o => o.Cart)
-                .ThenInclude(c => c.CartItems)
-                .ThenInclude(ci => ci.Product)
-                .FirstOrDefault(o=>o.OrderId==Id);
-        }
-    }
+		public async Task<Order> GetByIdWithDetails(int? Id)
+		{
+			return await _context.Orders.Include(o => o.ShippingAddress)
+				.Include(o => o.Cart)
+				.ThenInclude(c => c.CartItems)
+				.ThenInclude(ci => ci.Product)
+				.FirstOrDefaultAsync(o => o.OrderId == Id);
+		}
+	}
 }

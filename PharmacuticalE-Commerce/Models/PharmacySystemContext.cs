@@ -542,5 +542,4 @@ public DbSet<PharmacuticalE_Commerce.Viewmodels.RegisterViewModel> RegisterViewM
 
 public DbSet<PharmacuticalE_Commerce.Viewmodels.LoginViewModel> LoginViewModel { get; set; } = default!;
 
-public DbSet<PharmacuticalE_Commerce.Models.UserMetaData> UserMetaData { get; set; } = default!;
 }

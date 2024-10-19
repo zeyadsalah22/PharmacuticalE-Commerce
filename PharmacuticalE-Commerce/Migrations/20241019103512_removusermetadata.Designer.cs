@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmacuticalE_Commerce.Models;
 
@@ -11,9 +12,11 @@ using PharmacuticalE_Commerce.Models;
 namespace PharmacuticalE_Commerce.Migrations
 {
     [DbContext(typeof(PharmacySystemContext))]
-    partial class PharmacySystemContextModelSnapshot : ModelSnapshot
+    [Migration("20241019103512_removusermetadata")]
+    partial class removusermetadata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,8 +262,13 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("userId");
 
+                    b.Property<int?>("UserMetaDataUserId")
+                        .HasColumnType("int");
+
                     b.HasKey("CartId")
                         .HasName("PK__Cart__415B03B8E7458263");
+
+                    b.HasIndex("UserMetaDataUserId");
 
                     b.HasIndex(new[] { "UserId" }, "IX_Cart_userId");
 
@@ -479,8 +487,13 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("userId");
 
+                    b.Property<int?>("UserMetaDataUserId")
+                        .HasColumnType("int");
+
                     b.HasKey("OrderId")
                         .HasName("PK__Order__0809335DE1283F0A");
+
+                    b.HasIndex("UserMetaDataUserId");
 
                     b.HasIndex(new[] { "ShippingAddressId" }, "IX_Order_addressId");
 
@@ -705,12 +718,17 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("userId");
 
+                    b.Property<int?>("UserMetaDataUserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ZIP")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AddressId")
                         .HasName("PK__Shipping__26A111AD63DA2C05");
+
+                    b.HasIndex("UserMetaDataUserId");
 
                     b.HasIndex(new[] { "UserId" }, "IX_ShippingAddress_userId");
 
@@ -837,8 +855,13 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("userId");
 
+                    b.Property<int?>("UserMetaDataUserId")
+                        .HasColumnType("int");
+
                     b.HasKey("CardId", "CardNo")
                         .HasName("PK__UserCard__E98DAD82B96B04DE");
+
+                    b.HasIndex("UserMetaDataUserId");
 
                     b.HasIndex(new[] { "UserId" }, "IX_UserCard_userId");
 
@@ -846,6 +869,38 @@ namespace PharmacuticalE_Commerce.Migrations
                         .IsUnique();
 
                     b.ToTable("UserCard", (string)null);
+                });
+
+            modelBuilder.Entity("PharmacuticalE_Commerce.Models.UserMetaData", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Fname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Lname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("UserMetaData");
                 });
 
             modelBuilder.Entity("PharmacuticalE_Commerce.Viewmodels.LoginViewModel", b =>
@@ -1005,6 +1060,10 @@ namespace PharmacuticalE_Commerce.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__Cart__userId__5165187F");
 
+                    b.HasOne("PharmacuticalE_Commerce.Models.UserMetaData", null)
+                        .WithMany("Carts")
+                        .HasForeignKey("UserMetaDataUserId");
+
                     b.Navigation("User");
                 });
 
@@ -1084,6 +1143,10 @@ namespace PharmacuticalE_Commerce.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__Order__userId__6FE99F9F");
 
+                    b.HasOne("PharmacuticalE_Commerce.Models.UserMetaData", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("UserMetaDataUserId");
+
                     b.Navigation("Cart");
 
                     b.Navigation("ShippingAddress");
@@ -1132,6 +1195,10 @@ namespace PharmacuticalE_Commerce.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__ShippingA__userI__6B24EA82");
 
+                    b.HasOne("PharmacuticalE_Commerce.Models.UserMetaData", null)
+                        .WithMany("ShippingAddresses")
+                        .HasForeignKey("UserMetaDataUserId");
+
                     b.Navigation("User");
                 });
 
@@ -1142,6 +1209,10 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasForeignKey("UserId")
                         .IsRequired()
                         .HasConstraintName("FK__UserCard__userId__75A278F5");
+
+                    b.HasOne("PharmacuticalE_Commerce.Models.UserMetaData", null)
+                        .WithMany("UserCards")
+                        .HasForeignKey("UserMetaDataUserId");
 
                     b.Navigation("User");
                 });
@@ -1215,6 +1286,17 @@ namespace PharmacuticalE_Commerce.Migrations
                 });
 
             modelBuilder.Entity("PharmacuticalE_Commerce.Models.User", b =>
+                {
+                    b.Navigation("Carts");
+
+                    b.Navigation("Orders");
+
+                    b.Navigation("ShippingAddresses");
+
+                    b.Navigation("UserCards");
+                });
+
+            modelBuilder.Entity("PharmacuticalE_Commerce.Models.UserMetaData", b =>
                 {
                     b.Navigation("Carts");
 
