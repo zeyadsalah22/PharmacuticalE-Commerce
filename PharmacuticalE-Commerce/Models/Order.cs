@@ -25,13 +25,16 @@ public partial class Order
     public decimal TotalAmount { get; set; }
 
 	public int TotalItems
-	{
-		get
-		{
-			return Cart.CartItems.Sum(item => item.Quantity);
-		}
-	}
-
+    {
+        get
+        {
+            if (Cart?.CartItems == null)
+            {
+                return 0;
+            }
+            return Cart.CartItems.Sum(item => item.Quantity);
+        }
+    }
 	public decimal? ShippingPrice { get; set; }
 
     public bool IsPaid { get; set; }

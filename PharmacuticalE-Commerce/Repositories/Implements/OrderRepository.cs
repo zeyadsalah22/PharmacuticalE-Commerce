@@ -39,7 +39,7 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
 
         public IEnumerable<Order> GetOrdersByUserId(string userId)
         {
-            return _context.Orders.Where(o => o.UserId == userId).ToList();
+            return _context.Orders.Include(o=>o.Cart).ThenInclude(oc=>oc.CartItems).Where(o => o.UserId == userId).ToList();
         }
 
         public void Update(Order entity)
