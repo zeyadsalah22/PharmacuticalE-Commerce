@@ -15,7 +15,6 @@ using PharmacuticalE_Commerce.Viewmodels;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
-    [Authorize]
 	public class ProductsController : Controller
 	{
 		[TempData]
