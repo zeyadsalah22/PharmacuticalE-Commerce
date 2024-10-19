@@ -92,7 +92,7 @@ namespace PharmacuticalE_Commerce.Controllers
 				ModelState.AddModelError(string.Empty, "Invalid UserName and/or Password");
 
 			}
-			return RedirectToAction(nameof(Login));
+			return View(loginViewModel);
 		}
 
 		[HttpPost]
@@ -118,7 +118,7 @@ namespace PharmacuticalE_Commerce.Controllers
 				}
 				ModelState.AddModelError(string.Empty, "Invalid UserName and/or Password");
 			}
-			return RedirectToAction(nameof(Login));
+			return View(loginViewModel);
 		}
 
 

@@ -43,9 +43,9 @@
 					@if (User.Identity.IsAuthenticated)
 					{
 						<form method="post" asp-action="AddCartItem" asp-controller="Carts" onsubmit="syncQuantity()">
-							@if (ViewBag.ErrorMessage != null)
+							@if (TempData["ErrorMessage"] != null)
 							{
-								<p class="text-danger">@ViewBag.quantityError</p>
+								<p class="text-danger">@TempData["ErrorMessage"]</p>
 							}
 							<div class="product-quantity">
 								<span>Quantity:</span>

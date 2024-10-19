@@ -117,36 +117,6 @@
     </div>
 </div>
 
-@* 
-<h2>Place Order</h2>
-
-<form asp-action="PlaceOrder" method="post">
-
-    <div class="form-group">
-        <label asp-for="AddressId" class="control-label"></label>
-        <select asp-for="AddressId" class="form-control" asp-items="ViewBag.ShippingAddresses">
-            <option value="0">No Default</option>
-        </select>
-        <span asp-validation-for="AddressId" class="text-danger"></span>
-    </div>
-
-    <h3>Or Enter New Shipping Address</h3>
-    <div>
-        <label asp-for="Address"></label>
-        <input asp-for="Address" />
-    </div>
-    <div>
-        <label asp-for="City"></label>
-        <input asp-for="City" />
-    </div>
-    <div>
-        <label asp-for="ZIP"></label>
-        <input asp-for="ZIP" />
-    </div>
-
-    <button type="submit">Place Order</button>
-</form>
- *@
 
  @section Mysection {
     <script>

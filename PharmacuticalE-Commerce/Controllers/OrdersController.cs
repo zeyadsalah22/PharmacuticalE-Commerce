@@ -185,14 +185,15 @@ namespace PharmacuticalE_Commerce.Controllers
 			var cart = await _cartRepository.GetActiveCartByUserAsync(userId);
 			if (cart == null || cart.CartItems.Count == 0)
 			{
-				return RedirectToAction("Index", "Carts");  // Redirect to the cart if it's empty
+				ModelState.AddModelError(string.Empty, "Your cart is empty");
+				return View(shippingAddress);  // Redirect to the cart if it's empty
 			}
 			foreach (var item in cart.CartItems)
 			{
 				if (item.Product.Stock < item.Quantity)
 				{
-					ViewBag.ErrorMessage = $"{item.Product.Name} in your cart is out of stock";
-					return RedirectToAction("Index", "Carts");
+					ModelState.AddModelError(string.Empty, $"{item.Product.Name} in your cart is out of stock");
+					return View(shippingAddress);
 				}
 			}
 			if (shippingAddress.AddressId != 0)
@@ -210,6 +211,7 @@ namespace PharmacuticalE_Commerce.Controllers
 				ModelState.Remove("User");
 				if (!ModelState.IsValid)
 				{
+					ModelState.AddModelError(string.Empty, "Please select or enter a shipping address");
 					return View(shippingAddress);
 				}
 				shippingAddress = new ShippingAddress

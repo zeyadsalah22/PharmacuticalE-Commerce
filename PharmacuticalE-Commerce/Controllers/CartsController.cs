@@ -42,7 +42,7 @@ namespace PharmacuticalE_Commerce.Controllers
 		{
 			if (quantity < 1)
 			{
-				ViewBag.ErrorMessage = "Quantity must be more than 1";
+				TempData["ErrorMessage"] = "Quantity must be more than 1";
 				return RedirectToAction("CardDetails", "Products", new { Id = productId });
 			}
 			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -63,7 +63,7 @@ namespace PharmacuticalE_Commerce.Controllers
 			}
 			if (quantity > product.Stock)
 			{
-				ViewBag.ErrorMessage = $"Proudct stock is {product.Stock}";
+				TempData["ErrorMessage"] = "Not enough stock.";
 				return RedirectToAction("CardDetails", "Products", new { Id = productId });
 
 			}
