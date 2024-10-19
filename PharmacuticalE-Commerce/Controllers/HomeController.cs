@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmacuticalE_Commerce.Models;
 using System.Diagnostics;
@@ -33,6 +34,7 @@ namespace PharmacuticalE_Commerce.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin,Moderator,HR")]
         public IActionResult StaffManagement()
         {
             return View();
