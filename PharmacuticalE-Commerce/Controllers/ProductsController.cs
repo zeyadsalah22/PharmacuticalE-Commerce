@@ -24,12 +24,14 @@ namespace PharmacuticalE_Commerce.Controllers
 		private readonly IProductRepository _repository;
         private readonly IDiscountRepository _discountRepository;
         private readonly ICategoryRepository _categoryRepository;
+		private readonly ICartItemRepository _cartItemRepository;
 
-		public ProductsController(IProductRepository repository, ICategoryRepository categoryRepository, IDiscountRepository discountRepository)
+		public ProductsController(IProductRepository repository, ICategoryRepository categoryRepository, IDiscountRepository discountRepository , ICartItemRepository cartItemRepository)
 		{
 			_repository = repository;
 			_categoryRepository = categoryRepository;
 			_discountRepository = discountRepository;
+			_cartItemRepository	= cartItemRepository;
 		}
 		[Authorize(Roles = "Admin,Moderator")]
 		// GET: Products
@@ -197,22 +199,30 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(product);
 		}
 
-		[Authorize(Roles = "Admin,Moderator")]
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			var product = await _repository.GetById(id);
-			if (product != null)
-			{
-				await _repository.Delete(id);
-				TempData["MessageDelete"] = $"Product {product.Name} Deleted Successfully";
-			}
+        [Authorize(Roles = "Admin,Moderator")]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var product = await _repository.GetById(id);
+            if (product != null)
+            {
+                // Check if the product is in any cart items
+                var cartItems = await _cartItemRepository.GetCartItemsByProductId(id);
+                if (cartItems.Any())
+                {
+                    TempData["Error"] = $"Product {product.Name} is in a cart. Delete associated cart items first.";
+                    return RedirectToAction("Delete", new { id });
+                }
 
-			return RedirectToAction(nameof(Index));
-		}
+                await _repository.Delete(id);
+                TempData["MessageDelete"] = $"Product {product.Name} Deleted Successfully";
+            }
+            return RedirectToAction(nameof(Index));
+        }
 
-		public async Task<IActionResult> Gallery(string sortOrder, string categoryFilter, string searchString, int pageNumber = 1, int pageSize = 5)
+
+        public async Task<IActionResult> Gallery(string sortOrder, string categoryFilter, string searchString, int pageNumber = 1, int pageSize = 5)
 		{
 			ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
 			ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "price";

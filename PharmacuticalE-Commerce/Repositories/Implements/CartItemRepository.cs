@@ -1,4 +1,5 @@
-﻿using PharmacuticalE_Commerce.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce.Repositories.Implements
@@ -39,6 +40,10 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
             _context.CartItems.Attach(entity);
             _context.CartItems.Update(entity);
             await _context.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<CartItem>> GetCartItemsByProductId(int productId)
+        {
+            return await _context.CartItems.Where(ci => ci.ProductId == productId).ToListAsync();
         }
     }
 }
