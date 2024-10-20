@@ -65,7 +65,13 @@
             <td>
                     <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-warning">Edit</a> &nbsp;&nbsp;&nbsp;
                     <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-info">Details</a> &nbsp;&nbsp;&nbsp;
-                    <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-danger">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-danger">Delete</a> &nbsp;&nbsp;&nbsp;
+                    <a asp-action="AddDiscount" asp-route-productId="@item.ProductId" class="btn btn-secondary">+Discount</a> &nbsp;&nbsp;&nbsp;
+                    @if (item.Discount != null && item.Discount.StartDate <= DateTime.Now && item.Discount.EndDate >= DateTime.Now)
+                    {
+                        <a asp-action="ConfirmDeleteDiscount" asp-route-productId="@item.ProductId" class="btn btn-danger">-Discount</a>
+
+                    }
             </td>
         </tr>
 }
@@ -94,29 +100,3 @@
    class="btn btn-default @nextDisabled">
     &gt
 </a>
-
-@* <div id="ProductsListContainer">
-</div>
-
-@section Mysection {
-    <script>
-        $(document).ready(function () {
-            loadPage(1);
-        });
-
-        function loadPage(page) {
-            $.ajax({
-                url: '/Products/GetProductsList',
-                type: 'GET',
-                data: { pageNumber: page },
-                success: function (result) {
-                    $('#ProductsListContainer').html(result);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        }
-    </script>
-}
- *@

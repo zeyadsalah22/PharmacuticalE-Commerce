@@ -17,9 +17,8 @@ public partial class ShippingAddress
 
     public string Phone { get; set; } = null!;
 
-    public bool? IsDefault { get; set; }
-
     public bool? IsDeleted { get; set; }
+    public bool? IsDefault { get; set; }
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 

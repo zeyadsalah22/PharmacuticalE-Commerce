@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmacuticalE_Commerce.Models;
 
@@ -11,9 +12,11 @@ using PharmacuticalE_Commerce.Models;
 namespace PharmacuticalE_Commerce.Migrations
 {
     [DbContext(typeof(PharmacySystemContext))]
-    partial class PharmacySystemContextModelSnapshot : ModelSnapshot
+    [Migration("20241020094112_editdiscounts")]
+    partial class editdiscounts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -267,8 +270,11 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasColumnType("int")
                         .HasColumnName("productId");
 
-                    b.Property<decimal?>("FinalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<bool>("IsSelected")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("isSelected");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int")
@@ -547,8 +553,8 @@ namespace PharmacuticalE_Commerce.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PromoCodeId"));
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<decimal?>("MaxDiscountAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("MinOrderAmount")
                         .HasColumnType("decimal(18,2)");
@@ -556,15 +562,6 @@ namespace PharmacuticalE_Commerce.Migrations
                     b.Property<string>("PromoCode1")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UsageLimit")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Value")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("PromoCodeId");
 
@@ -684,7 +681,10 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsDefault")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("isDefault");
 
                     b.Property<bool?>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -796,6 +796,52 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("PharmacuticalE_Commerce.Models.UserCard", b =>
+                {
+                    b.Property<int>("CardId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("cardId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CardId"));
+
+                    b.Property<string>("CardNo")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("cardNo");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime")
+                        .HasColumnName("expirationDate");
+
+                    b.Property<string>("HolderName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("holderName");
+
+                    b.Property<bool?>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("isDeleted");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("userId");
+
+                    b.HasKey("CardId", "CardNo")
+                        .HasName("PK__UserCard__E98DAD82B96B04DE");
+
+                    b.HasIndex(new[] { "UserId" }, "IX_UserCard_userId");
+
+                    b.HasIndex(new[] { "CardNo" }, "UQ__UserCard__4D66913A9FD915EA")
+                        .IsUnique();
+
+                    b.ToTable("UserCard", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1001,6 +1047,17 @@ namespace PharmacuticalE_Commerce.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PharmacuticalE_Commerce.Models.UserCard", b =>
+                {
+                    b.HasOne("PharmacuticalE_Commerce.Models.User", "User")
+                        .WithMany("UserCards")
+                        .HasForeignKey("UserId")
+                        .IsRequired()
+                        .HasConstraintName("FK__UserCard__userId__75A278F5");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PharmacuticalE_Commerce.Models.Branch", b =>
                 {
                     b.Navigation("Attendances");
@@ -1062,6 +1119,8 @@ namespace PharmacuticalE_Commerce.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("ShippingAddresses");
+
+                    b.Navigation("UserCards");
                 });
 #pragma warning restore 612, 618
         }

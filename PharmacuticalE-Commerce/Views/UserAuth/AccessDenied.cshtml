@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{
+
+    ViewData["Title"] = "Access Denied";
+    Layout = null;
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -26,18 +32,17 @@
         <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
-                @RenderBody()
-            <!-- /.login-card-body -->
+                <h1>Access Denied</h1>
+                <p>You do not have permission to access this resource.</p>
+                <!-- /.login-card-body -->
+            </div>
         </div>
-    </div>
-    <!-- /.login-box -->
-    <!-- jQuery -->
-    <script src="~/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="~/js/adminlte.min.js"></script>
-        @RenderSection("Scripts", required: false)
+        <!-- /.login-box -->
+        <!-- jQuery -->
+        <script src="~/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap 4 -->
+        <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="~/js/adminlte.min.js"></script>
 </body>
 </html>

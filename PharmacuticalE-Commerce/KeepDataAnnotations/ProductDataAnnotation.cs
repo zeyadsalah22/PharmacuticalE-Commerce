@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PharmacuticalE_Commerce.Models
 {
@@ -19,8 +19,8 @@ namespace PharmacuticalE_Commerce.Models
         [Display(Name = "Product Name")]
         public string Name { get; set; } = null!;
 
-        [Required(ErrorMessage = "Please Enter Your Price ")]
-        [Range(0,100000, ErrorMessage = "Price should be less than 100000")]
+        [Required(ErrorMessage = "Please Enter Your Price")]
+        [Range(0, 100000, ErrorMessage = "Price should be less than 100000")]
         public decimal Price { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Stock cannot be negative")]
@@ -41,8 +41,11 @@ namespace PharmacuticalE_Commerce.Models
 
         public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
-        public virtual Category Category { get; set; } = null!;
 
-        public virtual ICollection<Discount> Discounts { get; set; } = new List<Discount>();
+        // Add DiscountId as a foreign key
+        [ForeignKey("Discount")]
+        public int? DiscountId { get; set; }
+
+        public virtual Discount? Discount { get; set; }
     }
 }

@@ -51,6 +51,27 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Category.Name)
         </dd>
+        @if(Model.Discount!=null && Model.Discount.StartDate <= DateTime.Now && Model.Discount.EndDate >= DateTime.Now)
+        {
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Discount)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Discount.ValuePct)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Discount.StartDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Discount.StartDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Discount.EndDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Discount.EndDate)
+            </dd>
+        }
     </dl>
 </div>
 <div>

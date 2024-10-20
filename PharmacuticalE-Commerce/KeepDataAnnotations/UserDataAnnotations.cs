@@ -29,6 +29,5 @@ namespace PharmacuticalE_Commerce.Models
 
         public virtual ICollection<ShippingAddress> ShippingAddresses { get; set; } = new List<ShippingAddress>();
 
-        public virtual ICollection<UserCard> UserCards { get; set; } = new List<UserCard>();
     }
 }

@@ -2,19 +2,24 @@
 
 @{
     ViewBag.PageTitle = "Branches";
-    ViewBag.Cardtitle = "Branches List";
+    ViewBag.CardTitle = "Branches List";
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
-
 <p>
-    <a class="btn btn-primary" asp-action="Create">Add New Branch</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
 <table class="table" id="BranchesList">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
             </th>
             <th>Options</th>
         </tr>
@@ -26,8 +31,14 @@
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
-                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.BranchId">Edit</a> &nbsp;&nbsp;&nbsp;
-                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.BranchId">Delete</a>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.BranchId" class="btn btn-warning">Edit</a>&nbsp;&nbsp;&nbsp;
+                <a asp-action="Delete" asp-route-id="@item.BranchId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }

@@ -22,12 +22,14 @@ namespace PharmacuticalE_Commerce.Controllers
 		[TempData]
 		public string MessageDelete { get; set; }
 		private readonly IProductRepository _repository;
-		private readonly ICategoryRepository _categoryRepository;
+        private readonly IDiscountRepository _discountRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-		public ProductsController(IProductRepository repository, ICategoryRepository categoryRepository)
+		public ProductsController(IProductRepository repository, ICategoryRepository categoryRepository, IDiscountRepository discountRepository)
 		{
 			_repository = repository;
 			_categoryRepository = categoryRepository;
+			_discountRepository = discountRepository;
 		}
 		[Authorize(Roles = "Admin,Moderator")]
 		// GET: Products
@@ -146,8 +148,6 @@ namespace PharmacuticalE_Commerce.Controllers
 		}
 
 		[Authorize(Roles = "Admin,Moderator")]
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, [ModelBinder(BinderType = typeof(ProductBinder))] Product product)
@@ -265,17 +265,103 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View("_RelatedProductsPartial", products);
 		}
 
-		public async Task<IActionResult> GetCategoriesSideBar()
+		public async Task<IActionResult> GetOffers()
 		{
-			var categories = await _categoryRepository.GetParents();
-			return View("_CategoriesSideBarPartial", categories);
+			var products = await _repository.GetAll();
+			var offers = products.Where(p => (p.Discount != null && p.Discount.EndDate >= DateTime.Today && p.Discount.StartDate <= DateTime.Today))
+								.OrderByDescending(p => p.Discount.CreatedAt)
+								.Take(8);
+			return View("_OffersPartial", offers);
 		}
 
-		public async Task<IActionResult> GetCategoriesNav()
-		{
-			var categories = await _categoryRepository.GetParents();
-			return View("_CategoriesNavPartial", categories);
-		}
+        [HttpGet]
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> AddDiscount(int productId)
+        {
+            var product = await _repository.GetById(productId);
+            if (product == null)
+            {
+                return NotFound("Product not found.");
+            }
+
+            ViewBag.ProductName = product.Name; 
+            ViewBag.ProductId = product.ProductId; 
+            return View(new Discount()); 
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> AddDiscount(int productId, Discount discount)
+        {
+            var product = await _repository.GetById(productId);
+            if (product == null)
+            {
+                return NotFound("Product not found.");
+            }
+            ViewBag.ProductName = product.Name; 
+            ViewBag.ProductId = product.ProductId; 
+            
+			ModelState.Remove("Product");
+            discount.Product = product;
+			if (!ModelState.IsValid)
+            {
+                return View(discount); 
+            }
+            await _discountRepository.Create(discount);
+
+            product.DiscountId = discount.DiscountId;
+            await _repository.Update(product);
+
+            TempData["MessageAdd"] = $"Discount added successfully to {product.Name}";
+            return RedirectToAction(nameof(Details), new { id = productId });
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> ConfirmDeleteDiscount(int productId)
+        {
+            var product = await _repository.GetById(productId);
+            if (product == null || product.DiscountId == null)
+            {
+                return NotFound("Product or discount not found.");
+            }
+
+            var discount = await _discountRepository.GetById(product.DiscountId.Value);
+            if (discount == null)
+            {
+                return NotFound("Discount not found.");
+            }
+
+            ViewBag.ProductName = product.Name; 
+            ViewBag.ProductId = product.ProductId; 
+            return View(discount); 
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> DeleteDiscount(int productId)
+        {
+            var product = await _repository.GetById(productId);
+            if (product == null || product.DiscountId == null)
+            {
+                return NotFound("Product or discount not found.");
+            }
+
+            var discount = await _discountRepository.GetById(product.DiscountId.Value);
+            if (discount != null)
+            {
+                await _discountRepository.Delete(discount.DiscountId);
+            }
+
+            product.DiscountId = null;
+            await _repository.Update(product);
+
+            TempData["MessageDelete"] = $"Discount removed successfully from {product.Name}";
+            return RedirectToAction(nameof(Details), new { id = productId });
+        }
+
 
 
 		private async Task<bool> ProductExists(int id)
