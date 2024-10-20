@@ -103,7 +103,7 @@ namespace PharmacuticalE_Commerce.Controllers
 			if (await _attendanceRepository.AttendanceExists(emp.EmployeeId.ToString(), emp.ShiftId.ToString(), emp.BranchId.ToString(), emp.AttendedAt))
 			{
 				TempData["Error"] = "Attendance for this employee has already been recorded for today.";
-				return View("Attended", attendance);
+				return View("Attended", emp);
 			}
 
 			await _attendanceRepository.Create(emp);

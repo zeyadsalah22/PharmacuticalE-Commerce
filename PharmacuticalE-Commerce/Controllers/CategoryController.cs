@@ -104,35 +104,33 @@ namespace Categories.Controllers
 		}
 
 
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Moderator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			var category = await _repository.GetByIdWithParent(id);
-			if (category != null)
-			{
-				if (!category.ParentCategoryId.HasValue)
-				{
-					if ((await _repository.GetChildsByparent(category.CategoryId)).Count() > 0)
-					{
-						// Code logic here
-					}
-						ModelState.AddModelError("", "Delete the category childs first");
-						return View("Delete", category);
-					}
-					await _repository.Delete(id);
-				}
-				else
-				{
-					if ((await _productRepository.GetProductsByCategory(id)).Count() > 0)
-					{
-						ModelState.AddModelError("", "Delete the category products first");
-						return View("Delete", category);
-					}
-					await _repository.Delete(id);
-				}
-			return RedirectToAction(nameof(Index));
-		}
-	}
-}
+        {
+            var category = await _repository.GetByIdWithParent(id);
+            if (category != null)
+            {
+                if (!category.ParentCategoryId.HasValue)
+                {
+                    if ((await _repository.GetChildsByparent(category.CategoryId)).Count() > 0)
+                    {
+                        TempData["Error"] = "Delete the category childs first";
+                        return RedirectToAction("Delete", new { id });
+                    }
+                }
+                else
+                {
+                    if ((await _productRepository.GetProductsByCategory(id)).Count() > 0)
+                    {
+                        TempData["Error"] = "Delete the category products first";
+                        return RedirectToAction("Delete", new { id });
+                    }
+                }
+                await _repository.Delete(id);
+            }
+            return RedirectToAction(nameof(Index));
+
+        }
+    }}

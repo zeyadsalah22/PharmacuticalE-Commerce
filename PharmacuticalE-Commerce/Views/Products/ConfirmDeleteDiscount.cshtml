@@ -1,6 +1,8 @@
 ﻿@model PharmacuticalE_Commerce.Models.Discount
 
 @{
+    ViewBag.PageTitle = "Products";
+    ViewBag.CardTitle = "Delete Discount";
     ViewData["Title"] = "ConfirmDeleteDiscount";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
@@ -41,7 +43,7 @@
     <form asp-action="DeleteDiscount" method="post">
         <input type="hidden" asp-for="DiscountId" />
         <input type="hidden" name="productId" value="@ViewBag.ProductId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <input type="submit" value="Delete" class="btn btn-danger" /> 
         <a class="btn btn-secondary" asp-action="Index">Back to List</a>
     </form>
 </div>

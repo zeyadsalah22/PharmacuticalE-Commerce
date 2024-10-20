@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
+using PharmacuticalE_Commerce.Repositories.Implements;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 using PharmacuticalE_Commerce.ViewModels;
 
@@ -11,10 +12,12 @@ namespace PharmacuticalE_Commerce.Controllers
 	public class EmployeesController : Controller
 	{
 		private readonly IEmployeeRepository _employeeRepository;
+		private readonly IAttendanceRepository _attendanceRepository;
 
-		public EmployeesController(IEmployeeRepository employeeRepository)
+		public EmployeesController(IEmployeeRepository employeeRepository,IAttendanceRepository attendanceRepository)
 		{
 			_employeeRepository = employeeRepository;
+			_attendanceRepository = attendanceRepository;
 		}
 
 		public async Task<IActionResult> Index()
@@ -42,15 +45,26 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(viewModel);
 		}
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(EmployeeViewModel viewModel)
-		{
-			await _employeeRepository.Create(viewModel.Employee);
-			return RedirectToAction(nameof(Index));
-		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(EmployeeViewModel viewModel)
+        {
+            var existingEmployee = await _employeeRepository.GetEmployeeByEmail(viewModel.Employee.Email);
+            if (existingEmployee != null)
+            {
+                TempData["Error"] = "Email already exists.";
+                viewModel.Branches = await _employeeRepository.GetBranches();
+                viewModel.Roles = await _employeeRepository.GetRoles();
+                viewModel.Shifts = await _employeeRepository.GetShifts();
+                return View(viewModel);
+            }
 
-		public async Task<IActionResult> Edit(int? id)
+            await _employeeRepository.Create(viewModel.Employee);
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> Edit(int? id)
 		{
 			var employee = await _employeeRepository.GetById(id);
 
@@ -83,7 +97,14 @@ namespace PharmacuticalE_Commerce.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
-			await _employeeRepository.Delete(id);
+            var attendanceRecords = await _attendanceRepository.GetAttendanceByEmployeeId(id);
+            if (attendanceRecords.Any())
+            {
+                TempData["Error"] = "Cannot delete employee with attendance records.";
+                var employee = await _employeeRepository.GetById(id);
+                return View(employee);
+            }
+            await _employeeRepository.Delete(id);
 			return RedirectToAction(nameof(Index));
 		}
 
@@ -129,12 +150,22 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(shift);
 		}
 
-		[HttpPost, ActionName("ShiftDelete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> ShiftDeleteConfirmed(int id)
-		{
-			await _employeeRepository.DeleteShift(id);
-			return RedirectToAction(nameof(Shifts));
-		}
-	}
+        [HttpPost, ActionName("ShiftDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ShiftDeleteConfirmed(int id)
+        {
+            
+            var employees = await _employeeRepository.GetEmployeesByShiftId(id);
+            if (employees.Any())
+            {
+                TempData["Error"] = "Delete employees first.";
+                var shift = await _employeeRepository.GetShiftsById(id);
+                return View(shift);
+            }
+
+            await _employeeRepository.DeleteShift(id);
+            return RedirectToAction(nameof(Shifts));
+        }
+
+    }
 }

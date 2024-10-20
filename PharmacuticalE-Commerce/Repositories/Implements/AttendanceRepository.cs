@@ -105,5 +105,11 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
 		{
 			return await _context.Shifts.ToListAsync();
 		}
-	}
+
+        public async Task<IEnumerable<Attendance>> GetAttendanceByEmployeeId(int employeeId)
+        {
+            return await _context.Attendances.Where(a => a.EmployeeId == employeeId).ToListAsync();
+        }
+
+    }
 }
