@@ -40,8 +40,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
 
     public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<SalaryLog> SalaryLogs { get; set; }
-
     public virtual DbSet<Shift> Shifts { get; set; }
 
     public virtual DbSet<ShippingAddress> ShippingAddresses { get; set; }
@@ -342,34 +340,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
             entity.Property(e => e.Title)
                 .HasMaxLength(50)
                 .HasColumnName("title");
-        });
-
-        modelBuilder.Entity<SalaryLog>(entity =>
-        {
-            entity.HasKey(e => e.RecordId).HasName("PK__SalaryLo__D825195E34536BF0");
-
-            entity.ToTable("SalaryLog");
-
-            entity.HasIndex(e => e.EmployeeId, "IX_SalaryLog_employeeId");
-
-            entity.Property(e => e.RecordId).HasColumnName("recordId");
-            entity.Property(e => e.ChangeType)
-                .HasMaxLength(10)
-                .HasColumnName("changeType");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("createdAt");
-            entity.Property(e => e.EmployeeId).HasColumnName("employeeId");
-            entity.Property(e => e.IsPermanent).HasColumnName("isPermanent");
-            entity.Property(e => e.Value)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("value");
-
-            entity.HasOne(d => d.Employee).WithMany(p => p.SalaryLogs)
-                .HasForeignKey(d => d.EmployeeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__SalaryLog__emplo__32E0915F");
         });
 
         modelBuilder.Entity<Shift>(entity =>

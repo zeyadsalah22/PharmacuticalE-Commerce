@@ -33,7 +33,6 @@ public partial class Employee
 
     public virtual Role Role { get; set; } = null!;
 
-    public virtual ICollection<SalaryLog> SalaryLogs { get; set; } = new List<SalaryLog>();
 
     public virtual Shift? Shift { get; set; }
 }
