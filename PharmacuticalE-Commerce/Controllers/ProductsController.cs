@@ -35,7 +35,7 @@ namespace PharmacuticalE_Commerce.Controllers
 		}
 		[Authorize(Roles = "Admin,Moderator")]
 		// GET: Products
-		public async Task<IActionResult> Index(string sortOrder, string categoryFilter, string searchString, int pageNumber = 1, int pageSize = 5)
+		public async Task<IActionResult> Index(string sortOrder, string categoryFilter, string searchString, int pageNumber = 1, int pageSize = 12)
 		{
 			ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
 			ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "price";
