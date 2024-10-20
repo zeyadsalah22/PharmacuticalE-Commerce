@@ -188,7 +188,7 @@ namespace PharmacuticalE_Commerce.Controllers
 			if (cart == null || cart.CartItems.Count == 0)
 			{
 				ModelState.AddModelError(string.Empty, "Your cart is empty");
-				return View(shippingAddress);  // Redirect to the cart if it's empty
+				return View(shippingAddress);  
 			}
 			foreach (var item in cart.CartItems)
 			{
@@ -242,7 +242,6 @@ namespace PharmacuticalE_Commerce.Controllers
 			// Calculate the total price of the cart
 			decimal totalAmount = cart.CartItems.Sum(item => item.Quantity * (item.FinalPrice ?? item.Product.Price));
 
-			// Create a new order entity
 			var order = new Order
 			{
 				UserId = userId,
@@ -254,7 +253,6 @@ namespace PharmacuticalE_Commerce.Controllers
 				Status = OrderStatus.Pending
 			};
 
-			// Save the order to the database
 			await _orderRepository.Create(order);
 
 			// Clear the cart after placing the order

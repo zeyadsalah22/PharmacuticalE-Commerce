@@ -39,15 +39,6 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
             return await _context.Discounts.FirstOrDefaultAsync(d => d.DiscountId == id);
         }
 
-        //public async Task<IEnumerable<Discount>> GetDiscountsByProduct(int productId)
-        //{
-
-        //    return await _context.Discounts
-        //                         .Include(d => d.Product)
-        //                         .Where(d => d.ProductId == productId)
-        //                         .ToListAsync();
-        //}
-
         public async Task<Discount> GetByIdWithProduct(int? id)
         {
             return await _context.Discounts

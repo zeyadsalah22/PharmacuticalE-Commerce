@@ -112,7 +112,7 @@
 
 		function loadPage() {
 			$.ajax({
-				url: '/Products/GetCategoriesSideBar',
+				url: '/Category/GetCategoriesSideBar',
 				type: 'GET',
 				success: function (result) {
 					$('#productscategories').html(result);

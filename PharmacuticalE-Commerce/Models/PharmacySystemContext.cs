@@ -48,7 +48,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<UserCard> UserCards { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -396,9 +395,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
                 .HasColumnName("address");
-            entity.Property(e => e.IsDefault)
-                .HasDefaultValue(false)
-                .HasColumnName("isDefault");
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isDeleted");
@@ -435,38 +431,6 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
             //.HasColumnName("password");
         });
 
-        modelBuilder.Entity<UserCard>(entity =>
-        {
-            entity.HasKey(e => new { e.CardId, e.CardNo }).HasName("PK__UserCard__E98DAD82B96B04DE");
-
-            entity.ToTable("UserCard");
-
-            entity.HasIndex(e => e.UserId, "IX_UserCard_userId");
-
-            entity.HasIndex(e => e.CardNo, "UQ__UserCard__4D66913A9FD915EA").IsUnique();
-
-            entity.Property(e => e.CardId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("cardId");
-            entity.Property(e => e.CardNo)
-                .HasMaxLength(20)
-                .HasColumnName("cardNo");
-            entity.Property(e => e.ExpirationDate)
-                .HasColumnType("datetime")
-                .HasColumnName("expirationDate");
-            entity.Property(e => e.HolderName)
-                .HasMaxLength(100)
-                .HasColumnName("holderName");
-            entity.Property(e => e.IsDeleted)
-                .HasDefaultValue(false)
-                .HasColumnName("isDeleted");
-            entity.Property(e => e.UserId).HasColumnName("userId");
-
-            entity.HasOne(d => d.User).WithMany(p => p.UserCards)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__UserCard__userId__75A278F5");
-        });
 
         OnModelCreatingPartial(modelBuilder);
     }

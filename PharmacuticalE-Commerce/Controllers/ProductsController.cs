@@ -148,8 +148,6 @@ namespace PharmacuticalE_Commerce.Controllers
 		}
 
 		[Authorize(Roles = "Admin,Moderator")]
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, [ModelBinder(BinderType = typeof(ProductBinder))] Product product)
@@ -286,9 +284,9 @@ namespace PharmacuticalE_Commerce.Controllers
                 return NotFound("Product not found.");
             }
 
-            ViewBag.ProductName = product.Name; // Pass product name to the view if needed
-            ViewBag.ProductId = product.ProductId; // Pass product name to the view if needed
-            return View(new Discount()); // Return an empty Discount model for the view
+            ViewBag.ProductName = product.Name; 
+            ViewBag.ProductId = product.ProductId; 
+            return View(new Discount()); 
         }
 
 
@@ -301,20 +299,17 @@ namespace PharmacuticalE_Commerce.Controllers
             {
                 return NotFound("Product not found.");
             }
-            ViewBag.ProductName = product.Name; // Pass product name to the view if needed
-            ViewBag.ProductId = product.ProductId; // Pass product name to the view if needed
-            // Check if the EndDay is less than today's date
+            ViewBag.ProductName = product.Name; 
+            ViewBag.ProductId = product.ProductId; 
+            
 			ModelState.Remove("Product");
             discount.Product = product;
 			if (!ModelState.IsValid)
             {
-                return View(discount); // Return view with validation errors
+                return View(discount); 
             }
-
-            // Create the Discount
             await _discountRepository.Create(discount);
 
-            // Assign the DiscountId to the Product
             product.DiscountId = discount.DiscountId;
             await _repository.Update(product);
 
@@ -338,13 +333,12 @@ namespace PharmacuticalE_Commerce.Controllers
                 return NotFound("Discount not found.");
             }
 
-            ViewBag.ProductName = product.Name; // Pass product name to the view if needed
-            ViewBag.ProductId = product.ProductId; // Pass product name to the view if needed
-            return View(discount); // Return the discount to show details before deletion
+            ViewBag.ProductName = product.Name; 
+            ViewBag.ProductId = product.ProductId; 
+            return View(discount); 
         }
 
 
-        // Delete Discount from a Product
         [HttpPost]
         [Authorize(Roles = "Admin,Moderator")]
         public async Task<IActionResult> DeleteDiscount(int productId)
@@ -355,14 +349,12 @@ namespace PharmacuticalE_Commerce.Controllers
                 return NotFound("Product or discount not found.");
             }
 
-            // Retrieve and delete the discount
             var discount = await _discountRepository.GetById(product.DiscountId.Value);
             if (discount != null)
             {
                 await _discountRepository.Delete(discount.DiscountId);
             }
 
-            // Remove the DiscountId from the product
             product.DiscountId = null;
             await _repository.Update(product);
 
@@ -370,20 +362,6 @@ namespace PharmacuticalE_Commerce.Controllers
             return RedirectToAction(nameof(Details), new { id = productId });
         }
 
-
-       
-
-        public async Task<IActionResult> GetCategoriesSideBar()
-		{
-			var categories = await _categoryRepository.GetParents();
-			return View("_CategoriesSideBarPartial", categories);
-		}
-
-		public async Task<IActionResult> GetCategoriesNav()
-		{
-			var categories = await _categoryRepository.GetParents();
-			return View("_CategoriesNavPartial", categories);
-		}
 
 
 		private async Task<bool> ProductExists(int id)
