@@ -14,6 +14,10 @@
 			<div class="col-md-3">
 				<div class="product-item">
 					<div class="product-thumb">
+						@if (item.Discount != null && item.Discount.StartDate <= DateTime.Now && item.Discount.EndDate >= DateTime.Now)
+						{
+							<span class="bage">%@item.Discount.ValuePct</span>
+						}
 						<img style="width:250px; height:300px; object-fit:cover" src="@Url.Content("~/images/products/" + item.Photo)" alt="@item.Name" />
 						<div class="preview-meta">
 							<ul>
@@ -26,7 +30,14 @@
 					</div>
 					<div class="product-content">
 						<h4><a href="product-single.html">@item.Name</a></h4>
-						<p class="price">$@item.Price</p>
+						@if (item.Discount != null && item.Discount.StartDate <= DateTime.Now && item.Discount.EndDate >= DateTime.Now)
+						{
+							<p>$@(item.Price * (1 - (item.Discount?.ValuePct ?? 0) / 100)) </p>
+						}
+						else
+						{
+							<p class="price">$@item.Price</p>
+						}
 					</div>
 				</div>
 			</div>

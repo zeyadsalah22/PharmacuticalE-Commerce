@@ -21,14 +21,16 @@ namespace PharmacuticalE_Commerce.Controllers
 		private readonly IOrderRepository _orderRepository;
 		private readonly ICartRepository _cartRepository;
 		private readonly IShippingAddressRepository _shippingAddressRepository;
+		private readonly ICartItemRepository _cartitemRepository;
 		private readonly IConfiguration _configuration;
 		private readonly decimal ShippingPrice = 50.00M;
-		public OrdersController(IOrderRepository orderRepository, ICartRepository cartRepository, IShippingAddressRepository shippingAddressRepository, IConfiguration configuration)
+		public OrdersController(IOrderRepository orderRepository, ICartRepository cartRepository, IShippingAddressRepository shippingAddressRepository,	ICartItemRepository cartItemRepository, IConfiguration configuration)
 		{
 			_orderRepository = orderRepository;
 			_cartRepository = cartRepository;
 			_shippingAddressRepository = shippingAddressRepository;
 			_configuration = configuration;
+			_cartitemRepository = cartItemRepository;
 		}
 
 		// GET: Orders/Index
@@ -225,9 +227,20 @@ namespace PharmacuticalE_Commerce.Controllers
 				await _shippingAddressRepository.Create(shippingAddress);
 			}
 
-
+			foreach (CartItem item in cart.CartItems)
+			{
+				if(item.Product.Discount!=null && item.Product.Discount.StartDate <= DateTime.Now && item.Product.Discount.EndDate >= DateTime.Now)
+				{
+					item.FinalPrice = (1 - ((item.Product.Discount?.ValuePct ?? 0) / 100)) * item.Product.Price;
+                }
+				else
+				{
+					item.FinalPrice = item.Product.Price;
+				}
+				_cartitemRepository.Update(item);
+			}
 			// Calculate the total price of the cart
-			decimal totalAmount = cart.CartItems.Sum(item => item.Quantity * item.Product.Price);
+			decimal totalAmount = cart.CartItems.Sum(item => item.Quantity * (item.FinalPrice ?? item.Product.Price));
 
 			// Create a new order entity
 			var order = new Order

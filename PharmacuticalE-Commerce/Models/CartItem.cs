@@ -11,7 +11,7 @@ public partial class CartItem
 
     public int Quantity { get; set; }
 
-    public bool IsSelected { get; set; }
+    public decimal? FinalPrice { get; set; }
 
     public virtual Cart Cart { get; set; } = null!;
 

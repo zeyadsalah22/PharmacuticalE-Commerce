@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmacuticalE_Commerce.Models;
 
@@ -11,9 +12,11 @@ using PharmacuticalE_Commerce.Models;
 namespace PharmacuticalE_Commerce.Migrations
 {
     [DbContext(typeof(PharmacySystemContext))]
-    partial class PharmacySystemContextModelSnapshot : ModelSnapshot
+    [Migration("20241020094112_editdiscounts")]
+    partial class editdiscounts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -267,8 +270,11 @@ namespace PharmacuticalE_Commerce.Migrations
                         .HasColumnType("int")
                         .HasColumnName("productId");
 
-                    b.Property<decimal?>("FinalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<bool>("IsSelected")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("isSelected");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int")
@@ -547,8 +553,8 @@ namespace PharmacuticalE_Commerce.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PromoCodeId"));
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<decimal?>("MaxDiscountAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("MinOrderAmount")
                         .HasColumnType("decimal(18,2)");
@@ -556,15 +562,6 @@ namespace PharmacuticalE_Commerce.Migrations
                     b.Property<string>("PromoCode1")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UsageLimit")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Value")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("PromoCodeId");
 

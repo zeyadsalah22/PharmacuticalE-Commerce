@@ -17,5 +17,4 @@ public partial class Category
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
-    public virtual ICollection<Discount> Discounts { get; set; } = new List<Discount>();
 }

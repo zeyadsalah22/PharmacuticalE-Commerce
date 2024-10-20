@@ -31,7 +31,7 @@
                             <h4>Order Summary</h4>
                             <p>Order ID: @Model.OrderId</p>
                             <p>Date: @Model.OrderDate</p>
-                            <p>Total Price: @Model.TotalAmount.ToString("C")</p>
+                            <p>Total Price: $@Model.TotalAmount</p>
                         </div>
                         <div class="col-md-6">
                             <h4>Shipping Address</h4>
@@ -63,7 +63,7 @@
                                                 </div>
                                             </td>
                                             <td>@item.Quantity</td>
-                                            <td>@(item.Quantity * item.Product.Price)</td>
+                                            <td>@(item.Quantity * item.FinalPrice)</td>
                                         </tr>
                                     }
                                 </tbody>

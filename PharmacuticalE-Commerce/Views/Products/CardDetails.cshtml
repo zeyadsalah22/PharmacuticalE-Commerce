@@ -23,7 +23,18 @@
 			<div class="col-md-7">
 				<div class="single-product-details">
 					<h2>@Model.Name</h2>
-					<p class="product-price">$ @Model.Price</p>
+					@if (Model.Discount != null && Model.Discount.StartDate <= DateTime.Now && Model.Discount.EndDate >= DateTime.Now)
+					{
+						<p>$@((1 - (Model.Discount.ValuePct / 100)) * Model.Price) </p>
+					}
+					@if (Model.Discount != null && Model.Discount.StartDate <= DateTime.Now && Model.Discount.EndDate >= DateTime.Now)
+					{
+						<span>%@Model.Discount.ValuePct Sale</span>
+					}
+					else
+					{
+						<p class="price">$@Model.Price</p>
+					}
 
 					<p class="product-description mt-20">
 						@Model.Description

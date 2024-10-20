@@ -1,0 +1,35 @@
+﻿@model PharmacuticalE_Commerce.Models.Discount
+
+@{
+    ViewData["Title"] = "AddDiscount";
+    Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
+}
+
+<h2>Add Discount to @ViewBag.ProductName</h2>
+
+<form asp-action="AddDiscount" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" value="@ViewBag.ProductId" name="productId" />
+    <div class="form-group">
+        <label asp-for="ValuePct"></label>
+        <input asp-for="ValuePct" class="form-control" />
+        <span asp-validation-for="ValuePct" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" class="form-control" type="date" value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Discount</button>
+</form>
+<br />
+<a class="btn btn-secondary" asp-action="Index">Back to List</a>
+

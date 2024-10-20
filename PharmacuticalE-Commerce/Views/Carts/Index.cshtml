@@ -49,7 +49,16 @@
                                                         </div>
                                                     </td>
                                                     <td>@item.Quantity</td>
-                                                    <td>@(item.Quantity * item.Product.Price)</td>
+                                                    @if (item.Product.Discount != null && item.Product.Discount.StartDate <= DateTime.Now && item.Product.Discount.EndDate >= DateTime.Now)
+                                                    {
+                                                        var price = (1 - (item.Product.Discount.ValuePct / 100)) * item.Product.Price;
+                                                        <td>@(item.Quantity * price)</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@(item.Quantity * item.Product.Price)</td>
+
+                                                    }
                                                     <td>
                                                         <input type="hidden" name="cartId" value="@Model.CartId" />
                                                         <input type="hidden" name="productId" value="@item.ProductId" />
