@@ -44,22 +44,32 @@ namespace Categories.Controllers
 		}
 
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Moderator")]
         public async Task<IActionResult> Create(Category category)
-		{
-			if (category.ParentCategoryId == 0)
-			{
-				category.ParentCategoryId = null;
-			}
-			if (ModelState.IsValid)
-			{
-				await _repository.Create(category);
-				return RedirectToAction(nameof(Index));
-			}
-			return View(category);
-		}
+        {
+            if (category.ParentCategoryId == 0)
+            {
+                category.ParentCategoryId = null;
+            }
+
+            var existingCategory = await _repository.GetCategoryByName(category.Name);
+            if (existingCategory != null)
+            {
+                TempData["Error"] = "Category already exists.";
+                return View(category);
+            }
+
+            if (ModelState.IsValid)
+            {
+                await _repository.Create(category);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(category);
+        }
+
 
         [Authorize(Roles = "Admin,Moderator")]
         public async Task<IActionResult> Edit(int id)

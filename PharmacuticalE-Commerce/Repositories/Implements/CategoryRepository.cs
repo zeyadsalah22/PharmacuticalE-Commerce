@@ -62,5 +62,11 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
 		{
 			return await _context.Categories.Where(p => p.ParentCategoryId == parentId).ToListAsync();
 		}
+
+		public async Task<Category> GetCategoryByName(string name)
+		{
+			return await _context.Categories.FirstOrDefaultAsync(c => c.Name == name);
+
+		}
 	}
 }
