@@ -6,6 +6,12 @@
     ViewData["Title"] = "ShiftDelete";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
 
 <h3>Are you sure you want to delete @Model.FromTime To @Model.ToTime Shift?</h3>
 <div>

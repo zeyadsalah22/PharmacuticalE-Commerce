@@ -42,15 +42,26 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(viewModel);
 		}
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(EmployeeViewModel viewModel)
-		{
-			await _employeeRepository.Create(viewModel.Employee);
-			return RedirectToAction(nameof(Index));
-		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(EmployeeViewModel viewModel)
+        {
+            var existingEmployee = await _employeeRepository.GetEmployeeByEmail(viewModel.Employee.Email);
+            if (existingEmployee != null)
+            {
+                TempData["Error"] = "Email already exists.";
+                viewModel.Branches = await _employeeRepository.GetBranches();
+                viewModel.Roles = await _employeeRepository.GetRoles();
+                viewModel.Shifts = await _employeeRepository.GetShifts();
+                return View(viewModel);
+            }
 
-		public async Task<IActionResult> Edit(int? id)
+            await _employeeRepository.Create(viewModel.Employee);
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> Edit(int? id)
 		{
 			var employee = await _employeeRepository.GetById(id);
 
@@ -129,12 +140,21 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(shift);
 		}
 
-		[HttpPost, ActionName("ShiftDelete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> ShiftDeleteConfirmed(int id)
-		{
-			await _employeeRepository.DeleteShift(id);
-			return RedirectToAction(nameof(Shifts));
-		}
-	}
+        [HttpPost, ActionName("ShiftDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ShiftDeleteConfirmed(int id)
+        {
+            var employees = await _employeeRepository.GetEmployeesByShiftId(id);
+            if (employees.Any())
+            {
+                TempData["Error"] = "Delete employees first.";
+                var shift = await _employeeRepository.GetShiftsById(id);
+                return View(shift);
+            }
+
+            await _employeeRepository.DeleteShift(id);
+            return RedirectToAction(nameof(Shifts));
+        }
+
+    }
 }

@@ -14,6 +14,10 @@ namespace PharmacuticalE_Commerce.Repositories.Interfaces
 		Task UpdateShift(Shift shift);
 		Task DeleteShift(int? id);
 		Task CreateShift(Shift shift);
-	}
+        Task<IEnumerable<Employee>> GetEmployeesByBranchId(int branchId);
+        Task<Employee> GetEmployeeByEmail(string email);
+        Task<IEnumerable<Employee>> GetEmployeesByShiftId(int shiftId);
+        Task<IEnumerable<Employee>> GetEmployeesByRoleId(int roleId);
+    }
 
 }

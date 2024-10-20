@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
+using PharmacuticalE_Commerce.Repositories.Implements;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce.Controllers
@@ -10,10 +11,12 @@ namespace PharmacuticalE_Commerce.Controllers
 	public class BranchesController : Controller
 	{
 		private readonly IBranchRepository _branchRepository;
+		private readonly IEmployeeRepository _employeeRepository;
 
-		public BranchesController(IBranchRepository branchRepository)
+		public BranchesController(IBranchRepository branchRepository , IEmployeeRepository employeeRepository)
 		{
 			_branchRepository = branchRepository;
+			_employeeRepository = employeeRepository;
 		}
 
 		public async Task<IActionResult> Index()
@@ -55,12 +58,24 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(branch);
 		}
 
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			await _branchRepository.Delete(id);
-			return RedirectToAction(nameof(Index));
-		}
-	}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var employees = await _employeeRepository.GetEmployeesByBranchId(id);
+            if (employees.Any())
+            {
+				TempData["Error"] = "Delete employees first";
+                var branch = await _branchRepository.GetById(id);
+                return View(branch);
+            }
+
+            await _branchRepository.Delete(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+    }
 }

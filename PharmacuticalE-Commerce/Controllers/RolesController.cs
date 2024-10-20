@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
+using PharmacuticalE_Commerce.Repositories.Implements;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce.Controllers
@@ -15,10 +16,12 @@ namespace PharmacuticalE_Commerce.Controllers
 	public class RolesController : Controller
 	{
 		private readonly IRoleRepository _roleRepository;
+		private readonly IEmployeeRepository _employeeRepository;
 
-		public RolesController(IRoleRepository roleRepository)
+		public RolesController(IRoleRepository roleRepository,IEmployeeRepository employeeRepository)
 		{
 			_roleRepository = roleRepository;
+			_employeeRepository = employeeRepository;
 		}
 
 		public async Task<IActionResult> Index()
@@ -80,12 +83,21 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(role);
 		}
 
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			await _roleRepository.Delete(id);
-			return RedirectToAction(nameof(Index));
-		}
-	}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var employees = await _employeeRepository.GetEmployeesByRoleId(id);
+            if (employees.Any())
+            {
+                TempData["Error"] = "Delete employees with this role first.";
+                var role = await _roleRepository.GetById(id); 
+                return View(role);
+            }
+
+            await _roleRepository.Delete(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+    }
 }

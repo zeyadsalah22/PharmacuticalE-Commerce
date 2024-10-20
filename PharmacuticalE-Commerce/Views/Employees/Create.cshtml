@@ -7,6 +7,13 @@
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
 <form asp-action="Create" method="post">
     <div class="form-group">
         <label asp-for="Employee.Fname" class="control-label"></label>
