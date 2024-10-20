@@ -5,13 +5,18 @@ namespace PharmacuticalE_Commerce.Models;
 
 public partial class PromoCode
 {
+    public int PromoCodeId { get; set; }
     public string PromoCode1 { get; set; } = null!;
 
-    public int DiscountId { get; set; }
+    public DateTime StartDate { get; set; }
+
+    public DateTime EndDate { get; set; }
+
+    public decimal? Value { get; set; }
+
+    public int UsageLimit { get; set; }
 
     public decimal? MinOrderAmount { get; set; }
 
-    public decimal? MaxDiscountAmount { get; set; }
 
-    public virtual Discount Discount { get; set; } = null!;
 }

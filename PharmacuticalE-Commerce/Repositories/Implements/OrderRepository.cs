@@ -55,6 +55,7 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
 				.Include(o => o.Cart)
 				.ThenInclude(c => c.CartItems)
 				.ThenInclude(ci => ci.Product)
+				.ThenInclude(p => p.Discount)
 				.FirstOrDefaultAsync(o => o.OrderId == Id);
 		}
 	}

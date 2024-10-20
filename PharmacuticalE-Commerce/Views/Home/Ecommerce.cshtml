@@ -86,11 +86,31 @@
 	<div class="container">
 		<div class="row">
 			<div class="title text-center">
-				<h2>Offers</h2>
+				<h2>Latest Offers</h2>
 			</div>
 		</div>
-		<div class="row">
-@* 			@@include('blocks/product.htm')
- *@		</div>
+		<div class="row" id="offers-block">
+		</div>
 	</div>
 </section>
+
+@section Mysection {
+	<script>
+		$(document).ready(function () {
+			loadPage();
+		});
+
+		function loadPage() {
+			$.ajax({
+				url: '/Products/GetOffers',
+				type: 'GET',
+				success: function (result) {
+					$('#offers-block').html(result);
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+		}
+	</script>
+}

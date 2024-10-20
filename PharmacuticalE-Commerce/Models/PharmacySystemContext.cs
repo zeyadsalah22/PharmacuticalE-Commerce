@@ -127,9 +127,7 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
 
             entity.Property(e => e.CartId).HasColumnName("cartId");
             entity.Property(e => e.ProductId).HasColumnName("productId");
-            entity.Property(e => e.IsSelected)
-                .HasDefaultValue(false)
-                .HasColumnName("isSelected");
+           
             entity.Property(e => e.Quantity).HasColumnName("quantity");
 
             entity.HasOne(d => d.Cart).WithMany(p => p.CartItems)
@@ -185,45 +183,9 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
                 .HasColumnType("decimal(5, 2)")
                 .HasColumnName("valuePct");
 
-            entity.HasMany(d => d.Categories).WithMany(p => p.Discounts)
-                .UsingEntity<Dictionary<string, object>>(
-                    "CategoryDiscount",
-                    r => r.HasOne<Category>().WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__CategoryD__categ__01142BA1"),
-                    l => l.HasOne<Discount>().WithMany()
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__CategoryD__disco__00200768"),
-                    j =>
-                    {
-                        j.HasKey("DiscountId", "CategoryId").HasName("PK__Category__402FA57B117933E4");
-                        j.ToTable("CategoryDiscount");
-                        j.HasIndex(new[] { "CategoryId" }, "IX_CategoryDiscount_categoryId");
-                        j.IndexerProperty<int>("DiscountId").HasColumnName("discountId");
-                        j.IndexerProperty<int>("CategoryId").HasColumnName("categoryId");
-                    });
+            
 
-            entity.HasMany(d => d.Products).WithMany(p => p.Discounts)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ProductDiscount",
-                    r => r.HasOne<Product>().WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__ProductDi__produ__7D439ABD"),
-                    l => l.HasOne<Discount>().WithMany()
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__ProductDi__disco__7C4F7684"),
-                    j =>
-                    {
-                        j.HasKey("DiscountId", "ProductId").HasName("PK__ProductD__60C20770C507E758");
-                        j.ToTable("ProductDiscount");
-                        j.HasIndex(new[] { "ProductId" }, "IX_ProductDiscount_productId");
-                        j.IndexerProperty<int>("DiscountId").HasColumnName("discountId");
-                        j.IndexerProperty<int>("ProductId").HasColumnName("productId");
-                    });
+            
         });
 
 
@@ -364,30 +326,7 @@ public partial class PharmacySystemContext : IdentityDbContext<User>
         });
 
 
-        modelBuilder.Entity<PromoCode>(entity =>
-        {
-            entity.HasKey(e => e.PromoCode1).HasName("PK__PromoCod__C7120D046F08FC51");
-
-            entity.ToTable("PromoCode");
-
-            entity.HasIndex(e => e.DiscountId, "IX_PromoCode_discountId");
-
-            entity.Property(e => e.PromoCode1)
-                .HasMaxLength(50)
-                .HasColumnName("promoCode");
-            entity.Property(e => e.DiscountId).HasColumnName("discountId");
-            entity.Property(e => e.MaxDiscountAmount)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("maxDiscountAmount");
-            entity.Property(e => e.MinOrderAmount)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("minOrderAmount");
-
-            entity.HasOne(d => d.Discount).WithMany(p => p.PromoCodes)
-                .HasForeignKey(d => d.DiscountId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PromoCode__disco__03F0984C");
-        });
+        
 
         modelBuilder.Entity<Role>(entity =>
         {

@@ -40,10 +40,12 @@ namespace PharmacuticalE_Commerce
 
             builder.Services.AddScoped<IProductRepository,ProductRepository>();
             builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
+            builder.Services.AddScoped<IDiscountRepository,DiscountRepository>();
             builder.Services.AddScoped<IBranchRepository, BranchRepository>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IAttendanceRepository,AttendanceRepository>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
+            builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IShippingAddressRepository, ShippingAddressRepository>();

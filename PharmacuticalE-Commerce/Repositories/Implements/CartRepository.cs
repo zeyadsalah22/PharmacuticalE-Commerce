@@ -20,6 +20,7 @@ namespace PharmacuticalE_Commerce.Repositories
             return await _context.Carts
                                  .Include(c => c.CartItems)
                                  .ThenInclude(ci => ci.Product)
+                                 .ThenInclude(p => p.Discount)
                                  .FirstOrDefaultAsync(c => c.CartId == cartId);
         }
 
@@ -28,6 +29,7 @@ namespace PharmacuticalE_Commerce.Repositories
             return await _context.Carts
                                  .Include(c => c.CartItems)
                                  .ThenInclude(ci => ci.Product)
+                                 .ThenInclude(p => p.Discount)
                                  .FirstOrDefaultAsync(c => c.UserId == userId && c.Status == true);  // Only return active cart
         }
 
@@ -47,6 +49,7 @@ namespace PharmacuticalE_Commerce.Repositories
 
         public async Task UpdateCartAsync(Cart cart)
         {
+            _context.Carts.Attach(cart);
             _context.Carts.Update(cart);
             await _context.SaveChangesAsync();
         }

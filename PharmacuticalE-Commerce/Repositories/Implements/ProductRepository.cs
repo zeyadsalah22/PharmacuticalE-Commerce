@@ -28,27 +28,27 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
 
 		public async Task<IEnumerable<Product>> GetAll()
 		{
-			return await _context.Products.ToListAsync();
+			return await _context.Products.Include(p=>p.Discount).ToListAsync();
 		}
 
 		public async Task<Product> GetById(int? id)
 		{
-			return await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
+			return await _context.Products.Include(p => p.Discount).FirstOrDefaultAsync(p => p.ProductId == id);
 		}
 
 		public async Task<IEnumerable<Product>> GetAllWithCategories()
 		{
-			return await _context.Products.Include(p => p.Category).Include(p => p.Category.ParentCategory).ToListAsync();
+			return await _context.Products.Include(p => p.Discount).Include(p => p.Category).Include(p => p.Category.ParentCategory).ToListAsync();
 		}
 
 		public async Task<Product> GetByIdWithCategories(int? id)
 		{
-			return await _context.Products.Include(p => p.Category).Include(p => p.Category.ParentCategory).FirstOrDefaultAsync(m => m.ProductId == id);
+			return await _context.Products.Include(p => p.Discount).Include(p => p.Category).Include(p => p.Category.ParentCategory).FirstOrDefaultAsync(m => m.ProductId == id);
 		}
 
 		public async Task<IEnumerable<Product>> GetProductsByCategory(int categoryId)
 		{
-			return await _context.Products.Include(p => p.Category).Where(p => p.CategoryId == categoryId).ToListAsync();
+			return await _context.Products.Include(p => p.Discount).Include(p => p.Category).Where(p => p.CategoryId == categoryId).ToListAsync();
 		}
 
 		public async Task Update(Product entity)

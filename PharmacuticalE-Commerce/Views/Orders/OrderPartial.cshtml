@@ -14,7 +14,18 @@
             </a>
             <div class="media-body">
                 <h4 class="media-heading"><a asp-action="CardDetails" asp-controller="Products" asp-route-id="@item.Product.ProductId">@item.Product.Name</a></h4>
-                <p class="price">@item.Quantity x @item.Product.Price.ToString("C")</p>
+                @if (item.Product.Discount != null && item.Product.Discount.StartDate <= DateTime.Now && item.Product.Discount.EndDate >= DateTime.Now)
+                {
+                    var price = (1 - (item.Product.Discount.ValuePct / 100)) * item.Product.Price;
+                    <p>@(item.Quantity * price)</p>
+                    <p class="price">@item.Quantity x $@price</p>
+
+                }
+                else
+                {
+                    <p>@(item.Quantity * item.Product.Price)</p>
+                    <p class="price">@item.Quantity x @item.Product.Price.ToString("C")</p>
+                }
                 <form asp-action="RemoveCartItem" asp-controller="Carts" method="post">
                     <input type="hidden" name="cartId" value="@Model.CartId" />
                     <input type="hidden" name="productId" value="@item.ProductId" />
