@@ -6,6 +6,12 @@
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_StaffManagementLayout.cshtml";
 }
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
 
 <h3>@($"Are you sure you want to delete {Model.Fname} {Model.Lname}?")</h3>
 

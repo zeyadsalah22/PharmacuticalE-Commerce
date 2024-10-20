@@ -14,5 +14,6 @@ namespace PharmacuticalE_Commerce.Repositories.Interfaces
 		Task<IEnumerable<Shift>> GetallShifts();
 		Task<string> GetBranchAddress(int id);
 		Task<bool> AttendanceExists(string employeeId, string shiftId, string branchId, DateTime attendedAt);
-	}
+        Task<IEnumerable<Attendance>> GetAttendanceByEmployeeId(int employeeId);
+    }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
+using PharmacuticalE_Commerce.Repositories.Implements;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 using PharmacuticalE_Commerce.ViewModels;
 
@@ -11,10 +12,12 @@ namespace PharmacuticalE_Commerce.Controllers
 	public class EmployeesController : Controller
 	{
 		private readonly IEmployeeRepository _employeeRepository;
+		private readonly IAttendanceRepository _attendanceRepository;
 
-		public EmployeesController(IEmployeeRepository employeeRepository)
+		public EmployeesController(IEmployeeRepository employeeRepository,IAttendanceRepository attendanceRepository)
 		{
 			_employeeRepository = employeeRepository;
+			_attendanceRepository = attendanceRepository;
 		}
 
 		public async Task<IActionResult> Index()
@@ -94,7 +97,14 @@ namespace PharmacuticalE_Commerce.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
-			await _employeeRepository.Delete(id);
+            var attendanceRecords = await _attendanceRepository.GetAttendanceByEmployeeId(id);
+            if (attendanceRecords.Any())
+            {
+                TempData["Error"] = "Cannot delete employee with attendance records.";
+                var employee = await _employeeRepository.GetById(id);
+                return View(employee);
+            }
+            await _employeeRepository.Delete(id);
 			return RedirectToAction(nameof(Index));
 		}
 
@@ -144,6 +154,7 @@ namespace PharmacuticalE_Commerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ShiftDeleteConfirmed(int id)
         {
+            
             var employees = await _employeeRepository.GetEmployeesByShiftId(id);
             if (employees.Any())
             {
