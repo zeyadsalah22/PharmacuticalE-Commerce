@@ -6,7 +6,7 @@ using PharmacuticalE_Commerce.Repositories.Implements;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 namespace Categories.Controllers
 {
-    [Authorize(Roles = "Admin,Moderator")]
+    
 	public class CategoryController : Controller
 	{
 		private readonly ICategoryRepository _repository;
@@ -18,15 +18,15 @@ namespace Categories.Controllers
 			_productRepository = productRepository;
 		}
 
-
-		public async Task<IActionResult> Index()
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> Index()
 		{
 			var categories = await _repository.GetAll();
 			return View(categories);
 		}
 
-
-		public async Task<IActionResult> Details(int id)
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> Details(int id)
 		{
 			var category = await _repository.GetByIdWithParent(id);
 			if (category == null)
@@ -36,8 +36,8 @@ namespace Categories.Controllers
 			return View(category);
 		}
 
-
-		public async Task<IActionResult> Create()
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> Create()
 		{
 			ViewData["CategoryId"] = new SelectList(await _repository.GetParents(), "CategoryId", "Name");
 			return View();
@@ -46,7 +46,8 @@ namespace Categories.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(Category category)
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> Create(Category category)
 		{
 			if (category.ParentCategoryId == 0)
 			{
@@ -60,8 +61,8 @@ namespace Categories.Controllers
 			return View(category);
 		}
 
-
-		public async Task<IActionResult> Edit(int id)
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> Edit(int id)
 		{
 			var category = await _repository.GetByIdWithParent(id);
 			if (category == null)
@@ -76,7 +77,8 @@ namespace Categories.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(Category category)
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> Edit(Category category)
 		{
 			if (category.ParentCategoryId == 0)
 			{
@@ -90,8 +92,8 @@ namespace Categories.Controllers
 			return View(category);
 		}
 
-
-		public async Task<IActionResult> Delete(int id)
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> Delete(int id)
 		{
 			var category = await _repository.GetByIdWithParent(id);
 			if (category == null)
@@ -104,7 +106,8 @@ namespace Categories.Controllers
 
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
+        [Authorize(Roles = "Admin,Moderator")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
 		{
 			var category = await _repository.GetByIdWithParent(id);
 			if (category != null)

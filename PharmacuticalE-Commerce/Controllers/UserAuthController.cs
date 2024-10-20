@@ -51,7 +51,7 @@ namespace PharmacuticalE_Commerce.Controllers
 					await _userManager.AddToRoleAsync(user, "Customer");
 					//cookies
 					await _signInManager.SignInAsync(user, false);
-					return RedirectToAction("Ecommerce", "Home");
+					return RedirectToAction("Index", "Home");
 				}
 				else
 				{
@@ -93,7 +93,7 @@ namespace PharmacuticalE_Commerce.Controllers
                         if (roles.Contains("Customer"))
                         {
                             // Redirect to e-commerce homepage
-                            return RedirectToAction("Ecommerce", "Home");
+                            return RedirectToAction("Index", "Home");
                         }
                         else
                         {
@@ -123,7 +123,7 @@ namespace PharmacuticalE_Commerce.Controllers
 						var roles = await _userManager.GetRolesAsync(user);
 						if (roles.Contains("Customer"))
 						{
-							return RedirectToAction("Ecommerce", "Home");
+							return RedirectToAction("Index", "Home");
 						}
 
 						await _signInManager.SignInAsync(user, loginViewModel.RememberMe);
