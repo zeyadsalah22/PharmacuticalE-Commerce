@@ -362,7 +362,17 @@ namespace PharmacuticalE_Commerce.Controllers
             return RedirectToAction(nameof(Details), new { id = productId });
         }
 
+		public async Task<IActionResult> GetCategoriesSideBar()
+		{
+			var categories = await _categoryRepository.GetParents();
+			return View("_CategoriesSideBarPartial", categories);
+		}
 
+		public async Task<IActionResult> GetCategoriesNav()
+		{
+			var categories = await _categoryRepository.GetParents();
+			return View("_CategoriesNavPartial", categories);
+		}
 
 		private async Task<bool> ProductExists(int id)
 		{

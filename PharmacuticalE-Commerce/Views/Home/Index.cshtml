@@ -1,1 +1,116 @@
-﻿<h2>Home Page</h2>
+﻿
+@{
+    ViewData["Title"] = "Ecommerce";
+    Layout = "~/Views/Shared/_EcommerceLayout.cshtml";
+}
+
+
+<div class="hero-slider">
+	<div class="slider-item th-fullpage hero-area" style="background-image: url('@Url.Content("~/images/slider/slider-1.jpeg")');">
+		<div class="container">
+            <div class="row">
+                <div class="col-lg-8 text-center">
+                    <p data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".1">PRODUCTS</p>
+					<h1 data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".5">Bringing Wellness to <br> Your Doorstep.</h1>
+                    <a data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".8" class="btn" asp-action="Gallery" asp-controller="Products">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="slider-item th-fullpage hero-area" style="background-image: url('@Url.Content("~/images/slider/slider-2.jpeg")');">
+		<div class="container">
+            <div class="row">
+                <div class="col-lg-8 text-left">
+                    <p data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".1">PRODUCTS</p>
+					<h1 data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".5">Bringing Wellness to <br> Your Doorstep.</h1>
+					<a data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".8" class="btn" asp-action="Gallery" asp-controller="Products">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="slider-item th-fullpage hero-area" style="background-image: url('@Url.Content("~/images/slider/slider-3.jpeg")');">
+		<div class="container">
+            <div class="row">
+                <div class="col-lg-8 text-right">
+                    <p data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".1">PRODUCTS</p>
+					<h1 data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".5">Bringing Wellness to <br> Your Doorstep.</h1>
+					<a data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".8" class="btn" asp-action="Gallery" asp-controller="Products">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="product-category section">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="title text-center">
+					<h2>Most On Demand</h2>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="category-box">
+					<a asp-action="Gallery" asp-route-categoryFilter="Medicines" asp-controller="Products">
+						<img src="~/images/shop/category/category-1.jpeg" alt="" />
+						<div class="content">
+							<h3>Medicines</h3>
+							<p>Safe Medications, Fast Relief</p>
+						</div>
+					</a>
+				</div>
+				<div class="category-box">
+					<a asp-action="Gallery" asp-route-categoryFilter="Vitamins & Nutritional Supplements" asp-controller="Products">
+						<img src="~/images/shop/category/category-2.jpeg" alt="" />
+						<div class="content">
+							<h3>Vitamins & Nutritional Supplements</h3>
+							<p>Fuel Your Body, Boost Your Health</p>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="category-box category-box-2">
+					<a asp-action="Gallery" asp-route-categoryFilter="Cosmetics & Personal Care" asp-controller="Products">
+						<img src="~/images/shop/category/category-3.jpeg" alt="" />
+						<div class="content">
+							<h3>Cosmetics & Personal Care	</h3>
+							<p>Feel Confident, Look Radiant</p>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="products section bg-gray">
+	<div class="container">
+		<div class="row">
+			<div class="title text-center">
+				<h2>Latest Offers</h2>
+			</div>
+		</div>
+		<div class="row" id="offers-block">
+		</div>
+	</div>
+</section>
+
+@section Mysection {
+	<script>
+		$(document).ready(function () {
+			loadPage();
+		});
+
+		function loadPage() {
+			$.ajax({
+				url: '/Products/GetOffers',
+				type: 'GET',
+				success: function (result) {
+					$('#offers-block').html(result);
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+		}
+	</script>
+}
