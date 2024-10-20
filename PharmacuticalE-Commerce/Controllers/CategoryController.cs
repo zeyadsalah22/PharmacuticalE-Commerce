@@ -131,17 +131,5 @@ namespace Categories.Controllers
 				}
 			return RedirectToAction(nameof(Index));
 		}
-
-		public async Task<IActionResult> GetCategoriesSideBar()
-		{
-			var categories = await _repository.GetParents();
-			return View("_CategoriesSideBarPartial", categories);
-		}
-
-		public async Task<IActionResult> GetCategoriesNav()
-		{
-			var categories = await _repository.GetParents();
-			return View("_CategoriesNavPartial", categories);
-		}
 	}
 }
