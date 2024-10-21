@@ -28,7 +28,7 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
 
 		public async Task<IEnumerable<Product>> GetAll()
 		{
-			return await _context.Products.Include(p=>p.Discount).ToListAsync();
+			return await _context.Products.Include(p => p.Discount).ToListAsync();
 		}
 
 		public async Task<Product> GetById(int? id)

@@ -1,21 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories;
-using PharmacuticalE_Commerce.Repositories.Implements;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
-using Stripe.Checkout;
-using Stripe;
-using System.Net;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
-    [Authorize]
+	[Authorize]
 	public class OrdersController : Controller
 	{
 		private readonly IOrderRepository _orderRepository;
@@ -24,7 +17,7 @@ namespace PharmacuticalE_Commerce.Controllers
 		private readonly ICartItemRepository _cartitemRepository;
 		private readonly IConfiguration _configuration;
 		private readonly decimal ShippingPrice = 50.00M;
-		public OrdersController(IOrderRepository orderRepository, ICartRepository cartRepository, IShippingAddressRepository shippingAddressRepository,	ICartItemRepository cartItemRepository, IConfiguration configuration)
+		public OrdersController(IOrderRepository orderRepository, ICartRepository cartRepository, IShippingAddressRepository shippingAddressRepository, ICartItemRepository cartItemRepository, IConfiguration configuration)
 		{
 			_orderRepository = orderRepository;
 			_cartRepository = cartRepository;
@@ -33,7 +26,6 @@ namespace PharmacuticalE_Commerce.Controllers
 			_cartitemRepository = cartItemRepository;
 		}
 
-		// GET: Orders/Index
 		public async Task<IActionResult> Index()
 		{
 			var orders = await _orderRepository.GetAll();
@@ -54,7 +46,6 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(orders);
 		}
 
-		// GET: Orders/Details/5
 		public async Task<IActionResult> Details(int id)
 		{
 			var order = await _orderRepository.GetByIdWithDetails(id);
@@ -88,7 +79,6 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(cart);
 		}
 
-		// GET: Orders/Edit/5
 		public async Task<IActionResult> Edit(int id)
 		{
 			var order = await _orderRepository.GetByIdWithDetails(id);
@@ -101,7 +91,6 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(order);
 		}
 
-		// POST: Orders/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, int ShippingAddressId, OrderStatus Status)
@@ -145,7 +134,6 @@ namespace PharmacuticalE_Commerce.Controllers
 
 		}
 
-		// GET: Orders/Delete/5
 		public async Task<IActionResult> Delete(int id)
 		{
 			var order = await _orderRepository.GetById(id);
@@ -157,7 +145,6 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(order);
 		}
 
-		// POST: Orders/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
@@ -183,12 +170,11 @@ namespace PharmacuticalE_Commerce.Controllers
 		{
 			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-			// Get the active cart for the user
 			var cart = await _cartRepository.GetActiveCartByUserAsync(userId);
 			if (cart == null || cart.CartItems.Count == 0)
 			{
 				ModelState.AddModelError(string.Empty, "Your cart is empty");
-				return View(shippingAddress);  
+				return View(shippingAddress);
 			}
 			foreach (var item in cart.CartItems)
 			{
@@ -229,10 +215,10 @@ namespace PharmacuticalE_Commerce.Controllers
 
 			foreach (CartItem item in cart.CartItems)
 			{
-				if(item.Product.Discount!=null && item.Product.Discount.StartDate <= DateTime.Now && item.Product.Discount.EndDate >= DateTime.Now)
+				if (item.Product.Discount != null && item.Product.Discount.StartDate <= DateTime.Now && item.Product.Discount.EndDate >= DateTime.Now)
 				{
 					item.FinalPrice = (1 - ((item.Product.Discount?.ValuePct ?? 0) / 100)) * item.Product.Price;
-                }
+				}
 				else
 				{
 					item.FinalPrice = item.Product.Price;

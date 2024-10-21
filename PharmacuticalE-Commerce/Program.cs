@@ -51,16 +51,6 @@ namespace PharmacuticalE_Commerce
             builder.Services.AddScoped<IShippingAddressRepository, ShippingAddressRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-            //builder.Services.AddIdentity<User, IdentityRole>()
-            //    .AddEntityFrameworkStores<PharmacySystemContext>();
-
-            //builder.Services.AddDbContext<PharmacySystemContext>(options =>
-            //{
-            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            //});
-
-
-
 
             var app = builder.Build();
 

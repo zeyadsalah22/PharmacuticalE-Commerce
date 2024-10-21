@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
+using System.Security.Claims;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
@@ -20,7 +15,6 @@ namespace PharmacuticalE_Commerce.Controllers
 			_repository = repository;
 		}
 
-		// GET: ShippingAddresses
 		public async Task<IActionResult> Index()
 		{
 			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -29,7 +23,6 @@ namespace PharmacuticalE_Commerce.Controllers
 		}
 
 
-		// GET: ShippingAddresses/Edit/5
 		public async Task<IActionResult> Edit(int? id)
 		{
 			if (id == null)
@@ -45,9 +38,6 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(shippingAddress);
 		}
 
-		// POST: ShippingAddresses/Edit/5
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, [Bind("AddressId,UserId,Address,City,ZIP,Phone,IsDefault,IsDeleted")] ShippingAddress shippingAddress)
@@ -80,7 +70,6 @@ namespace PharmacuticalE_Commerce.Controllers
 		}
 
 
-		// POST: ShippingAddresses/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
