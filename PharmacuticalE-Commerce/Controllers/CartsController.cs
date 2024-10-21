@@ -4,11 +4,10 @@ using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
-    [Authorize]
+	[Authorize]
 	public class CartsController : Controller
 	{
 		private readonly ICartRepository _cartRepository;

@@ -109,24 +109,24 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
 				await _context.SaveChangesAsync();
 			}
 		}
-        public async Task<IEnumerable<Employee>> GetEmployeesByBranchId(int branchId)
-        {
-            return await _context.Employees.Where(e => e.BranchId == branchId).ToListAsync();
-        }
+		public async Task<IEnumerable<Employee>> GetEmployeesByBranchId(int branchId)
+		{
+			return await _context.Employees.Where(e => e.BranchId == branchId).ToListAsync();
+		}
 
-        public async Task<Employee> GetEmployeeByEmail(string email)
-        {
-            return await _context.Employees.FirstOrDefaultAsync(e => e.Email == email);
-        }
-        public async Task<IEnumerable<Employee>> GetEmployeesByShiftId(int shiftId)
-        {
-            return await _context.Employees.Where(e => e.ShiftId == shiftId).ToListAsync();
-        }
-        public async Task<IEnumerable<Employee>> GetEmployeesByRoleId(int roleId)
-        {
-            return await _context.Employees.Where(e => e.RoleId == roleId).ToListAsync();
-        }
+		public async Task<Employee> GetEmployeeByEmail(string email)
+		{
+			return await _context.Employees.FirstOrDefaultAsync(e => e.Email == email);
+		}
+		public async Task<IEnumerable<Employee>> GetEmployeesByShiftId(int shiftId)
+		{
+			return await _context.Employees.Where(e => e.ShiftId == shiftId).ToListAsync();
+		}
+		public async Task<IEnumerable<Employee>> GetEmployeesByRoleId(int roleId)
+		{
+			return await _context.Employees.Where(e => e.RoleId == roleId).ToListAsync();
+		}
 
 
-    }
+	}
 }

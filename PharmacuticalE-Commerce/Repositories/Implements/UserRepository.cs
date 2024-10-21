@@ -157,7 +157,7 @@ namespace PharmacuticalE_Commerce.Repositories.Implements
 					Email = user.Email,
 					Username = user.UserName,
 					PhoneNumber = user.PhoneNumber,
-					RoleNames = roles // Add all roles for debugging
+					RoleNames = roles
 				};
 
 				if (roles.Contains("Admin") || roles.Contains("HR") || roles.Contains("Moderator"))

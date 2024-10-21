@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NuGet.Versioning;
-using PharmacuticalE_Commerce.Migrations;
 using PharmacuticalE_Commerce.Models;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 

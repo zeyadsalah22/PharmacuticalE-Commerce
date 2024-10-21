@@ -1,19 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PharmacuticalE_Commerce.Models;
-using PharmacuticalE_Commerce.Repositories.Implements;
 using PharmacuticalE_Commerce.Repositories.Interfaces;
 
 namespace PharmacuticalE_Commerce.Controllers
 {
-    [Authorize(Roles = "Admin")]
+	[Authorize(Roles = "Admin")]
 	public class BranchesController : Controller
 	{
 		private readonly IBranchRepository _branchRepository;
 		private readonly IEmployeeRepository _employeeRepository;
 
-		public BranchesController(IBranchRepository branchRepository , IEmployeeRepository employeeRepository)
+		public BranchesController(IBranchRepository branchRepository, IEmployeeRepository employeeRepository)
 		{
 			_branchRepository = branchRepository;
 			_employeeRepository = employeeRepository;
@@ -58,24 +56,24 @@ namespace PharmacuticalE_Commerce.Controllers
 			return View(branch);
 		}
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var employees = await _employeeRepository.GetEmployeesByBranchId(id);
-            if (employees.Any())
-            {
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+			var employees = await _employeeRepository.GetEmployeesByBranchId(id);
+			if (employees.Any())
+			{
 				TempData["Error"] = "Delete employees first";
-                var branch = await _branchRepository.GetById(id);
-                return View(branch);
-            }
+				var branch = await _branchRepository.GetById(id);
+				return View(branch);
+			}
 
-            await _branchRepository.Delete(id);
-            return RedirectToAction(nameof(Index));
-        }
+			await _branchRepository.Delete(id);
+			return RedirectToAction(nameof(Index));
+		}
 
 
 
-    }
+	}
 }
